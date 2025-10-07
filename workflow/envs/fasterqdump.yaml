@@ -1,0 +1,8 @@
+name: fasterq_dump
+channels: 
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - sra-tools
+  - pigz
