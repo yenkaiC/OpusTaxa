@@ -1,6 +1,7 @@
 rule download_fastq:
     output: 
-        r1 = os.path.join(config["output"], "fastq_raw", "{sra_id}_1.fastq.gz"),
+        r1 = os.path.join(config["output"], "fastq_raw", "{sra_id}_1.fastq.gz"), 
+        # base output directory (config["output"]), the subdirectory "fastq_raw", and a filename template "{sra_id}_1.fastq.gz".
         r2 = os.path.join(config["output"], "fastq_raw", "{sra_id}_2.fastq.gz")
     params:
         dir = os.path.join(config["output"], "fastq_raw"),
