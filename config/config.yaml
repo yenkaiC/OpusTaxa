@@ -1,2 +1,9 @@
-input: "sra_id.txt"
-output:  "opustaxa.out"
+databaseDirectory: Database
+rawFastQDirectory: Data/Raw_FastQ
+trimmedFastQDirectory: Data/FastP
+nohumanDirectory: Data/NoHuman
+metaphlanDirectory: Data/Metaphlan
+singlemDirectory: Data/SingleM
+multiQCDirectory: Reports/MultiQC
+qcOutputDirectory: Reports/FastQC
+

@@ -1,0 +1,8 @@
+name: singlem
+channels:
+    - conda-forge
+    - bioconda
+    - defaults
+dependencies:
+    - singlem>=0.20.3
+
