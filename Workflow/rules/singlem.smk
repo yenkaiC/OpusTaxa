@@ -3,7 +3,7 @@ rule dl_singlem_DB:
     params:
         db_dir = singlemDB_dir
     output:
-        singlemDB_dir + "/S5.4.0.GTDB_r226.metapackage_20250331.smpkg.zb"
+        directory(singlemDB_dir + "/S5.4.0.GTDB_r226.metapackage_20250331.smpkg.zb")
     conda: 
         workflow.basedir + '/Workflow/envs/singlem.yaml'
     resources:
@@ -16,7 +16,8 @@ rule dl_singlem_DB:
 rule singlem:
     input:
         r1 = nohuman_dir + "/{sample}_R1_001.fastq.gz",
-        r2 = nohuman_dir + "/{sample}_R2_001.fastq.gz"
+        r2 = nohuman_dir + "/{sample}_R2_001.fastq.gz",
+        db = singlemDB_dir + "/S5.4.0.GTDB_r226.metapackage_20250331.smpkg.zb"
     output:
         otu_table = singlem_dir + "/{sample}_otu-table.tsv"
     conda:
@@ -27,7 +28,7 @@ rule singlem:
     shell:
         """
         singlem pipe \
-            --metapackage "{params.db_dir}/S5.4.0.GTDB_r226.metapackage_20250331.smpkg.zb" \
+            --metapackage "{input.db}" \
             -1 {input.r1} -2 {input.r2} \
             --otu-table {output.otu_table}
         """
