@@ -1,7 +1,7 @@
 name: nohuman
 channels:
-    - bioconda
     - conda-forge
+    - bioconda
     - defaults
 dependencies:
     - nohuman

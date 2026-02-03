@@ -1,2 +1,6 @@
 .snakemake/*
 Database/*
+Data/FastP/*
+Data/NoHuman/*
+Reports/*
+fastp*

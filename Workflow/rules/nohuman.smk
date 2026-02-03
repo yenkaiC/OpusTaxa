@@ -21,7 +21,10 @@ rule dl_noHuman_DB:
 rule remove_human_reads:
     input:
         r1 = clean_dir + "/{sample}_R1_001.fastq.gz",
-        r2 = clean_dir + "/{sample}_R2_001.fastq.gz"
+        r2 = clean_dir + "/{sample}_R2_001.fastq.gz",
+        db_taxo = nohumanDB_dir + "/taxo.k2d",
+        db_hash = nohumanDB_dir + "/hash.k2d",
+        db_opts = nohumanDB_dir + "/opts.k2d"
     output:
         r1 = nohuman_dir + "/{sample}_R1_001.fastq.gz",
         r2 = nohuman_dir + "/{sample}_R2_001.fastq.gz"

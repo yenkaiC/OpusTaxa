@@ -1,7 +1,7 @@
 ## Declare Directories
 # Databases
 DB_dir = config['databaseDirectory']
-nohumanDB_dir = DB_dir + "/nohuman"
+nohumanDB_dir = DB_dir + "/nohuman/HPRC.r2/db"
 metaphlanDB_dir = DB_dir + "/metaphlan"
 singlemDB_dir = DB_dir + "/singlem"
 # File locations
