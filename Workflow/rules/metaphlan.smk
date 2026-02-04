@@ -1,16 +1,16 @@
 # Download metaphylan Database
-#rule dl_metaphlan_DB:
-#    output: 
-#        metaphlanDB_dir + "/mpa_vJan25_CHOCOPhlAnSGB_202503.tar"
-#    conda: 
-#        '/Workflow/envs/metaphlan.yaml'
-#    resources:
-#        mem_mb=4000
-#    threads: 1
-#    params:
-#        db_dir = metaphlanDB_dir
-#    shell:
-#        "metaphlan --install --index mpa_vJan25_CHOCOPhlAnSGB_202503 --db_dir {params.db_dir}"
+rule dl_metaphlan_DB:
+    output: 
+        directory(metaphlanDB_dir)
+    conda: 
+        workflow.basedir + '/Workflow/envs/metaphlan.yaml'
+    resources:
+        mem_mb=4000
+    threads: 1
+    params:
+        db_dir = metaphlanDB_dir
+    shell:
+        "metaphlan --install --db_dir {params.db_dir}"
 
 # Run MetaPhlAn
 rule metaphlan:
