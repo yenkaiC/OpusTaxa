@@ -9,6 +9,10 @@ rule raw_qc:
         raw_qc_dir
     conda: 
         '../envs/fastqc.yaml'
+    threads: 4
+    resources:
+        mem_mb = 4000,
+        time = 80
     shell:
         "fastqc --outdir {params} {input}"
 
@@ -23,6 +27,10 @@ rule fastp_qc:
         fastp_qc_dir
     conda: 
         '../envs/fastqc.yaml'
+    threads: 4
+    resources:
+        mem_mb = 4000,
+        time = 80
     shell:
         "fastqc --outdir {params} {input}"
 
@@ -37,6 +45,10 @@ rule nohuman_qc:
         nohuman_qc_dir
     conda: 
         '../envs/fastqc.yaml'
+    threads: 4
+    resources:
+        mem_mb = 4000,
+        time = 80
     shell:
         "fastqc --outdir {params} {input}"
 
@@ -57,6 +69,10 @@ rule multi_qc:
         multiqc_dir
     conda:
         '../envs/multiqc.yaml'
+    threads: 4
+    resources:
+        mem_mb = 4000,
+        time = 80
     shell:
         """
         multiqc {raw_qc_dir} -o {params} -n raw_multiqc_report.html

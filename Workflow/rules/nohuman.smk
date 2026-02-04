@@ -8,6 +8,10 @@ rule dl_noHuman_DB:
         '../envs/nohuman.yaml'
     params:
         nohumanDB_dir
+    resources:
+        mem_mb = 4000,
+        time = 480
+    threads: 1
     shell:
         "nohuman --download --db {params}"
         #""" # before update
@@ -32,5 +36,8 @@ rule remove_human_reads:
         '../envs/nohuman.yaml'
     params:
         db_dir = nohumanDB_dir
+    resources:
+        mem_mb = 32000, #32GB
+        time = 480
     shell:
         "nohuman --db {params.db_dir} -t 8 --out1 {output.r1} --out2 {output.r2} {input.r1} {input.r2}"

@@ -7,7 +7,8 @@ rule dl_singlem_DB:
     conda: 
         workflow.basedir + '/Workflow/envs/singlem.yaml'
     resources:
-        mem_mb=4000
+        mem_mb = 4000,
+        time = 480
     threads: 1
     shell:
        "singlem data --output-directory {params.db_dir}"
@@ -26,6 +27,9 @@ rule singlem_profile:
     params:
         db_dir = singlemDB_dir
     threads: 8
+    resources:
+        mem_mb = 24000,
+        time = 480
     shell:
         """
         singlem pipe \
@@ -50,6 +54,9 @@ rule singlem_extra:
     conda:
         workflow.basedir + "/Workflow/envs/singlem.yaml"
     threads: 8
+    resources:
+        mem_mb = 24000,
+        time = 480
     shell:
         """
         singlem summarise \

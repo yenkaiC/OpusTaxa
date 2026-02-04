@@ -7,3 +7,6 @@ singlemDirectory: Data/SingleM
 multiQCDirectory: Reports/MultiQC
 qcOutputDirectory: Reports/FastQC
 
+executor: slurm
+default_resources: []
+jobs: 20
