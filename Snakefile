@@ -28,5 +28,5 @@ rule all:
         multiqc_dir + "/nohuman_multiqc_report.html",
         expand(singlem_dir + "/{sample}_otu-table.tsv", sample=SAMPLES),
         expand(singlem_dir + "/{sample}.spf.tsv", sample=SAMPLES),
-        #expand(metaphlan_dir + "/{sample}_profile.txt", sample=SAMPLES),
-        #expand(metaphlan_dir + "/{sample}_bowtie.bz2", sample=SAMPLES)
+        expand(metaphlan_dir + "/{sample}_profile.txt", sample=SAMPLES),
+        expand(metaphlan_dir + "/{sample}_bowtie.bz2", sample=SAMPLES)
