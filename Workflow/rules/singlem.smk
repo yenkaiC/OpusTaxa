@@ -1,4 +1,4 @@
-# Download SingleM Database
+## Download SingleM Database
 rule dl_singlem_DB:
     params:
         db_dir = singlemDB_dir
@@ -13,7 +13,8 @@ rule dl_singlem_DB:
     shell:
        "singlem data --output-directory {params.db_dir}"
 
-# Run SingleM
+## Run SingleM
+# Outputs profile and OTU table
 rule singlem_profile:
     input:
         r1 = nohuman_dir + "/{sample}_R1_001.fastq.gz",
@@ -40,7 +41,8 @@ rule singlem_profile:
             --otu-table {output.otu_table}
         """
 
-# Send profile to extract more data
+## Send profile to extract more data
+# Utilise the profile made earlier and outputs species abundance, abundance in longform, and a microbial fraction 
 rule singlem_extra:
     input:
         r1 = nohuman_dir + "/{sample}_R1_001.fastq.gz",

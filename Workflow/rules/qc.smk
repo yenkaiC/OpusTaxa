@@ -1,4 +1,4 @@
-# Declare FastQC inputs, outputs and shellscript for Raw data
+## Declare FastQC inputs, outputs and shellscript for Raw data
 rule raw_qc:
     input:
         input_dir + "/{sample}_{read}_001.fastq.gz"
@@ -16,7 +16,7 @@ rule raw_qc:
     shell:
         "fastqc --outdir {params} {input}"
 
-# Declare FastQC inputs, outputs and shellscript for FastP outputs
+## Declare FastQC inputs, outputs and shellscript for FastP outputs
 rule fastp_qc:
     input:
         input_dir + "/{sample}_{read}_001.fastq.gz"
@@ -34,7 +34,7 @@ rule fastp_qc:
     shell:
         "fastqc --outdir {params} {input}"
 
-# Declare FastQC inputs, outputs and shellscript for FastP outputs
+## Declare FastQC inputs, outputs and shellscript for NoHuman outputs
 rule nohuman_qc:
     input:
         nohuman_dir + "/{sample}_{read}_001.fastq.gz"
@@ -52,7 +52,8 @@ rule nohuman_qc:
     shell:
         "fastqc --outdir {params} {input}"
 
-# MultiQC
+## MultiQC
+# Takes in FastQC results from the raw, fastp, and nohuman data and summarises QC results
 rule multi_qc:
     input:
         raw_fastqc = expand(raw_qc_dir + "/{sample}_{read}_001_fastqc.zip", 

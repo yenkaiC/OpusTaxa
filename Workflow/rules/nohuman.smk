@@ -1,4 +1,4 @@
-# Download nohuman's Database. 
+## Download nohuman's Database. 
 rule dl_noHuman_DB:
     output:
         nohumanDB_dir + "/taxo.k2d",
@@ -21,7 +21,7 @@ rule dl_noHuman_DB:
         #rm {params}/nohuman_db.tar.gz
         #"""
 
-# Run nohuman
+## Run nohuman
 rule remove_human_reads:
     input:
         r1 = clean_dir + "/{sample}_R1_001.fastq.gz",

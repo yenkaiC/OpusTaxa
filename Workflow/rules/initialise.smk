@@ -26,7 +26,7 @@ samples_srr, = glob_wildcards(input_dir + "/{sample}_1.fastq.gz") # SRA
 # All samples (combination of both)
 SAMPLES = list(set(samples_standard + samples_srr))
 
-# Rule to standardize SRR filenames
+## Rule to standardize SRR filenames
 rule standardize_filenames:
     input:
         r1 = input_dir + "/{sample}_1.fastq.gz",

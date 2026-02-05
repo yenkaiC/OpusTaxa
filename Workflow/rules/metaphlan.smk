@@ -1,4 +1,4 @@
-# Download metaphylan Database
+## Download metaphylan Database
 rule dl_metaphlan_DB:
     output: 
         directory(metaphlanDB_dir)
@@ -13,7 +13,8 @@ rule dl_metaphlan_DB:
     shell:
         "metaphlan --install --db_dir {params.db_dir}"
 
-# Run MetaPhlAn
+## Run MetaPhlAn
+# outputs a bowtie and an abundance profile file
 rule metaphlan:
     input:
         r1 = nohuman_dir + "/{sample}_R1_001.fastq.gz",

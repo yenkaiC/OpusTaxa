@@ -2,7 +2,7 @@ executor: slurm
 jobs: 100
 default-resources:
   slurm_partition: general
-  mem_mb: 24000
+  mem_mb: 24000 # 24 GigaBytes
   runtime: 480 # minutes (8 hours)
 
 rerun-incomplete: true
