@@ -4,13 +4,14 @@ OpusTaxa is a pipeline that streamlines best-practice end-to-end processing of s
 <img src="/Misc/OpusTaxa_logo.png" alt="OpusTaxa Logo" title="OpusTaxa Logo" width="250">
 
 ## Summary of pipeline
-1. fastp
+1. Quality Control with fastp
     - Filters out low-quality reads
-2. NoHuman
-    - Remove host reads
-3. FastQC
-- MultiQC
-- Metaphylan
-- SingleM
+2. Removes host-reads with NoHuman
+3. Read and output reports on the quality of the sequencesFastQC
+    - Conducts FastQC on Raw, FastP, and NoHuman sequences
+    - Summarises the FastQC quality control statistics with MultiQC
+5. Performs Taxonomic classification and/or profiling with
+    - Metaphylan
+    - SingleM
 
 ## Usage
