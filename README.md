@@ -15,7 +15,7 @@ OpusTaxa is a pipeline that streamlines best-practice end-to-end processing of s
     - [SingleM](https://wwood.github.io/singlem/)
 
 ## Usage
-**Step 1a. Clone the OpusTaxa Repository**<br />
+### Step 1a. Clone the OpusTaxa Repository
 ```
 git clone https://github.com/yenkaiC/OpusTaxa.git
 ```
