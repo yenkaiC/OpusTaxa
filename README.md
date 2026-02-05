@@ -32,8 +32,8 @@ Transfer your raw data to the cloned repository following folder <br />
 ```/OpusTaxa/Data/Raw_FastQ``` <br />
 You should test it on two to three samples, or run the sample data in the directory before running it on all your samples. 
 
-### Step 2b. Correct File Format
-Your files should be in the following format <br />
+### Step 2b. File Formatting
+Your files should be in one of the two following format <br />
 `sample_name_R1_001.fastq.gz` <br />
 (e.g. `12-343567_S2_R1.fastq.gz`, `plzWork_R2.fastq.gz`) or <br />
 `sample_name_1.fastq.gz` <br />
