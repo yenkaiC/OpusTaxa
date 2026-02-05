@@ -1,0 +1,9 @@
+executor: slurm
+jobs: 100
+default-resources:
+  slurm_partition: general
+  mem_mb: 24000
+  runtime: 480 # minutes (8 hours)
+
+rerun-incomplete: true
+restart-times: 1

@@ -1,8 +1,6 @@
-import pandas as pd
-
 configfile: "config/config.yaml"
 
-
+## Load rules
 include: workflow.basedir + "/Workflow/rules/initialise.smk"
 include: workflow.basedir + "/Workflow/rules/fastp.smk"
 include: workflow.basedir + "/Workflow/rules/nohuman.smk"
@@ -10,7 +8,7 @@ include: workflow.basedir + "/Workflow/rules/metaphlan.smk"
 include: workflow.basedir + "/Workflow/rules/singlem.smk"
 include: workflow.basedir + "/Workflow/rules/qc.smk"
 
-# Define Outputs
+## Define Outputs
 rule all:
     input:
         expand(clean_dir + "/{sample}_R1_001.fastq.gz", sample=SAMPLES),
