@@ -16,4 +16,6 @@ OpusTaxa is a pipeline that streamlines best-practice end-to-end processing of s
 
 ## Usage
 Clone the OpusTaxa Repository
-```git clone https://github.com/yenkaiC/OpusTaxa.git```
+```
+git clone https://github.com/yenkaiC/OpusTaxa.git
+```
