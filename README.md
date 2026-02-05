@@ -20,19 +20,19 @@ OpusTaxa is a pipeline that streamlines best-practice end-to-end processing of s
 git clone https://github.com/yenkaiC/OpusTaxa.git
 ```
 
-**Step 1b. Install and Activate Snakemake**<br />
+### Step 1b. Install and Activate Snakemake
 If you haven't already, make sure to install and activate it for the session
 ```
 conda install bioconda::snakemake
 conda activate snakemake
 ```
 
-**Step 2a. Transfer Raw Data to Corresponding Directory**<br />
+### Step 2a. Transfer Raw Data to Corresponding Directory
 Transfer your raw data to the cloned repository following folder <br /> 
 ```/OpusTaxa/Data/Raw_FastQ``` <br />
 You should test it on two to three samples, or run the sample data in the directory before running it on all your samples. 
 
-**Step 2b. Correct File Format**<br />
+### Step 2b. Correct File Format
 Your files should be in the following format <br />
 `sample_name_R1_001.fastq.gz` <br />
 (e.g. `12-343567_S2_R1.fastq.gz`, `plzWork_R2.fastq.gz`) or <br />
@@ -40,7 +40,7 @@ Your files should be in the following format <br />
 (e.g. `SRR12345678_1.fastq.gz`, `SRR12345678_2.fastq.gz`), 
 the latter will be converted to the earlier format.
 
-**Step 3: Run OpusTaxa**<br />
+### Step 3: Run OpusTaxa
 To run and test your samples in OpusTaxa, type ```snakemake --use-conda``` into the terminal once you are in the OpusTaxa directory. You can specify ```--dry-run``` to check that everything seems to be working prior to committing the run.
 ```
 snakemake --cores 1 --use-conda --dry-run
