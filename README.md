@@ -4,47 +4,102 @@ OpusTaxa is a pipeline that streamlines best-practice end-to-end processing of s
 <img src="/Misc/OpusTaxa_logo.png" alt="OpusTaxa Logo" title="OpusTaxa Logo" width="250">
 
 ## Summary of pipeline
-1. Quality Control with [fastp](https://github.com/OpenGene/fastp)
+1. **Quality Control** with [fastp](https://github.com/OpenGene/fastp)
     - Filters out low-quality reads
-2. Removes host-reads with [NoHuman](https://github.com/mbhall88/nohuman)
-3. Read and output reports on the quality of the sequencesFastQC
-    - Conducts [FastQC](https://github.com/s-andrews/FastQC) on the Raw, and processed FastP and NoHuman sequences
-    - Summarises the FastQC quality control statistics with MultiQC
-5. Performs Taxonomic classification and/or profiling with
+2. **Host Read Removal** with [NoHuman](https://github.com/mbhall88/nohuman)
+3. **Quality Reports** with [FastQC](https://github.com/s-andrews/FastQC)
+    - Quality control reports at each step (raw, trimmed and filter)
+    - Aggregates FastQC reports with [MultiQC](https://github.com/MultiQC/MultiQC)
+5. **Taxonomic Profiling** with
     - [Metaphylan](https://github.com/biobakery/MetaPhlAn)
     - [SingleM](https://wwood.github.io/singlem/)
 
-## Usage
-### Step 1a. Clone the OpusTaxa Repository
-```
+## Quick Start
+```bash
+# 1. Clone the repository
 git clone https://github.com/yenkaiC/OpusTaxa.git
-```
+cd OpusTaxa
 
-### Step 1b. Install and Activate Snakemake
-If you haven't already, make sure to install and activate it for the session
-```
-conda install bioconda::snakemake
+# 2. Create and activate Snakemake environment
+conda create -n snakemake -c conda-forge -c bioconda snakemake
 conda activate snakemake
+
+# 3. Test with dry-run
+snakemake --use-conda --dry-run --cores 1
 ```
 
-### Step 2a. Transfer Raw Data to Corresponding Directory
-Transfer your raw data to the cloned repository following folder <br /> 
-```/OpusTaxa/Data/Raw_FastQ``` <br />
-You should test it on two to three samples, or run the sample data in the directory before running it on all your samples. 
+## Usage
+### 1. Prepare Input Data
 
-### Step 2b. File Formatting
-Your files should be in one of the two following format <br />
-`sample_name_R1_001.fastq.gz` <br />
-(e.g. `12-343567_S2_R1.fastq.gz`, `plzWork_R2.fastq.gz`) or <br />
-`sample_name_1.fastq.gz` <br />
-(e.g. `SRR12345678_1.fastq.gz`, `SRR12345678_2.fastq.gz`), 
-the latter will be converted to the earlier format.
+Place your paired-end FASTQ files in `Data/Raw_FastQ/`:
+```bash
+Data/Raw_FastQ/
+├── sample1_R1_001.fastq.gz
+├── sample1_R2_001.fastq.gz
+├── sample2_R1_001.fastq.gz
+└── sample2_R2_001.fastq.gz
+```
 
-### Step 3: Run OpusTaxa
-To run and test your samples in OpusTaxa, type ```snakemake --use-conda``` into the terminal once you are in the OpusTaxa directory. You can specify ```--dry-run``` to check that everything seems to be working prior to committing the run.
+**Supported filename formats:**
+- `{sample}_R1_001.fastq.gz` / `{sample}_R2_001.fastq.gz` (Illumina format)
+- `{sample}_1.fastq.gz` / `{sample}_2.fastq.gz` (SRA format - auto-converted)
+
+**Note:** Start with 2-3 samples to test before running your full dataset.
+
+### 2. Configure Settings (Optional)
+
+Edit `config/config.yaml` to customize:
+- Output directories
+- Resource requirements
+- Tool-specific parameters
+
+### 3. Run the Pipeline
+
+**Local execution:**
+```bash
+# Dry-run to check everything
+snakemake --use-conda --dry-run --cores 8
+
+# Actual run
+snakemake --use-conda --cores 8
 ```
-snakemake --cores 1 --use-conda --dry-run
+
+### 4. Access Results
+
+Results are organized in the `Data/` and `Reports/` directories:
 ```
+OpusTaxa/
+├── Data/
+│   ├── FastP/              # Quality-trimmed reads
+│   ├── NoHuman/            # Host-filtered reads
+│   ├── MetaPhlAn/          # Taxonomic profiles
+│   └── SingleM/            # OTU tables
+└── Reports/
+    ├── FastQC/             # Individual QC reports
+    │   ├── Step_1_Raw/
+    │   ├── Step_2_FastP/
+    │   └── Step_3_NoHuman/
+    └── MultiQC/            # Aggregated reports
+        ├── raw_multiqc_report.html
+        ├── fastp_multiqc_report.html
+        └── nohuman_multiqc_report.html
 ```
-snakemake --cores 8 --use-conda
-```
+
+## Resource Requirements
+
+### Minimum (for testing)
+- **CPU:** 4 cores
+- **RAM:** 16 GB
+- **Storage:** 100 GB
+
+### Recommended (for production)
+- **CPU:** 8+ cores
+- **RAM:** 32+ GB
+- **Storage:** 500 GB (depends on dataset size)
+
+### Database Sizes
+- NoHuman: ~6.3 GB (As of February 2026)
+- MetaPhlAn: ~36 GB (As of February 2026)
+- SingleM: ~7.5 GB (Version S5.4.0)
+
+Databases are downloaded automatically on first run.
