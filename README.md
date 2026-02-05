@@ -15,19 +15,20 @@ OpusTaxa is a pipeline that streamlines best-practice end-to-end processing of s
     - [SingleM](https://wwood.github.io/singlem/)
 
 ## Usage
-Clone the OpusTaxa Repository
+**Step 1a. Clone the OpusTaxa Repository**
 ```
 git clone https://github.com/yenkaiC/OpusTaxa.git
 ```
 
+**Step 1b. Install and Activate Snakemake**
 If you haven't already, make sure to install snakemake and activate it for the session
 ```
 conda install bioconda::snakemake
 conda activate snakemake
 ```
 
-Transfer your raw data to the cloned repository following folder '/OpusTaxa/Data/Raw_FastQ'
-You should test it on two to three samples before running it on all your samples. 
+Transfer your raw data to the cloned repository following folder **'/OpusTaxa/Data/Raw_FastQ'**
+You should test it on two to three samples, or run the sample data in the directory before running it on all your samples. 
 
 Your files should be in the following format 
 `sample_name_R1_001.fastq.gz` 
@@ -36,7 +37,8 @@ Your files should be in the following format
 (e.g. `SRR12345678_1.fastq.gz`, `SRR12345678_2.fastq.gz`), 
 the latter will be converted to the earlier format.
 
-To run OpusTaxa, run ```snakemake --use-conda```. You can specify ```--dry-run``` to check that everything seems to be working prior to committing the run.
+**Run OpusTaxa**
+To run and test your samples in OpusTaxa, type ```snakemake --use-conda``` into the terminal once you are in the OpusTaxa directory. You can specify ```--dry-run``` to check that everything seems to be working prior to committing the run.
 ```
 snakemake --cores 1 --use-conda --dry-run
 snakemake --cores 8 --use-conda
