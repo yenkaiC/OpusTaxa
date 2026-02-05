@@ -28,13 +28,14 @@ conda activate snakemake
 ```
 
 **Step 2a. Transfer Raw Data to Corresponding Directory**<br />
-Transfer your raw data to the cloned repository following folder ```/OpusTaxa/Data/Raw_FastQ```
+Transfer your raw data to the cloned repository following folder <br /> 
+```/OpusTaxa/Data/Raw_FastQ``` <br />
 You should test it on two to three samples, or run the sample data in the directory before running it on all your samples. 
 
 **Step 2b. Correct File Format**<br />
-Your files should be in the following format 
+Your files should be in the following format <br />
 `sample_name_R1_001.fastq.gz` 
-(e.g. `12-343567_S2_R1.fastq.gz`, `plzWork_R2.fastq.gz`) or 
+(e.g. `12-343567_S2_R1.fastq.gz`, `plzWork_R2.fastq.gz`) or <br />
 `sample_name_1.fastq.gz` 
 (e.g. `SRR12345678_1.fastq.gz`, `SRR12345678_2.fastq.gz`), 
 the latter will be converted to the earlier format.
