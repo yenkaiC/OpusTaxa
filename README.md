@@ -1,5 +1,5 @@
 # OpusTaxa
-<img src="/Misc/OpusTaxa_logo.png" alt="OpusTaxa Logo" title="OpusTaxa Logo" width="150">
+<img src="/Misc/OpusTaxa_logo.png" alt="OpusTaxa Logo" title="OpusTaxa Logo" width="250">
 
 A workflow pipeline to process shotgun metagenomic data with various metagenomic tools. It also outputs MultiQC reports during processing. 
 
