@@ -30,7 +30,7 @@ Transfer your raw data to the cloned repository following folder '/OpusTaxa/Data
 You should test it on two to three samples before running it on all your samples. 
 
 Your files should be in the following format 
-'sample_name_R1_001.fastq.gz' (e.g. '12-343567_S2_R1.fastq.gz', 'plzWork_R2.fastq.gz') or 'sample_name_1.fastq.gz' (e.g. 'SRR12345678_1.fastq.gz', 'SRR12345678_2.fastq.gz'), 
+`sample_name_R1_001.fastq.gz` (e.g. `12-343567_S2_R1.fastq.gz`, `plzWork_R2.fastq.gz`) or `sample_name_1.fastq.gz` (e.g. `SRR12345678_1.fastq.gz`, `SRR12345678_2.fastq.gz`), 
 the latter will be converted to the earlier format.
 
 ### Running on the HPC
