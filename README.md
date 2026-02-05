@@ -34,9 +34,9 @@ You should test it on two to three samples, or run the sample data in the direct
 
 **Step 2b. Correct File Format**<br />
 Your files should be in the following format <br />
-`sample_name_R1_001.fastq.gz` 
+`sample_name_R1_001.fastq.gz` <br />
 (e.g. `12-343567_S2_R1.fastq.gz`, `plzWork_R2.fastq.gz`) or <br />
-`sample_name_1.fastq.gz` 
+`sample_name_1.fastq.gz` <br />
 (e.g. `SRR12345678_1.fastq.gz`, `SRR12345678_2.fastq.gz`), 
 the latter will be converted to the earlier format.
 
@@ -44,5 +44,7 @@ the latter will be converted to the earlier format.
 To run and test your samples in OpusTaxa, type ```snakemake --use-conda``` into the terminal once you are in the OpusTaxa directory. You can specify ```--dry-run``` to check that everything seems to be working prior to committing the run.
 ```
 snakemake --cores 1 --use-conda --dry-run
+```
+```
 snakemake --cores 8 --use-conda
 ```
