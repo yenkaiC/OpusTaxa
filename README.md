@@ -32,6 +32,7 @@ snakemake --use-conda --dry-run --cores 1
 ### 1. Prepare Input Data
 
 Place your paired-end FASTQ files in `Data/Raw_FastQ/`:
+(Remove sample files)
 ```bash
 Data/Raw_FastQ/
 ├── sample1_R1_001.fastq.gz
@@ -42,7 +43,7 @@ Data/Raw_FastQ/
 
 **Supported filename formats:**
 - `{sample}_R1_001.fastq.gz` / `{sample}_R2_001.fastq.gz` (Illumina format)
-- `{sample}_1.fastq.gz` / `{sample}_2.fastq.gz` (SRA format - auto-converted)
+- `{sample}_1.fastq.gz` / `{sample}_2.fastq.gz` (SRA format - auto-converts to Illumina format)
 
 **Note:** Start with 2-3 samples to test before running your full dataset.
 
