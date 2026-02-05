@@ -36,17 +36,8 @@ Your files should be in the following format
 (e.g. `SRR12345678_1.fastq.gz`, `SRR12345678_2.fastq.gz`), 
 the latter will be converted to the earlier format.
 
-### Running on the HPC
-Unless you are conducting shallow sequencing (e.g. MiSeq), it is often good to process your files in a high-performance computing (HPC) environment.
-To run OpusTaxa on the HPC, you should install Snakemake's executor plugin for slurm (if your HPC runs on slurm).
+To run OpusTaxa, run ```snakemake --use-conda```. You can specify ```--dry-run``` to check that everything seems to be working prior to committing the run.
 ```
-pip install snakemake-executor-plugin-slurm
-```
-Send jobs to the HPC
-```
-snakemake --workflow-profile config.slurm.yaml
-```
-You can also test the runs before sending jobs to slurm
-```
-snakemake --workflow-profile config.slurm.yaml —dry-run
+snakemake --cores 1 --use-conda --dry-run
+snakemake --cores 8 --use-conda
 ```
