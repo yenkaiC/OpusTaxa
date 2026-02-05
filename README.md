@@ -15,23 +15,23 @@ OpusTaxa is a pipeline that streamlines best-practice end-to-end processing of s
     - [SingleM](https://wwood.github.io/singlem/)
 
 ## Usage
-**Step 1a. Clone the OpusTaxa Repository**
+**Step 1a. Clone the OpusTaxa Repository**<br />
 ```
 git clone https://github.com/yenkaiC/OpusTaxa.git
 ```
 
-**Step 1b. Install and Activate Snakemake**
+**Step 1b. Install and Activate Snakemake**<br />
 If you haven't already, make sure to install and activate it for the session
 ```
 conda install bioconda::snakemake
 conda activate snakemake
 ```
 
-**Step 2a. Transfer Raw Data to Corresponding Directory**
+**Step 2a. Transfer Raw Data to Corresponding Directory**<br />
 Transfer your raw data to the cloned repository following folder ```/OpusTaxa/Data/Raw_FastQ```
 You should test it on two to three samples, or run the sample data in the directory before running it on all your samples. 
 
-**Step 2b. Correct File Format**
+**Step 2b. Correct File Format**<br />
 Your files should be in the following format 
 `sample_name_R1_001.fastq.gz` 
 (e.g. `12-343567_S2_R1.fastq.gz`, `plzWork_R2.fastq.gz`) or 
@@ -39,7 +39,7 @@ Your files should be in the following format
 (e.g. `SRR12345678_1.fastq.gz`, `SRR12345678_2.fastq.gz`), 
 the latter will be converted to the earlier format.
 
-**Step 3: Run OpusTaxa**
+**Step 3: Run OpusTaxa**<br />
 To run and test your samples in OpusTaxa, type ```snakemake --use-conda``` into the terminal once you are in the OpusTaxa directory. You can specify ```--dry-run``` to check that everything seems to be working prior to committing the run.
 ```
 snakemake --cores 1 --use-conda --dry-run
