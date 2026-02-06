@@ -29,7 +29,7 @@ rule metaphlan:
         workflow.basedir + "/Workflow/envs/metaphlan.yaml"
     params:
         db_dir = metaphlanDB_dir
-    threads: 8
+    threads: 6
     log:
         log_dir + "/metaphlan/{sample}.log"
     resources:

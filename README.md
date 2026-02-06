@@ -61,8 +61,8 @@ Edit `config/config.yaml` to customize:
 # Dry-run to check everything
 snakemake --use-conda --dry-run --cores 8
 
-# Actual run
-snakemake --use-conda --cores 8
+# Actual Run with SingleM only
+snakemake --use-conda --cores 8 --config run_metaphlan=false run_singlem=true
 ```
 
 ### 4. Access Results

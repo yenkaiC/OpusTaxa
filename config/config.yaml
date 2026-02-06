@@ -8,6 +8,9 @@ multiQCDirectory: Reports/MultiQC
 qcOutputDirectory: Reports/FastQC
 logDirectory: logs
 slurmLogDirectory": logs/slurm
+run_nohuman: true
+run_metaphlan: true
+run_singlem: true
 
 executor: slurm
 default_resources: []

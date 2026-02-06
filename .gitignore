@@ -7,3 +7,4 @@ Data/Metaphlan/*
 Reports/*
 fastp*
 .DS_Store
+.Rhistory
