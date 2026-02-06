@@ -12,8 +12,10 @@ rule dl_noHuman_DB:
         mem_mb = 4000,
         time = 480
     threads: 1
+    log:
+        log_dir + "/nohuman/databaseDL.log"
     shell:
-        "nohuman --download --db {params.db_dir}"
+        "nohuman --download --db {params.db_dir} 2> {log}"
         #""" # before update
         #mkdir -p {params}
         #curl -L https://ndownloader.figshare.com/files/59658306 -o {params}/nohuman_db.tar.gz
@@ -34,10 +36,12 @@ rule remove_human_reads:
         r2 = nohuman_dir + "/{sample}_R2_001.fastq.gz"
     conda: 
         '../envs/nohuman.yaml'
+    log:
+        log_dir + "/nohuman/{sample}.log"
     params:
         db_dir = nohumanDB_dir
     resources:
         mem_mb = 32000, #32GB
         time = 480
     shell:
-        "nohuman --db {params.db_dir} -t 8 --out1 {output.r1} --out2 {output.r2} {input.r1} {input.r2}"
+        "nohuman --db {params.db_dir} -t 8 --out1 {output.r1} --out2 {output.r2} {input.r1} {input.r2} 2> {log}"

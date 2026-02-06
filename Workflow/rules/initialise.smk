@@ -34,8 +34,10 @@ rule standardize_filenames:
     output:
         r1 = input_dir + "/{sample}_R1_001.fastq.gz",
         r2 = input_dir + "/{sample}_R2_001.fastq.gz"
+    log:
+        log_dir + "/file_rename/{sample}.log"
     shell:
         """
         mv {input.r1} {output.r1}
-        mv {input.r2} {output.r2}
+        mv {input.r2} {output.r2} 2> {log}
         """

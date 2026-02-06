@@ -10,8 +10,10 @@ rule dl_singlem_DB:
         mem_mb = 4000,
         time = 480
     threads: 1
+    log:
+        log_dir + "/singlem/databaseDL.log"
     shell:
-       "singlem data --output-directory {params.db_dir}"
+       "singlem data --output-directory {params.db_dir} 2> {log}"
 
 ## Run SingleM
 # Outputs profile and OTU table
@@ -31,6 +33,8 @@ rule singlem_profile:
     resources:
         mem_mb = 24000,
         time = 480
+    log:
+        log_dir + "/singlem/{sample}_profile.log"
     shell:
         """
         singlem pipe \
@@ -38,7 +42,7 @@ rule singlem_profile:
             -1 {input.r1} -2 {input.r2} \
             --threads 8 \
             -p {output.profile} \
-            --otu-table {output.otu_table}
+            --otu-table {output.otu_table} 2> {log}
         """
 
 ## Send profile to extract more data
@@ -59,19 +63,21 @@ rule singlem_extra:
     resources:
         mem_mb = 24000,
         time = 480
+    log:
+        log_dir + "/singlem/{sample}_profile.log"
     shell:
         """
         singlem summarise \
             --input-taxonomic-profile {input.profile} \
             --output-species-by-site-relative-abundance {output.species_by_site} \
-            --output-species-by-site-level species
+            --output-species-by-site-level species 2>> {log}
         
         singlem summarise \
             --input-taxonomic-profile {input.profile} \
-            --output-taxonomic-profile-with-extras {output.longform}
+            --output-taxonomic-profile-with-extras {output.longform} 2>> {log}
 
         singlem prokaryotic_fraction \
             --forward {input.r1} --reverse {input.r2} \
             --metapackage "{input.db}" \
-            -p {input.profile} > {output.microbial_fraction}
+            -p {input.profile} > {output.microbial_fraction} 2>> {log}
         """

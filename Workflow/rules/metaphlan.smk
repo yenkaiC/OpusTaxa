@@ -10,8 +10,10 @@ rule dl_metaphlan_DB:
     threads: 1
     params:
         db_dir = metaphlanDB_dir
+    log:
+        log_dir + "/metaphlan/databaseDL.log"
     shell:
-        "metaphlan --install --db_dir {params.db_dir}"
+        "metaphlan --install --db_dir {params.db_dir} 2> {log}"
 
 ## Run MetaPhlAn
 # outputs a bowtie and an abundance profile file
