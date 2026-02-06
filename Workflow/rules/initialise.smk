@@ -17,7 +17,7 @@ raw_qc_dir = qc_dir + "/Step_1_Raw"
 fastp_qc_dir = qc_dir + "/Step_2_FastP"
 nohuman_qc_dir = qc_dir + "/Step_3_NoHuman"
 # Log
-log_dir = 'logs'
+log_dir = config['logDirectory']
 
 # Recognise file patterns
 samples_standard, = glob_wildcards(input_dir + "/{sample}_R1_001.fastq.gz") # SAGC

@@ -28,6 +28,8 @@ rule metaphlan:
     params:
         db_dir = metaphlanDB_dir
     threads: 8
+    log:
+        log_dir + "/metaphlan/{sample}.log"
     resources:
         mem_mb = 38000,
         time = 720
@@ -40,5 +42,5 @@ rule metaphlan:
             --db_dir {params.db_dir} \
             --mapout {output.bowtie} \
             -o {output.profile} \
-            -t rel_ab_w_read_stats
+            -t rel_ab_w_read_stats 2> {log}
         """

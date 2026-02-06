@@ -6,6 +6,8 @@ metaphlanDirectory: Data/Metaphlan
 singlemDirectory: Data/SingleM
 multiQCDirectory: Reports/MultiQC
 qcOutputDirectory: Reports/FastQC
+logDirectory: logs
+slurmLogDirectory": logs/slurm
 
 executor: slurm
 default_resources: []
