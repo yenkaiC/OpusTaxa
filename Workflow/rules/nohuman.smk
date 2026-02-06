@@ -13,7 +13,7 @@ rule dl_noHuman_DB:
         time = 480
     threads: 1
     shell:
-        "nohuman --download --db {params}"
+        "nohuman --download --db {params.db_dir}"
         #""" # before update
         #mkdir -p {params}
         #curl -L https://ndownloader.figshare.com/files/59658306 -o {params}/nohuman_db.tar.gz
