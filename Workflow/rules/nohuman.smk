@@ -7,7 +7,7 @@ rule dl_noHuman_DB:
     conda: 
         '../envs/nohuman.yaml'
     params:
-        nohumanDB_dir
+        db_dir = DB_dir + "/nohuman"
     resources:
         mem_mb = 4000,
         time = 480
