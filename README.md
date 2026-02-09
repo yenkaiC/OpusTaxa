@@ -64,7 +64,7 @@ snakemake --use-conda --dry-run --cores 8
 # Actual Run
 snakemake --use-conda --cores 8
 
-# Run with SingleM only
+# Run with SingleM, and without MetaPhlAn
 snakemake --use-conda --cores 8 --config metaphlan=false singlem=true
 ```
 
