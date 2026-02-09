@@ -11,6 +11,12 @@ nohuman_dir = config['nohumanDirectory']
 metaphlan_dir = config['metaphlanDirectory']
 singlem_dir = config['singlemDirectory']
 multiqc_dir = config['multiQCDirectory']
+# Read SRA IDs from file if it exists
+import os
+SRA_IDS = []
+if os.path.exists("sra_id.txt"):
+    with open("sra_id.txt", "r") as f:
+        SRA_IDS = [line.strip() for line in f if line.strip()]
 # Quality Control
 qc_dir = config['qcOutputDirectory']
 raw_qc_dir = qc_dir + "/Step_1_Raw"
@@ -28,7 +34,7 @@ samples_standard, = glob_wildcards(input_dir + "/{sample}_R1_001.fastq.gz") # SA
 samples_srr, = glob_wildcards(input_dir + "/{sample}_1.fastq.gz") # SRA
 
 # All samples (combination of both)
-SAMPLES = list(set(samples_standard + samples_srr))
+SAMPLES = list(set(samples_standard + samples_srr + SRA_IDS))
 
 ## Rule to standardize SRR filenames
 rule standardize_filenames:

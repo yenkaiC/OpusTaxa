@@ -2,6 +2,7 @@ configfile: "config/config.yaml"
 
 ## Load rules
 include: workflow.basedir + "/Workflow/rules/initialise.smk"
+include: workflow.basedir + "/Workflow/rules/sra.smk"
 include: workflow.basedir + "/Workflow/rules/fastp.smk"
 include: workflow.basedir + "/Workflow/rules/nohuman.smk"
 include: workflow.basedir + "/Workflow/rules/metaphlan.smk"
