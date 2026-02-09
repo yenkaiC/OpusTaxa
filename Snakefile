@@ -19,20 +19,20 @@ rule all:
         expand(raw_qc_dir + "/{sample}_R2_001_fastqc.html", sample=SAMPLES),
         expand(fastp_qc_dir + "/{sample}_R1_001_fastqc.html", sample=SAMPLES),
         expand(fastp_qc_dir + "/{sample}_R2_001_fastqc.html", sample=SAMPLES),
-        expand(nohuman_dir + "/{sample}_R1_001.fastq.gz", sample=SAMPLES) if config.get("nohuman", True) else [],
-        expand(nohuman_dir + "/{sample}_R2_001.fastq.gz", sample=SAMPLES) if config.get("nohuman", True) else [],
+        
+        # MultiQC reports - nohuman is conditional
         multiqc_dir + "/raw_multiqc_report.html",
         multiqc_dir + "/fastp_multiqc_report.html",
         multiqc_dir + "/nohuman_multiqc_report.html",
         
         # Conditional SingleM
-        expand(singlem_dir + "/{sample}_otu-table.tsv", sample=SAMPLES) if config.get("singlem", True) else [],
-        expand(singlem_dir + "/{sample}.spf.tsv", sample=SAMPLES) if config.get("singlem", True) else [],
+        expand(singlem_dir + "/{sample}_otu-table.tsv", sample=SAMPLES) if run_singlem else [],
+        expand(singlem_dir + "/{sample}.spf.tsv", sample=SAMPLES) if run_singlem else [],
         # Conditional MetaPhlAn
-        expand(metaphlan_dir + "/{sample}_profile.txt", sample=SAMPLES) if config.get("metaphlan", True) else [],
-        expand(metaphlan_dir + "/{sample}_bowtie.bz2", sample=SAMPLES) if config.get("metaphlan", True) else []
-        #
-        #expand(singlem_dir + "/{sample}_otu-table.tsv", sample=SAMPLES),
-        #expand(singlem_dir + "/{sample}.spf.tsv", sample=SAMPLES),
-        #expand(metaphlan_dir + "/{sample}_profile.txt", sample=SAMPLES),
-        #expand(metaphlan_dir + "/{sample}_bowtie.bz2", sample=SAMPLES)
+        expand(metaphlan_dir + "/{sample}_profile.txt", sample=SAMPLES) if run_metaphlan else [],
+        expand(metaphlan_dir + "/{sample}_bowtie.bz2", sample=SAMPLES) if run_metaphlan else []
+        
+
+print("Config values:")
+print(f"  metaphlan: {config.get('metaphlan', True)}")
+print(f"  singlem: {config.get('singlem', True)}")

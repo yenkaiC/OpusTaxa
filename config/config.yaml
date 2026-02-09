@@ -8,6 +8,7 @@ multiQCDirectory: Reports/MultiQC
 qcOutputDirectory: Reports/FastQC
 logDirectory: logs
 slurmLogDirectory": logs/slurm
+
 nohuman: true
 metaphlan: true
 singlem: true

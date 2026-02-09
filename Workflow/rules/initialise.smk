@@ -19,6 +19,10 @@ nohuman_qc_dir = qc_dir + "/Step_3_NoHuman"
 # Log
 log_dir = config['logDirectory']
 
+# Flags
+run_metaphlan = str(config.get("metaphlan", True)).lower() not in ("false", "0", "no")
+run_singlem = str(config.get("singlem", True)).lower() not in ("false", "0", "no")
+
 # Recognise file patterns
 samples_standard, = glob_wildcards(input_dir + "/{sample}_R1_001.fastq.gz") # SAGC
 samples_srr, = glob_wildcards(input_dir + "/{sample}_1.fastq.gz") # SRA
