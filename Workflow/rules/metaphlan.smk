@@ -33,7 +33,7 @@ rule metaphlan:
     log:
         log_dir + "/metaphlan/{sample}.log"
     resources:
-        mem_mb = 38000,
+        mem_mb = 48000,
         time = 720
     shell:
         """
