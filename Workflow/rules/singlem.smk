@@ -31,7 +31,7 @@ rule singlem_profile:
         db_dir = singlemDB_dir
     threads: 8
     resources:
-        mem_mb = 24000,
+        mem_mb = 38000,
         time = 480
     log:
         log_dir + "/singlem/{sample}_profile.log"
@@ -61,7 +61,7 @@ rule singlem_extra:
         workflow.basedir + "/Workflow/envs/singlem.yaml"
     threads: 8
     resources:
-        mem_mb = 24000,
+        mem_mb = 38000,
         time = 480
     log:
         log_dir + "/singlem/{sample}_profile.log"

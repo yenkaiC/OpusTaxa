@@ -3,6 +3,7 @@ Database/*
 Data/FastP/*
 Data/Raw_FastQ/SRR15041036_*
 Data/Raw_FastQ/SRR15040909_*
+fasterq.tmp*
 Data/NoHuman/*
 Data/SingleM/*
 Data/Metaphlan/*

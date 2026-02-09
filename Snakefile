@@ -12,10 +12,6 @@ include: workflow.basedir + "/Workflow/rules/qc.smk"
 ## Define Outputs
 rule all:
     input:
-        # SRA downloads - conditional
-        expand(input_dir + "/{sra_id}_1.fastq.gz", sra_id=SRA_IDS) if download_sra and SRA_IDS else [],
-        expand(input_dir + "/{sra_id}_2.fastq.gz", sra_id=SRA_IDS) if download_sra and SRA_IDS else [],
-        
         # Data processing and QC
         expand(clean_dir + "/{sample}_R1_001.fastq.gz", sample=SAMPLES),
         expand(clean_dir + "/{sample}_R2_001.fastq.gz", sample=SAMPLES),
@@ -38,8 +34,8 @@ rule all:
         expand(metaphlan_dir + "/{sample}_profile.txt", sample=SAMPLES) if run_metaphlan else [],
         expand(metaphlan_dir + "/{sample}_bowtie.bz2", sample=SAMPLES) if run_metaphlan else [],
         # Merged table for MetaPhlAn
-        metaphlan_dir + "/table/abundance_all.txt" if config.get("metaphlan", True) else [],
-        metaphlan_dir + "/table/abundance_species.txt" if config.get("metaphlan", True) else []
+        metaphlan_dir + "/table/abundance_all.txt" if run_metaphlan else [],
+        metaphlan_dir + "/table/abundance_species.txt" if run_metaphlan else []
         
 
 print("Config values:")

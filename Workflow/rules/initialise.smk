@@ -28,7 +28,7 @@ download_sra = str(config.get("download_sra", False)).lower() not in ("false", "
 # Read SRA IDs if download_sra is enabled
 import os
 SRA_IDS = []
-if config.get("download_sra", False) and os.path.exists("sra_id.txt"):
+if download_sra and os.path.exists("sra_id.txt"):
     with open("sra_id.txt", "r") as f:
         SRA_IDS = [line.strip() for line in f if line.strip()]
 
