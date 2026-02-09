@@ -30,7 +30,10 @@ rule all:
         expand(singlem_dir + "/{sample}.spf.tsv", sample=SAMPLES) if run_singlem else [],
         # Conditional MetaPhlAn
         expand(metaphlan_dir + "/{sample}_profile.txt", sample=SAMPLES) if run_metaphlan else [],
-        expand(metaphlan_dir + "/{sample}_bowtie.bz2", sample=SAMPLES) if run_metaphlan else []
+        expand(metaphlan_dir + "/{sample}_bowtie.bz2", sample=SAMPLES) if run_metaphlan else [],
+        # Merged table for MetaPhlAn
+        metaphlan_dir + "/table/abundance_all.txt" if config.get("metaphlan", True) else [],
+        metaphlan_dir + "/table/abundance_species.txt" if config.get("metaphlan", True) else []
         
 
 print("Config values:")

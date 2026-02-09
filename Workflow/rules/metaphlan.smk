@@ -46,3 +46,27 @@ rule metaphlan:
             -o {output.profile} \
             -t rel_ab_w_read_stats 2> {log}
         """
+
+rule metaphlan_abundance_table:
+    input:
+        profiles = expand(metaphlan_dir + "/{sample}_profile.txt", sample=SAMPLES)
+    output:
+        abundance = metaphlan_dir + "/table/abundance_all.txt",
+        species = metaphlan_dir + "/table/abundance_species.txt"
+    conda:
+        workflow.basedir + "/Workflow/envs/metaphlan.yaml"
+    log:
+        log_dir + "/metaphlan/merge_table.log"
+    shell:
+        """
+        # Create output directory if it doesn't exist
+        mkdir -p {metaphlan_dir}/table
+
+        # Merge all the tables into one
+        merge_metaphlan_tables.py {input.profiles} > {output.abundance} 2> {log}
+        
+        # Extract header (line 2) and species rows
+        sed -n '2p' {output.abundance} > {output.species}
+        grep "s__" {output.abundance} >> {output.species} 2>> {log}
+        """
+    
