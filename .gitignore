@@ -1,6 +1,8 @@
 .snakemake/*
 Database/*
 Data/FastP/*
+Data/RawFastQ/SRR15041036_*
+Data/RawFastQ/SRR15040909_*
 Data/NoHuman/*
 Data/SingleM/*
 Data/Metaphlan/*
