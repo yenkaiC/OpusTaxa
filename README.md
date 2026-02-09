@@ -61,6 +61,9 @@ Edit `config/config.yaml` to customize:
 # Dry-run to check everything
 snakemake --use-conda --dry-run --cores 8
 
+# Actual Run
+snakemake --use-conda --cores 8
+
 # Actual Run with SingleM only
 snakemake --use-conda --cores 8 --config metaphlan=false singlem=true
 ```
@@ -74,7 +77,7 @@ OpusTaxa/
 │   ├── FastP/              # Quality-trimmed reads
 │   ├── NoHuman/            # Host-filtered reads
 │   ├── MetaPhlAn/          # Taxonomic profiles
-│   └── SingleM/            # OTU tables
+│   └── SingleM/            # OTU tables & Microbial Fractions
 └── Reports/
     ├── FastQC/             # Individual QC reports
     │   ├── Step_1_Raw/

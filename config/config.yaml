@@ -1,3 +1,4 @@
+# Directories
 databaseDirectory: Database
 rawFastQDirectory: Data/Raw_FastQ
 trimmedFastQDirectory: Data/FastP
@@ -9,10 +10,11 @@ qcOutputDirectory: Reports/FastQC
 logDirectory: logs
 slurmLogDirectory": logs/slurm
 
-nohuman: true
+# Flags
 metaphlan: true
 singlem: true
 
+# HPC
 executor: slurm
 default_resources: []
 jobs: 20
