@@ -67,6 +67,9 @@ snakemake --use-conda --cores 8
 
 # Run with SingleM, and without MetaPhlAn
 snakemake --use-conda --cores 8 --config metaphlan=false singlem=true
+
+# Run with with SRA integration (off by default)
+snakemake --use-conda --cores 8 --config download_sra=true singlem=false
 ```
 
 ### 4. Access Results

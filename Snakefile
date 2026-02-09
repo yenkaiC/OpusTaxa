@@ -12,6 +12,11 @@ include: workflow.basedir + "/Workflow/rules/qc.smk"
 ## Define Outputs
 rule all:
     input:
+        # SRA downloads - conditional
+        expand(input_dir + "/{sra_id}_1.fastq.gz", sra_id=SRA_IDS) if download_sra and SRA_IDS else [],
+        expand(input_dir + "/{sra_id}_2.fastq.gz", sra_id=SRA_IDS) if download_sra and SRA_IDS else [],
+        
+        # Data processing and QC
         expand(clean_dir + "/{sample}_R1_001.fastq.gz", sample=SAMPLES),
         expand(clean_dir + "/{sample}_R2_001.fastq.gz", sample=SAMPLES),
         expand(nohuman_dir + "/{sample}_R1_001.fastq.gz", sample=SAMPLES),
@@ -21,7 +26,7 @@ rule all:
         expand(fastp_qc_dir + "/{sample}_R1_001_fastqc.html", sample=SAMPLES),
         expand(fastp_qc_dir + "/{sample}_R2_001_fastqc.html", sample=SAMPLES),
         
-        # MultiQC reports - nohuman is conditional
+        # MultiQC reports
         multiqc_dir + "/raw_multiqc_report.html",
         multiqc_dir + "/fastp_multiqc_report.html",
         multiqc_dir + "/nohuman_multiqc_report.html",
@@ -40,3 +45,4 @@ rule all:
 print("Config values:")
 print(f"  metaphlan: {config.get('metaphlan', True)}")
 print(f"  singlem: {config.get('singlem', True)}")
+print(f"  SRA download: {config.get('download_SRA', False)}")

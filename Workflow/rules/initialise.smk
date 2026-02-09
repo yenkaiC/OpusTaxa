@@ -11,12 +11,7 @@ nohuman_dir = config['nohumanDirectory']
 metaphlan_dir = config['metaphlanDirectory']
 singlem_dir = config['singlemDirectory']
 multiqc_dir = config['multiQCDirectory']
-# Read SRA IDs from file if it exists
-import os
-SRA_IDS = []
-if os.path.exists("sra_id.txt"):
-    with open("sra_id.txt", "r") as f:
-        SRA_IDS = [line.strip() for line in f if line.strip()]
+
 # Quality Control
 qc_dir = config['qcOutputDirectory']
 raw_qc_dir = qc_dir + "/Step_1_Raw"
@@ -28,6 +23,14 @@ log_dir = config['logDirectory']
 # Flags
 run_metaphlan = str(config.get("metaphlan", True)).lower() not in ("false", "0", "no")
 run_singlem = str(config.get("singlem", True)).lower() not in ("false", "0", "no")
+download_sra = str(config.get("download_sra", False)).lower() not in ("false", "0", "no")
+
+# Read SRA IDs if download_sra is enabled
+import os
+SRA_IDS = []
+if config.get("download_sra", False) and os.path.exists("sra_id.txt"):
+    with open("sra_id.txt", "r") as f:
+        SRA_IDS = [line.strip() for line in f if line.strip()]
 
 # Recognise file patterns
 samples_standard, = glob_wildcards(input_dir + "/{sample}_R1_001.fastq.gz") # SAGC

@@ -2,8 +2,9 @@
 import os
 
 # Read SRA IDs from the file
-with open("sra_id.txt", "r") as f:
-    SRA_IDS = [line.strip() for line in f if line.strip()]
+if config.get("download_sra", False) and os.path.exists("sra_id.txt"):
+    with open("sra_id.txt", "r") as f:
+        SRA_IDS = [line.strip() for line in f if line.strip()]
 
 ## Download FastQ File from SRA
 rule SRA_downloader:
