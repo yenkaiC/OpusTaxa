@@ -43,6 +43,6 @@ rule all:
         
 
 print("Config values:")
-print(f"  metaphlan: {config.get('metaphlan', True)}")
-print(f"  singlem: {config.get('singlem', True)}")
-print(f"  SRA download: {config.get('download_SRA', False)}")
+print(f"  metaphlan: {run_metaphlan}")
+print(f"  singlem: {run_singlem}")
+print(f"  SRA download: {download_sra}")
