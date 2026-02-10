@@ -31,9 +31,8 @@ snakemake --use-conda --dry-run --cores 1
 ## Usage
 ### 1. Prepare Input Data
 
-Place your paired-end FASTQ files in `Data/Raw_FastQ/`:<br>
-(and remove the test sample files already in folder)<br>
-**DELETE** `sra_id.txt` file if you are not using it. 
+Place your paired-end FASTQ files in `OpusTaxa/Data/Raw_FastQ/`:<br>
+**Input** your SRA IDs into `sra_id.txt` file if you plan on using it. 
 ```bash
 Data/Raw_FastQ/
 ├── sample1_R1_001.fastq.gz
@@ -81,6 +80,7 @@ Results are organized in the `Data/` and `Reports/` directories:
 ```
 OpusTaxa/
 ├── Data/
+│   ├── Raw_FastQ/          # Raw reads
 │   ├── FastP/              # Quality-trimmed reads
 │   ├── NoHuman/            # Host-filtered reads
 │   ├── MetaPhlAn/          # Taxonomic profiles
