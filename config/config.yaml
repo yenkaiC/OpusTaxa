@@ -11,6 +11,7 @@ logDirectory: logs
 slurmLogDirectory": logs/slurm
 
 # Flags
+test_mode: false
 download_sra: false
 metaphlan: true
 singlem: true

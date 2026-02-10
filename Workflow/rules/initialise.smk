@@ -24,6 +24,9 @@ log_dir = config['logDirectory']
 run_metaphlan = str(config.get("metaphlan", True)).lower() not in ("false", "0", "no")
 run_singlem = str(config.get("singlem", True)).lower() not in ("false", "0", "no")
 download_sra = str(config.get("download_sra", False)).lower() not in ("false", "0", "no")
+run_test = str(config.get("test_mode", False)).lower() not in ("false", "0", "no")
+if run_test:
+    input_dir = "Misc/Test/Raw_FastQ"
 
 # Read SRA IDs if download_sra is enabled
 import os
