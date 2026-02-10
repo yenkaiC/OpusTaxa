@@ -80,6 +80,7 @@ Results are organized in the `Data/` and `Reports/` directories:
 ```
 OpusTaxa/
 ├── Data/
+│   ├── Raw_FastQ/          # Raw reads
 │   ├── FastP/              # Quality-trimmed reads
 │   ├── NoHuman/            # Host-filtered reads
 │   ├── MetaPhlAn/          # Taxonomic profiles
