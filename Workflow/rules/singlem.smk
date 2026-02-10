@@ -81,3 +81,25 @@ rule singlem_extra:
             --metapackage "{input.db}" \
             -p {input.profile} > {output.microbial_fraction} 2>> {log}
         """
+
+rule singlem_merged_table:
+    input:
+        profiles = expand(singlem_dir + "/{sample}_profile.tsv", sample=SAMPLES)
+    output:
+        merged = singlem_dir + "/table/merged_profile.tsv"
+    conda:
+        workflow.basedir + "/Workflow/envs/singlem.yaml"
+    log:
+        log_dir + "/singlem/merge_table.log"
+    resources:
+        mem_mb = 8000,
+        time = 120
+    threads: 1
+    shell:
+        """
+        mkdir -p {singlem_dir}/table
+        
+        singlem summarise \
+            --input-taxonomic-profiles {input.profiles} \
+            --output-taxonomic-profile {output.merged} 2> {log}
+        """
