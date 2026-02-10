@@ -10,3 +10,6 @@ fastp*
 .DS_Store
 .Rhistory
 logs/*
+
+# Keep this folder
+!Data/Raw_FastQ/
