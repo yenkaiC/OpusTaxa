@@ -31,7 +31,7 @@ snakemake --use-conda --dry-run --cores 1
 ## Usage
 ### 1. Prepare Input Data
 
-Create and place your paired-end FASTQ files in `OpusTaxa/Data/Raw_FastQ/`:<br>
+Place your paired-end FASTQ files in `OpusTaxa/Data/Raw_FastQ/`:<br>
 **Input** your SRA IDs into `sra_id.txt` file if you plan on using it. 
 ```bash
 Data/Raw_FastQ/
