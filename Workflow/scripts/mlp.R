@@ -2,16 +2,15 @@ if (!requireNamespace("microbial.load.predictor", quietly = TRUE)) {
     remotes::install_github("grp-bork/microbial_load_predictor")
 }
 
-library(tidyverse)
-library(microbial.load.predictor)  # devtools::install_github("grp-bork/microbial_load_predictor")
+library(microbial.load.predictor)
 
 # Get args passed from Snakemake
-input_profile <- snakemake@input[["profile"]]
-output_load   <- snakemake@output[["load"]]
-output_qmp    <- snakemake@output[["qmp"]]
+input_profile <- snakemake@input[["profile"]] # → "Data/Metaphlan/sample_profile.txt"
+output_load   <- snakemake@output[["load"]]   # → "Data/MLP/sample_load.tsv"
+output_qmp    <- snakemake@output[["qmp"]]    # → "Data/MLP/sample_qmp.tsv"
 
-# Read MetaPhlAn4 profile
-input <- read.delim(input_profile, header = T, row.names = 1, check.names = F, comment.char = "#")
+# Read MetaPhlAn4 profile (skip comment lines starting with #)
+input <- read.delim(input_profile, header = TRUE, row.names = 1, check.names = FALSE, comment.char = "#")
 
 # Transpose - MLP expects samples as rows, species as columns
 input <- data.frame(t(input), check.names = F)

@@ -11,7 +11,7 @@ metaspadesDirectory: Data/MetaSPAdes
 humannDirectory: Data/HUMAnN
 mlpDirectory: Data/MLP
 logDirectory: logs
-slurmLogDirectory": logs/slurm
+slurmLogDirectory: logs/slurm
 
 # Flags
 test_mode: false
