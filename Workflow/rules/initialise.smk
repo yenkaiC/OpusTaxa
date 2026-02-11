@@ -12,6 +12,7 @@ metaphlan_dir = config['metaphlanDirectory']
 singlem_dir = config['singlemDirectory']
 multiqc_dir = config['multiQCDirectory']
 metaspades_dir = config['metaspadesDirectory']
+mlp_dir = config['mlpDirectory']
 
 # Quality Control
 qc_dir = config['qcOutputDirectory']
@@ -29,6 +30,7 @@ run_test = str(config.get("test_mode", False)).lower() not in ("false", "0", "no
 if run_test:
     input_dir = "Misc/Test/Raw_FastQ"
 run_metaspades = str(config.get("metaspades", False)).lower() not in ("false", "0", "no")
+run_mlp = str(config.get("mlp", False)).lower() not in ("false", "0", "no")
 
 # Read SRA IDs if download_sra is enabled
 import os

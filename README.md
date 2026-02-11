@@ -1,7 +1,7 @@
+<img src="/Misc/OpusTaxa_logo.png" alt="OpusTaxa Logo" title="OpusTaxa Logo" width="250">
+
 # OpusTaxa: Metagenomic Processing Pipeline
 OpusTaxa is a pipeline that streamlines best-practice end-to-end processing of shotgun metagenomic data with various metagenomic tools, from quality control to, host-read removal to taxonomic and funcational profiling. 
-
-<img src="/Misc/OpusTaxa_logo.png" alt="OpusTaxa Logo" title="OpusTaxa Logo" width="250">
 
 ## Summary of pipeline
 1. **Quality Control** with [fastp](https://github.com/OpenGene/fastp)

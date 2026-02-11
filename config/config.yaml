@@ -8,6 +8,7 @@ singlemDirectory: Data/SingleM
 multiQCDirectory: Reports/MultiQC
 qcOutputDirectory: Reports/FastQC
 metaspadesDirectory: Data/MetaSPAdes
+mlpDirectory: Data/MLP
 logDirectory: logs
 slurmLogDirectory": logs/slurm
 
@@ -17,6 +18,7 @@ download_sra: false
 metaphlan: true
 singlem: true
 metaspades: false
+mlp: false
 
 # HPC
 executor: slurm

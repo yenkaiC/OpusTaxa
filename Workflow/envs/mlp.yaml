@@ -1,0 +1,10 @@
+name: mlp
+channels:
+    - conda-forge
+    - bioconda
+    - defaults
+dependencies:
+    - r-base
+    - r-tidyverse
+    - r-devtools
+    - r-remotes
