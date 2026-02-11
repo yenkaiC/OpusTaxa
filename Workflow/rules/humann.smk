@@ -97,6 +97,7 @@ rule humann_merge_tables:
     conda:
         workflow.basedir + "/Workflow/envs/humann.yaml"
     params:
+        humann_dir = humann_dir,
         gf_dir = humann_dir + "/table/genefamilies",
         pa_dir = humann_dir + "/table/pathabundance",
         pc_dir = humann_dir + "/table/pathcoverage"
@@ -109,9 +110,9 @@ rule humann_merge_tables:
         """
         mkdir -p {params.gf_dir} {params.pa_dir} {params.pc_dir}
 
-        humann_join_tables -i $(dirname {input.genefamilies[0]})  -o {params.gf_dir}/joined.tsv --file_name genefamilies 2> {log}
-        humann_join_tables -i $(dirname {input.pathabundance[0]}) -o {params.pa_dir}/joined.tsv --file_name pathabundance 2>> {log}
-        humann_join_tables -i $(dirname {input.pathcoverage[0]})  -o {params.pc_dir}/joined.tsv --file_name pathcoverage 2>> {log}
+        humann_join_tables -i {params.humann_dir} -o {params.gf_dir}/joined.tsv --file_name genefamilies 2> {log}
+        humann_join_tables -i {params.humann_dir} -o {params.pa_dir}/joined.tsv --file_name pathabundance 2>> {log}
+        humann_join_tables -i {params.humann_dir} -o {params.pc_dir}/joined.tsv --file_name pathcoverage 2>> {log}
 
         humann_renorm_table -i {params.gf_dir}/joined.tsv -o {params.gf_dir}/joined_cpm.tsv --units cpm 2>> {log}
         humann_renorm_table -i {params.pa_dir}/joined.tsv -o {params.pa_dir}/joined_cpm.tsv --units cpm 2>> {log}
