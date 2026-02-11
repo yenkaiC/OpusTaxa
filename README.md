@@ -64,13 +64,13 @@ snakemake --use-conda --dry-run --cores 8
 # Actual Run
 snakemake --use-conda --cores 8
 
-# Run with SingleM, and without MetaPhlAn
+# Run with SingleM, and without MetaPhlAn (SingleM and MetaPhlAn are on by default)
 snakemake --use-conda --cores 8 --config metaphlan=false singlem=true
 
 # Run with with SRA integration (off by default)
 snakemake --use-conda --cores 8 --config download_sra=true
 
-# Run with test files
+# Run with test files (off by default)
 snakemake --use-conda --cores 8 --config test_mode=true
 ```
 
@@ -84,7 +84,8 @@ OpusTaxa/
 │   ├── FastP/              # Quality-trimmed reads
 │   ├── NoHuman/            # Host-filtered reads
 │   ├── MetaPhlAn/          # Taxonomic profiles
-│   └── SingleM/            # OTU tables & Microbial Fractions
+│   ├── SingleM/            # OTU tables & Microbial Fractions
+│   └── MetaSPAdes/         # Metagenome Assemblies
 └── Reports/
     ├── FastQC/             # Individual QC reports
     │   ├── Step_1_Raw/
@@ -105,7 +106,7 @@ OpusTaxa/
 
 ### Recommended (for production)
 - **CPU:** 8+ cores
-- **RAM:** 32+ GB
+- **RAM:** 40+ GB (80 GB for MetaSPAdes, 64GB for HUMAnN)
 - **Storage:** 500 GB (depends on dataset size)
 
 ### Database Sizes
