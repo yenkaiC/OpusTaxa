@@ -76,7 +76,7 @@ rule multi_qc:
         time = 80
     shell:
         """
-        multiqc {raw_qc_dir} -o {params} -n raw_multiqc_report.html
-        multiqc {fastp_qc_dir} -o {params} -n fastp_multiqc_report.html
-        multiqc {nohuman_qc_dir} -o {params} -n nohuman_multiqc_report.html
+        multiqc {raw_qc_dir} -o {params} -n raw_multiqc_report.html --force
+        multiqc {fastp_qc_dir} -o {params} -n fastp_multiqc_report.html --force
+        multiqc {nohuman_qc_dir} -o {params} -n nohuman_multiqc_report.html --force
         """
