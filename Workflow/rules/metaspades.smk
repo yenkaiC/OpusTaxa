@@ -8,7 +8,7 @@ rule metaspades:
         scaffolds = metaspades_dir + "/{sample}/scaffolds.fasta",
         graph     = metaspades_dir + "/{sample}/assembly_graph_with_scaffolds.gfa"
     conda:
-        workflow.basedir + "/Workflow/envs/metaspades.yaml"
+        workflow.basedir + "/Workflow/envs/spades.yaml"
     params:
         outdir = metaspades_dir + "/{sample}"
     threads: 10

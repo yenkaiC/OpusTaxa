@@ -5,6 +5,7 @@ fasterq.tmp*
 Data/NoHuman/*
 Data/SingleM/*
 Data/Metaphlan/*
+Data/MetaSPAdes/*
 Reports/*
 fastp*
 .DS_Store
