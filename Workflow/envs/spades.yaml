@@ -1,0 +1,7 @@
+name: metaspades
+channels:
+    - conda-forge
+    - bioconda
+    - defaults
+dependencies:
+    - spades

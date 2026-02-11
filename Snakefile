@@ -8,6 +8,7 @@ include: workflow.basedir + "/Workflow/rules/nohuman.smk"
 include: workflow.basedir + "/Workflow/rules/metaphlan.smk"
 include: workflow.basedir + "/Workflow/rules/singlem.smk"
 include: workflow.basedir + "/Workflow/rules/qc.smk"
+include: workflow.basedir + "/Workflow/rules/metaspades.smk"
 
 ## Define Outputs
 rule all:
@@ -30,18 +31,26 @@ rule all:
         # Conditional SingleM
         expand(singlem_dir + "/{sample}_otu-table.tsv", sample=SAMPLES) if run_singlem else [],
         expand(singlem_dir + "/{sample}.spf.tsv", sample=SAMPLES) if run_singlem else [],
+        # Merged table for SingleM
         singlem_dir + "/table/merged_profile.tsv" if run_singlem else [],
         directory(singlem_dir + "/table/species_by_site/") if run_singlem else [],
+        
         # Conditional MetaPhlAn
         expand(metaphlan_dir + "/{sample}_profile.txt", sample=SAMPLES) if run_metaphlan else [],
         expand(metaphlan_dir + "/{sample}_bowtie.bz2", sample=SAMPLES) if run_metaphlan else [],
         # Merged table for MetaPhlAn
         metaphlan_dir + "/table/abundance_all.txt" if run_metaphlan else [],
-        metaphlan_dir + "/table/abundance_species.txt" if run_metaphlan else []
+        metaphlan_dir + "/table/abundance_species.txt" if run_metaphlan else [],
+
+        # Conditional metaSPAdes assembly
+        expand(metaspades_dir + "/{sample}/contigs.fasta", sample=SAMPLES) if run_metaspades else [],
+        expand(metaspades_dir + "/{sample}/scaffolds.fasta", sample=SAMPLES) if run_metaspades else [] 
         
 
+## Check what one should be running
 print("Config values:")
-print(f"  metaphlan: {run_metaphlan}")
-print(f"  singlem: {run_singlem}")
+print(f"  MetaPhlAn: {run_metaphlan}")
+print(f"  SingleM: {run_singlem}")
 print(f"  SRA download: {download_sra}")
 print(f"  Test files: {run_test}")
+print(f"  metaSPAdes: {run_metaspades}")
