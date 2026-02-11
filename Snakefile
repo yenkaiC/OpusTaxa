@@ -49,15 +49,22 @@ rule all:
         expand(metaspades_dir + "/{sample}/contigs.fasta", sample=SAMPLES) if run_metaspades else [],
         expand(metaspades_dir + "/{sample}/scaffolds.fasta", sample=SAMPLES) if run_metaspades else [] 
 
-        # Microbial Load Predictor
+        # Microbial Load Predictor (requries metaphlan)
         expand(mlp_dir + "/{sample}_load.tsv", sample=SAMPLES) if run_mlp and run_metaphlan else [],
         expand(mlp_dir + "/{sample}_qmp.tsv", sample=SAMPLES) if run_mlp and run_metaphlan else []
+
+        # HUMAnN - requires MetaPhlAn (conditional)
+        humann_dir + "/table/genefamilies_cpm_unstratified.tsv" if run_humann and run_metaphlan else [],
+        humann_dir + "/table/pathabundance_cpm_unstratified.tsv" if run_humann and run_metaphlan else [],
+        humann_dir + "/table/pathcoverage_unstratified.tsv" if run_humann and run_metaphlan else []
         
 
 ## Check what one should be running
 print("Config values:")
+print(f"  Test files: {run_test}")
+print(f"  SRA download: {download_sra}")
 print(f"  MetaPhlAn: {run_metaphlan}")
 print(f"  SingleM: {run_singlem}")
-print(f"  SRA download: {download_sra}")
-print(f"  Test files: {run_test}")
+print(f"  HUMAnN: {run_humann}")
 print(f"  metaSPAdes: {run_metaspades}")
+print(f"  MLP: {run_mlp}")
