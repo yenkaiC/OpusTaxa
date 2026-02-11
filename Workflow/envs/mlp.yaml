@@ -6,5 +6,9 @@ channels:
 dependencies:
     - r-base
     - r-tidyverse
-    - r-devtools
     - r-remotes
+    - r-data.table
+    - r-nnet
+    - r-rpart
+    - r-caret
+    - r-clock

@@ -1,6 +1,4 @@
-if (!requireNamespace("microbial.load.predictor", quietly = TRUE)) {
-    remotes::install_github("grp-bork/microbial_load_predictor")
-}
+library(MLP)
 
 library(microbial.load.predictor)
 
