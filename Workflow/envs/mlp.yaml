@@ -12,3 +12,4 @@ dependencies:
     - r-rpart
     - r-caret
     - r-clock
+    - r-xgboost=1.7.6
