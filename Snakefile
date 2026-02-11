@@ -10,6 +10,7 @@ include: workflow.basedir + "/Workflow/rules/singlem.smk"
 include: workflow.basedir + "/Workflow/rules/qc.smk"
 include: workflow.basedir + "/Workflow/rules/metaspades.smk"
 include: workflow.basedir + "/Workflow/rules/mlp.smk"
+include: workflow.basedir + "/Workflow/rules/humann.smk"
 
 ## Define Outputs
 rule all:

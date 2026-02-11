@@ -4,6 +4,7 @@ DB_dir = config['databaseDirectory']
 nohumanDB_dir = DB_dir + "/nohuman/HPRC.r2/db"
 metaphlanDB_dir = DB_dir + "/metaphlan"
 singlemDB_dir = DB_dir + "/singlem"
+humannDB_dir = DB_dir + "/humann"
 # File locations
 input_dir = config['rawFastQDirectory']
 clean_dir = config['trimmedFastQDirectory']
@@ -13,6 +14,7 @@ singlem_dir = config['singlemDirectory']
 multiqc_dir = config['multiQCDirectory']
 metaspades_dir = config['metaspadesDirectory']
 mlp_dir = config['mlpDirectory']
+humann_dir   = config['humannDirectory']
 
 # Quality Control
 qc_dir = config['qcOutputDirectory']
@@ -31,6 +33,7 @@ if run_test:
     input_dir = "Misc/Test/Raw_FastQ"
 run_metaspades = str(config.get("metaspades", False)).lower() not in ("false", "0", "no")
 run_mlp = str(config.get("mlp", False)).lower() not in ("false", "0", "no")
+run_humann = str(config.get("humann", False)).lower() not in ("false", "0", "no")
 
 # Read SRA IDs if download_sra is enabled
 import os
