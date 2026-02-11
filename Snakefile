@@ -31,6 +31,7 @@ rule all:
         expand(singlem_dir + "/{sample}_otu-table.tsv", sample=SAMPLES) if run_singlem else [],
         expand(singlem_dir + "/{sample}.spf.tsv", sample=SAMPLES) if run_singlem else [],
         singlem_dir + "/table/merged_profile.tsv" if run_singlem else [],
+        directory(singlem_dir + "/table/species_by_site/") if run_singlem else [],
         # Conditional MetaPhlAn
         expand(metaphlan_dir + "/{sample}_profile.txt", sample=SAMPLES) if run_metaphlan else [],
         expand(metaphlan_dir + "/{sample}_bowtie.bz2", sample=SAMPLES) if run_metaphlan else [],

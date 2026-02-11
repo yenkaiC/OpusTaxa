@@ -86,7 +86,8 @@ rule singlem_merged_table:
     input:
         profiles = expand(singlem_dir + "/{sample}_profile.tsv", sample=SAMPLES)
     output:
-        merged = singlem_dir + "/table/merged_profile.tsv"
+        merged = singlem_dir + "/table/merged_profile.tsv",
+        species_by_site = directory(singlem_dir + "/table/species_by_site/")
     conda:
         workflow.basedir + "/Workflow/envs/singlem.yaml"
     log:
@@ -98,8 +99,14 @@ rule singlem_merged_table:
     shell:
         """
         mkdir -p {singlem_dir}/table
+        mkdir -p {singlem_dir}/table/species_by_site
         
         singlem summarise \
             --input-taxonomic-profiles {input.profiles} \
             --output-taxonomic-profile {output.merged} 2> {log}
+        
+        singlem summarise \
+            --input-taxonomic-profiles {input.profiles} \
+            --output-species-by-site-relative-abundance-prefix {output.species_by_site}/merged \
+            2>> {log}
         """
