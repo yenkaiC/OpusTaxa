@@ -47,11 +47,11 @@ rule all:
 
         # metaSPAdes assembly
         expand(metaspades_dir + "/{sample}/contigs.fasta", sample=SAMPLES) if run_metaspades else [],
-        expand(metaspades_dir + "/{sample}/scaffolds.fasta", sample=SAMPLES) if run_metaspades else [] 
+        expand(metaspades_dir + "/{sample}/scaffolds.fasta", sample=SAMPLES) if run_metaspades else [],
 
         # Microbial Load Predictor (requries metaphlan)
         expand(mlp_dir + "/{sample}_load.tsv", sample=SAMPLES) if run_mlp and run_metaphlan else [],
-        expand(mlp_dir + "/{sample}_qmp.tsv", sample=SAMPLES) if run_mlp and run_metaphlan else []
+        expand(mlp_dir + "/{sample}_qmp.tsv", sample=SAMPLES) if run_mlp and run_metaphlan else [],
 
         # HUMAnN - requires MetaPhlAn (conditional)
         humann_dir + "/table/genefamilies_cpm_unstratified.tsv" if run_humann and run_metaphlan else [],
