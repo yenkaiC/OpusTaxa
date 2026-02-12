@@ -10,9 +10,10 @@ OpusTaxa is a pipeline that streamlines best-practice end-to-end processing of s
 3. **Quality Reports** with [FastQC](https://github.com/s-andrews/FastQC)
     - Quality control reports at each step (raw, trimmed and filter)
     - Aggregates FastQC reports with [MultiQC](https://github.com/MultiQC/MultiQC)
-5. **Taxonomic Profiling** with
+4a. **Taxonomic Profiling** with
     - [Metaphylan](https://github.com/biobakery/MetaPhlAn)
     - [SingleM](https://wwood.github.io/singlem/)
+4b. **Metagenomic Assembly** with [MetaSPAdes](https://github.com/ablab/spades)
 
 ## Quick Start
 ```bash
@@ -83,8 +84,10 @@ OpusTaxa/
 │   ├── Raw_FastQ/          # Raw reads
 │   ├── FastP/              # Quality-trimmed reads
 │   ├── NoHuman/            # Host-filtered reads
-│   ├── MetaPhlAn/          # Taxonomic profiles
-│   ├── SingleM/            # OTU tables & Microbial Fractions
+│   ├── MetaPhlAn/          
+    │   ├── Table/          # Abundance table from all samples
+│   ├── SingleM/            # Microbial Fractions
+    │   ├── Table/          # Profile table of all samples in different taxonomic order
 │   └── MetaSPAdes/         # Metagenome Assemblies
 └── Reports/
     ├── FastQC/             # Individual QC reports
