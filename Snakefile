@@ -46,7 +46,6 @@ rule all:
         metaphlan_dir + "/table/abundance_species.txt" if run_metaphlan else [],
 
         # metaSPAdes assembly
-        expand(metaspades_dir + "/{sample}/contigs.fasta", sample=SAMPLES) if run_metaspades else [],
         expand(metaspades_dir + "/{sample}/scaffolds.fasta", sample=SAMPLES) if run_metaspades else [],
 
         # Microbial Load Predictor (requries metaphlan)

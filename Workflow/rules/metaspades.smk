@@ -4,9 +4,7 @@ rule metaspades:
         r1 = nohuman_dir + "/{sample}_R1_001.fastq.gz",
         r2 = nohuman_dir + "/{sample}_R2_001.fastq.gz"
     output:
-        contigs   = metaspades_dir + "/{sample}/contigs.fasta",
         scaffolds = metaspades_dir + "/{sample}/scaffolds.fasta",
-        graph     = metaspades_dir + "/{sample}/assembly_graph_with_scaffolds.gfa"
     conda:
         workflow.basedir + "/Workflow/envs/spades.yaml"
     params:
@@ -25,4 +23,10 @@ rule metaspades:
             -t {threads} \
             -m 80 \
             -o {params.outdir} 2> {log}
+        
+        # Keep only essential outputs, remove everything else
+        find {params.outdir} -maxdepth 1 \
+            ! -name 'scaffolds.fasta' \
+            ! -name '.' \
+            -exec rm -rf {{}} +
         """
