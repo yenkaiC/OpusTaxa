@@ -85,9 +85,9 @@ OpusTaxa/
 │   ├── FastP/              # Quality-trimmed reads
 │   ├── NoHuman/            # Host-filtered reads
 │   ├── MetaPhlAn/          
-    │   ├── Table/          # Abundance table from all samples
+│   │   ├── Table/          # Abundance table from all samples
 │   ├── SingleM/            # Microbial Fractions
-    │   ├── Table/          # Profile table of all samples in different taxonomic order
+│   │   ├── Table/          # Profile table of all samples in different taxonomic order
 │   └── MetaSPAdes/         # Metagenome Assemblies
 └── Reports/
     ├── FastQC/             # Individual QC reports
