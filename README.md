@@ -62,13 +62,14 @@ Edit `config/config.yaml` to customize:
 # Dry-run to check everything
 snakemake --use-conda --dry-run --cores 8
 
-# Actual Run
+## Actual Run
+# By default, SingleM and MetaPhlAn are on by default, everything else is off
 snakemake --use-conda --cores 8
 
-# Run with SingleM, and without MetaPhlAn (SingleM and MetaPhlAn are on by default)
+# Run with SingleM, and without MetaPhlAn
 snakemake --use-conda --cores 8 --config metaphlan=false singlem=true
 
-# Run with with SRA integration (off by default)
+# Run with SRA integration (off by default)
 snakemake --use-conda --cores 8 --config download_sra=true
 
 # Run with test files (off by default)
