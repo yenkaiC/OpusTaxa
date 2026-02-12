@@ -11,6 +11,7 @@ include: workflow.basedir + "/Workflow/rules/qc.smk"
 include: workflow.basedir + "/Workflow/rules/metaspades.smk"
 include: workflow.basedir + "/Workflow/rules/mlp.smk"
 include: workflow.basedir + "/Workflow/rules/humann.smk"
+include: workflow.basedir + "/Workflow/rules/rgi.smk"
 
 ## Define Outputs
 rule all:
@@ -46,6 +47,7 @@ rule all:
         metaphlan_dir + "/table/abundance_species.txt" if run_metaphlan else [],
 
         # metaSPAdes assembly
+        expand(metaspades_dir + "/{sample}/contigs.fasta", sample=SAMPLES) if run_metaspades else [],
         expand(metaspades_dir + "/{sample}/scaffolds.fasta", sample=SAMPLES) if run_metaspades else [],
 
         # Microbial Load Predictor (requries metaphlan)
@@ -56,6 +58,18 @@ rule all:
         humann_dir + "/table/genefamilies_cpm_unstratified.tsv" if run_humann and run_metaphlan else [],
         humann_dir + "/table/pathabundance_cpm_unstratified.tsv" if run_humann and run_metaphlan else [],
         humann_dir + "/table/pathcoverage_unstratified.tsv" if run_humann and run_metaphlan else []
+
+        # RGI - Resistome analysis (dual-mode)
+        # Read-based mode (always runs when RGI is enabled)
+        #expand(rgi_dir + "/{sample}/reads/{sample}.gene_mapping_data.txt", sample=SAMPLES) if run_rgi else [],
+        #expand(rgi_dir + "/{sample}/reads/{sample}.overall_mapping_stats.txt", sample=SAMPLES) if run_rgi else [],
+        # Contig-based mode (only runs when both RGI and metaspades are enabled)
+        #expand(rgi_dir + "/{sample}/contigs/{sample}_rgi.txt", sample=SAMPLES) if run_rgi and run_metaspades else [],
+        #expand(rgi_dir + "/{sample}/contigs/{sample}_rgi.json", sample=SAMPLES) if run_rgi and run_metaspades else [],
+        # Summary outputs
+        #rgi_dir + "/summary/all_samples_reads_summary.txt" if run_rgi else [],
+        #rgi_dir + "/summary/reads_heatmap.png" if run_rgi else [],
+        #rgi_dir + "/summary/RGI_comparative_report.html" if run_rgi else []
         
 
 ## Check what one should be running
@@ -67,3 +81,4 @@ print(f"  SingleM: {run_singlem}")
 print(f"  HUMAnN: {run_humann}")
 print(f"  metaSPAdes: {run_metaspades}")
 print(f"  MLP: {run_mlp}")
+print(f"  RGI: {run_rgi}")

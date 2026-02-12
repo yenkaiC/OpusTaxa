@@ -10,6 +10,7 @@ qcOutputDirectory: Reports/FastQC
 metaspadesDirectory: Data/MetaSPAdes
 humannDirectory: Data/HUMAnN
 mlpDirectory: Data/MLP
+rgiDirectory: Data/RGI
 logDirectory: logs
 slurmLogDirectory: logs/slurm
 
@@ -21,6 +22,7 @@ singlem: true
 metaspades: false
 mlp: false
 humann: false 
+rgi: false
 
 # HPC
 executor: slurm

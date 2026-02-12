@@ -1,0 +1,7 @@
+name: rgi
+channels:
+    - bioconda
+    - conda-forge
+    - defaults
+dependencies:
+    - rgi>=6.0.0
