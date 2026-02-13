@@ -55,9 +55,9 @@ rule all:
         mlp_dir + "/qmp.tsv"  if run_mlp and run_metaphlan else [],
 
         # HUMAnN - requires MetaPhlAn (conditional)
-        humann_dir + "/table/genefamilies_cpm_unstratified.tsv" if run_humann and run_metaphlan else [],
-        humann_dir + "/table/pathabundance_cpm_unstratified.tsv" if run_humann and run_metaphlan else [],
-        humann_dir + "/table/pathcoverage_unstratified.tsv" if run_humann and run_metaphlan else []
+        humann_dir + "/merged/genefamilies_cpm_unstratified.tsv" if run_humann and run_metaphlan else [],
+        humann_dir + "/merged/pathabundance_cpm_unstratified.tsv" if run_humann and run_metaphlan else [],
+        humann_dir + "/merged/pathcoverage_unstratified.tsv" if run_humann and run_metaphlan else []
 
         # RGI - Resistome analysis (dual-mode)
         # Read-based mode (always runs when RGI is enabled)
