@@ -1,4 +1,4 @@
-## Download Kraken2 Database
+## Download Kraken2 PlusPF-16 Database (16GB)
 rule dl_kraken2_DB:
     output:
         checkpoint = kraken2DB_dir + "/.download_complete"
@@ -15,38 +15,13 @@ rule dl_kraken2_DB:
     shell:
         """
         if [ ! -f "{params.db_dir}/hash.k2d" ]; then
-            # Download standard Kraken2 database (8GB compressed, ~50GB uncompressed)
-            kraken2-build --standard --threads {threads} --db {params.db_dir} 2> {log}
-        else
-            echo "Kraken2 database already exists, skipping download" > {log}
-        fi
-        touch {output.checkpoint}
-        """
-
-## Alternative: Download pre-built database (faster but larger)
-rule dl_kraken2_prebuilt_DB:
-    output:
-        checkpoint = kraken2DB_dir + "/.download_complete"
-    conda:
-        workflow.basedir + '/Workflow/envs/kraken2.yaml'
-    params:
-        db_dir = kraken2DB_dir
-    resources:
-        mem_mb = 8000,
-        time = 480
-    threads: 4
-    log:
-        log_dir + "/kraken2/database_dl.log"
-    shell:
-        """
-        if [ ! -f "{params.db_dir}/hash.k2d" ]; then
             mkdir -p {params.db_dir}
-            # Download pre-built standard database
-            wget -P {params.db_dir} https://genome-idx.s3.amazonaws.com/kraken/k2_standard_20231009.tar.gz 2> {log}
-            tar -xzvf {params.db_dir}/k2_standard_20231009.tar.gz -C {params.db_dir} 2>> {log}
-            rm {params.db_dir}/k2_standard_20231009.tar.gz
+            # Includes: archaea, bacteria, viral, plasmid, human, UniVec_Core, protozoa, fungi
+            wget -P {params.db_dir} https://genome-idx.s3.amazonaws.com/kraken/k2_pluspf_16gb_20240112.tar.gz 2> {log}
+            tar -xzvf {params.db_dir}/k2_pluspf_16gb_20240112.tar.gz -C {params.db_dir} 2>> {log}
+            rm {params.db_dir}/k2_pluspf_16gb_20240112.tar.gz
         else
-            echo "Kraken2 database already exists, skipping download" > {log}
+            echo "Kraken2 PlusPF-16 database already exists, skipping download" > {log}
         fi
         touch {output.checkpoint}
         """
