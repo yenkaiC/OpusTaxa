@@ -118,7 +118,7 @@ rule humann:
         rm -rf {params.outdir}
         """
 
-## Merge, normalise, and split stratified tables - Now much simpler!
+## Merge, normalise, and split stratified tables
 rule humann_merge_tables:
     input:
         genefamilies  = expand(humann_dir + "/genefamilies/{sample}_genefamilies.tsv",  sample=SAMPLES),
@@ -127,7 +127,7 @@ rule humann_merge_tables:
     output:
         gf_cpm_unstrat = humann_dir + "/merged/genefamilies_cpm_unstratified.tsv",
         pa_cpm_unstrat = humann_dir + "/merged/pathabundance_cpm_unstratified.tsv",
-        pc_unstrat     = humann_dir + "/merged/pathcoverage_unstratified.tsv"
+        pc_unstrat     = humann_dir + "/merged/pathcoverage_joined_unstratified.tsv"
     conda:
         workflow.basedir + "/Workflow/envs/humann.yaml"
     params:
@@ -144,22 +144,17 @@ rule humann_merge_tables:
         """
         mkdir -p {params.merge_dir}
 
-        # Join tables - simple directory search now works!
-        humann_join_tables -i {params.gf_dir} -o {params.merge_dir}/genefamilies_joined.tsv --file_name genefamilies 2> {log}
-        humann_join_tables -i {params.pa_dir} -o {params.merge_dir}/pathabundance_joined.tsv --file_name pathabundance 2>> {log}
-        humann_join_tables -i {params.pc_dir} -o {params.merge_dir}/pathcoverage_joined.tsv --file_name pathcoverage 2>> {log}
+        # Join tables
+        humann_join_tables -i {params.gf_dir} -o {params.merge_dir}/genefamilies_joined.tsv --file_name genefamilies 2> {log} || true
+        humann_join_tables -i {params.pa_dir} -o {params.merge_dir}/pathabundance_joined.tsv --file_name pathabundance 2>> {log} || true
+        humann_join_tables -i {params.pc_dir} -o {params.merge_dir}/pathcoverage_joined.tsv --file_name pathcoverage 2>> {log} || true
 
         # Normalize to CPM
-        humann_renorm_table -i {params.merge_dir}/genefamilies_joined.tsv -o {params.merge_dir}/genefamilies_cpm.tsv --units cpm 2>> {log}
-        humann_renorm_table -i {params.merge_dir}/pathabundance_joined.tsv -o {params.merge_dir}/pathabundance_cpm.tsv --units cpm 2>> {log}
+        humann_renorm_table -i {params.merge_dir}/genefamilies_joined.tsv -o {params.merge_dir}/genefamilies_cpm.tsv --units cpm 2>> {log} || true
+        humann_renorm_table -i {params.merge_dir}/pathabundance_joined.tsv -o {params.merge_dir}/pathabundance_cpm.tsv --units cpm 2>> {log} || true
 
         # Split stratified tables
-        humann_split_stratified_table -i {params.merge_dir}/genefamilies_cpm.tsv -o {params.merge_dir} 2>> {log}
-        humann_split_stratified_table -i {params.merge_dir}/pathabundance_cpm.tsv -o {params.merge_dir} 2>> {log}
-        humann_split_stratified_table -i {params.merge_dir}/pathcoverage_joined.tsv -o {params.merge_dir} 2>> {log}
-
-        # Rename to final output names
-        mv {params.merge_dir}/genefamilies_cpm_unstratified.tsv {output.gf_cpm_unstrat}
-        mv {params.merge_dir}/pathabundance_cpm_unstratified.tsv {output.pa_cpm_unstrat}
-        mv {params.merge_dir}/pathcoverage_joined_unstratified.tsv {output.pc_unstrat}
+        humann_split_stratified_table -i {params.merge_dir}/genefamilies_cpm.tsv -o {params.merge_dir} 2>> {log} || true
+        humann_split_stratified_table -i {params.merge_dir}/pathabundance_cpm.tsv -o {params.merge_dir} 2>> {log} || true
+        humann_split_stratified_table -i {params.merge_dir}/pathcoverage_joined.tsv -o {params.merge_dir} 2>> {log} || true
         """
