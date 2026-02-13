@@ -7,6 +7,7 @@ include: workflow.basedir + "/Workflow/rules/fastp.smk"
 include: workflow.basedir + "/Workflow/rules/nohuman.smk"
 include: workflow.basedir + "/Workflow/rules/metaphlan.smk"
 include: workflow.basedir + "/Workflow/rules/singlem.smk"
+include: workflow.basedir + "/Workflow/rules/kraken2.smk"
 include: workflow.basedir + "/Workflow/rules/qc.smk"
 include: workflow.basedir + "/Workflow/rules/metaspades.smk"
 include: workflow.basedir + "/Workflow/rules/mlp.smk"
@@ -46,6 +47,12 @@ rule all:
         metaphlan_dir + "/table/abundance_all.txt" if run_metaphlan else [],
         metaphlan_dir + "/table/abundance_species.txt" if run_metaphlan else [],
 
+        # Kraken2
+        expand(kraken2_dir + "/{sample}_report.txt", sample=SAMPLES) if run_kraken2 else [],
+        expand(kraken2_dir + "/{sample}_bracken.txt", sample=SAMPLES) if run_kraken2 else [],
+        # Combined Bracken table
+        kraken2_dir + "/table/combined_bracken_species.txt" if run_kraken2 else [],
+        
         # metaSPAdes assembly
         expand(metaspades_dir + "/{sample}/contigs.fasta", sample=SAMPLES) if run_metaspades else [],
         expand(metaspades_dir + "/{sample}/scaffolds.fasta", sample=SAMPLES) if run_metaspades else [],
@@ -78,6 +85,7 @@ print(f"  Test files: {run_test}")
 print(f"  SRA download: {download_sra}")
 print(f"  MetaPhlAn: {run_metaphlan}")
 print(f"  SingleM: {run_singlem}")
+print(f"  Kraken2: {run_kraken2}")
 print(f"  HUMAnN: {run_humann}")
 print(f"  metaSPAdes: {run_metaspades}")
 print(f"  MLP: {run_mlp}")

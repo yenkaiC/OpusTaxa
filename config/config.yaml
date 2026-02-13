@@ -5,6 +5,7 @@ trimmedFastQDirectory: Data/FastP
 nohumanDirectory: Data/NoHuman
 metaphlanDirectory: Data/Metaphlan
 singlemDirectory: Data/SingleM
+kraken2Directory: Data/Kraken2
 multiQCDirectory: Reports/MultiQC
 qcOutputDirectory: Reports/FastQC
 metaspadesDirectory: Data/MetaSPAdes
@@ -19,6 +20,7 @@ test_mode: false
 download_sra: false
 metaphlan: true
 singlem: true
+kraken2: false
 metaspades: false
 mlp: false
 humann: false 

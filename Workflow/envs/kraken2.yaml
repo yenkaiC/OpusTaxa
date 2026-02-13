@@ -1,0 +1,8 @@
+name: kraken2
+channels:
+    - conda-forge
+    - bioconda
+    - defaults
+dependencies:
+    - kraken2
+    - bracken

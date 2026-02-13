@@ -5,6 +5,7 @@ nohumanDB_dir = DB_dir + "/nohuman/HPRC.r2/db"
 metaphlanDB_dir = DB_dir + "/metaphlan"
 singlemDB_dir = DB_dir + "/singlem"
 humannDB_dir = DB_dir + "/humann"
+kraken2DB_dir = DB_dir + "/kraken2"
 cardDB_dir = DB_dir + "/card"
 # File locations
 input_dir = config['rawFastQDirectory']
@@ -16,6 +17,7 @@ multiqc_dir = config['multiQCDirectory']
 metaspades_dir = config['metaspadesDirectory']
 mlp_dir = config['mlpDirectory']
 humann_dir   = config['humannDirectory']
+kraken2_dir = config['kraken2Directory']
 rgi_dir = config['rgiDirectory']
 
 # Quality Control
@@ -29,6 +31,7 @@ log_dir = config['logDirectory']
 # Flags
 run_metaphlan = str(config.get("metaphlan", True)).lower() not in ("false", "0", "no")
 run_singlem = str(config.get("singlem", True)).lower() not in ("false", "0", "no")
+run_kraken2 = str(config.get("kraken2", False)).lower() not in ("false", "0", "no")
 download_sra = str(config.get("download_sra", False)).lower() not in ("false", "0", "no")
 run_test = str(config.get("test_mode", False)).lower() not in ("false", "0", "no")
 if run_test:
