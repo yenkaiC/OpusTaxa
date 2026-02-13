@@ -4,8 +4,8 @@ rule metaspades:
         r1 = nohuman_dir + "/{sample}_R1_001.fastq.gz",
         r2 = nohuman_dir + "/{sample}_R2_001.fastq.gz"
     output:
-        contigs = metaspades_dir + "/{sample}/contigs.fasta",
-        scaffolds = metaspades_dir + "/{sample}/scaffolds.fasta",
+        contigs = metaspades_dir + "/{sample}/contigs.fasta",       # For RGI
+        scaffolds = metaspades_dir + "/{sample}/scaffolds.fasta",   # For Daedalus
     conda:
         workflow.basedir + "/Workflow/envs/spades.yaml"
     params:
