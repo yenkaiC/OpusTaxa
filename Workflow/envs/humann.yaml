@@ -4,4 +4,8 @@ channels:
     - bioconda
     - defaults
 dependencies:
-    - humann=3.9
+    - python=3.9
+    - metaphlan=4.0.6
+    - pip
+    - pip:
+        - humann==3.9

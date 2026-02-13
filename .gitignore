@@ -7,6 +7,7 @@ Data/SingleM/*
 Data/Metaphlan/*
 Data/MetaSPAdes/*
 Data/Raw_FastQ/SRR*
+Data/HUMAnN/*
 Reports/*
 fastp*
 .DS_Store

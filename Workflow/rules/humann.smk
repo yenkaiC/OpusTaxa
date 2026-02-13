@@ -1,6 +1,7 @@
+## Download HUMAnN databases using checkpoint files
 rule dl_humann_chocophlan:
     output:
-        directory(humannDB_dir + "/chocophlan")
+        checkpoint = humannDB_dir + "/chocophlan/.download_complete"
     conda:
         workflow.basedir + '/Workflow/envs/humann.yaml'
     params:
@@ -12,11 +13,18 @@ rule dl_humann_chocophlan:
     log:
         log_dir + "/humann/chocophlan_dl.log"
     shell:
-        "humann_databases --download chocophlan full {params.db_dir} 2> {log}"
+        """
+        if [ ! -d "{params.db_dir}/chocophlan" ]; then
+            humann_databases --download chocophlan full {params.db_dir} 2> {log}
+        else
+            echo "ChocoPhlAn database already exists, skipping download" > {log}
+        fi
+        touch {output.checkpoint}
+        """
 
 rule dl_humann_uniref:
     output:
-        directory(humannDB_dir + "/uniref")
+        checkpoint = humannDB_dir + "/uniref/.download_complete"
     conda:
         workflow.basedir + '/Workflow/envs/humann.yaml'
     params:
@@ -28,11 +36,18 @@ rule dl_humann_uniref:
     log:
         log_dir + "/humann/uniref_dl.log"
     shell:
-        "humann_databases --download uniref uniref90_diamond {params.db_dir} 2> {log}"
+        """
+        if [ ! -d "{params.db_dir}/uniref" ]; then
+            humann_databases --download uniref uniref90_diamond {params.db_dir} 2> {log}
+        else
+            echo "UniRef database already exists, skipping download" > {log}
+        fi
+        touch {output.checkpoint}
+        """
 
 rule dl_humann_utility:
     output:
-        directory(humannDB_dir + "/utility_mapping")
+        checkpoint = humannDB_dir + "/utility_mapping/.download_complete"
     conda:
         workflow.basedir + '/Workflow/envs/humann.yaml'
     params:
@@ -44,16 +59,23 @@ rule dl_humann_utility:
     log:
         log_dir + "/humann/utility_dl.log"
     shell:
-        "humann_databases --download utility_mapping full {params.db_dir} 2> {log}"
+        """
+        if [ ! -d "{params.db_dir}/utility_mapping" ]; then
+            humann_databases --download utility_mapping full {params.db_dir} 2> {log}
+        else
+            echo "Utility mapping database already exists, skipping download" > {log}
+        fi
+        touch {output.checkpoint}
+        """
 
 ## Run HUMAnN3 on forward reads only
 rule humann:
     input:
         r1           = nohuman_dir + "/{sample}_R1_001.fastq.gz",
         profile      = metaphlan_dir + "/{sample}_profile.txt",
-        chocophlan   = humannDB_dir + "/chocophlan",
-        uniref       = humannDB_dir + "/uniref",
-        utility      = humannDB_dir + "/utility_mapping"
+        chocophlan   = humannDB_dir + "/chocophlan/.download_complete",
+        uniref       = humannDB_dir + "/uniref/.download_complete",
+        utility      = humannDB_dir + "/utility_mapping/.download_complete"
     output:
         genefamilies  = humann_dir + "/{sample}/{sample}_R1_001_genefamilies.tsv",
         pathabundance = humann_dir + "/{sample}/{sample}_R1_001_pathabundance.tsv",
@@ -62,8 +84,8 @@ rule humann:
         workflow.basedir + "/Workflow/envs/humann.yaml"
     params:
         outdir  = humann_dir + "/{sample}",
-        nucdb   = humannDB_dir + "/chocophlan",
-        protdb  = humannDB_dir + "/uniref",
+        nucdb   = humannDB_dir + "/chocophlan/chocophlan",
+        protdb  = humannDB_dir + "/uniref/uniref",
         mpa_db  = metaphlanDB_dir
     threads: 8
     resources:
