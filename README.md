@@ -14,6 +14,8 @@ OpusTaxa is a pipeline that streamlines best-practice end-to-end processing of s
     - [Metaphylan](https://github.com/biobakery/MetaPhlAn)
     - [SingleM](https://wwood.github.io/singlem/)
 5. **Metagenomic Assembly** with [MetaSPAdes](https://github.com/ablab/spades)
+6. **Functional Profiling** with
+    - [HUMAnN 3.9](https://huttenhower.sph.harvard.edu/humannn)
 
 ## Quick Start
 ```bash
@@ -74,6 +76,9 @@ snakemake --use-conda --cores 8 --config download_sra=true
 
 # Run with test files (off by default)
 snakemake --use-conda --cores 8 --config test_mode=true
+
+# Additional config commands
+snakemake --use-conda --cores 16 --config humann=true metaspades=true
 ```
 
 ### 4. Access Results
@@ -88,7 +93,9 @@ OpusTaxa/
 │   ├── MetaPhlAn/          
 │   │   ├── Table/          # Abundance table from all samples
 │   ├── SingleM/            # Microbial Fractions
-│   │   ├── Table/          # Profile table of all samples in different taxonomic order
+│   │   ├── Table/          # Taxonomic Profile table of all samples
+│   ├── HUMANnN/
+│   │   ├── merged/         # Merged, normalised, and unstratified tables
 │   └── MetaSPAdes/         # Metagenome Assemblies
 └── Reports/
     ├── FastQC/             # Individual QC reports
@@ -117,6 +124,7 @@ OpusTaxa/
 - NoHuman: ~6.3 GB (As of February 2026)
 - MetaPhlAn: ~36 GB (As of February 2026)
 - SingleM: ~7.5 GB (Version S5.4.0)
+- HUMAnN: ~55.6 GB (HUMAnN 3.9)
 
 ### Things to note
 OpusTaxa currently only accepts paired reads. However, we've configured HUMAnN to run only on the forward read.
