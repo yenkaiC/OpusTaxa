@@ -118,4 +118,6 @@ OpusTaxa/
 - MetaPhlAn: ~36 GB (As of February 2026)
 - SingleM: ~7.5 GB (Version S5.4.0)
 
-Databases are downloaded automatically on first run.
+### Things to note
+OpusTaxa currently only accepts paired reads. However, we've configured HUMAnN to run only on the forward read.
+Databases for the corresponding tool are downloaded automatically on first run (not including dry-tools).
