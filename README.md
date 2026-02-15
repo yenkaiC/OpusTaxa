@@ -85,6 +85,7 @@ snakemake --use-conda --cores 16 --config humann=true metaspades=true kraken2=tr
 ### 4. Access Results
 
 Results are organized in the `Data/` and `Reports/` directories:
+The tables from MetaPhlAn, SingleM, Kraken2, and HUMAnN are abundances merged across all samples
 ```
 OpusTaxa/
 ├── Data/
@@ -92,13 +93,13 @@ OpusTaxa/
 │   ├── FastP/              # Quality-trimmed reads
 │   ├── NoHuman/            # Host-filtered reads
 │   ├── MetaPhlAn/          
-│   │   ├── Table/          # Abundance table from all samples
+│   │   ├── Table/          # Relative abundance table
 │   ├── SingleM/            # Microbial Fractions
-│   │   ├── Table/          # Taxonomic Profile table of all samples
+│   │   ├── Table/          # Taxonomic Profile table
 │   ├── Kraken2/            
 │   │   ├── Table/          # Bracken table (relative-abundance)
-│   ├── HUMANnN/
-│   │   ├── merged/         # Stratified tables
+│   ├── HUMAnN/
+│   │   ├── merged/         # Stratified abundance tables
 │   └── MetaSPAdes/         # Metagenome Assemblies
 └── Reports/
     ├── FastQC/             # Individual QC reports
