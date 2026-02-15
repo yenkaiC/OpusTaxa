@@ -13,6 +13,7 @@ OpusTaxa is a pipeline that streamlines best-practice end-to-end processing of s
 4. **Taxonomic Profiling** with
     - [Metaphylan](https://github.com/biobakery/MetaPhlAn)
     - [SingleM](https://wwood.github.io/singlem/)
+    - [Kraken2](https://github.com/DerrickWood/kraken2) and [Bracken](https://github.com/jenniferlu717/Bracken)
 5. **Metagenomic Assembly** with [MetaSPAdes](https://github.com/ablab/spades)
 6. **Functional Profiling** with
     - [HUMAnN 3.9](https://huttenhower.sph.harvard.edu/humannn)
@@ -65,7 +66,7 @@ Edit `config/config.yaml` to customize:
 snakemake --use-conda --dry-run --cores 8
 
 ## Actual Run
-# By default, SingleM and MetaPhlAn are on by default, everything else is off
+# By default, SingleM and MetaPhlAn are on, everything else is off
 snakemake --use-conda --cores 8
 
 # Run with SingleM, and without MetaPhlAn
@@ -78,7 +79,7 @@ snakemake --use-conda --cores 8 --config download_sra=true
 snakemake --use-conda --cores 8 --config test_mode=true
 
 # Additional config commands
-snakemake --use-conda --cores 16 --config humann=true metaspades=true
+snakemake --use-conda --cores 16 --config humann=true metaspades=true kraken2=true
 ```
 
 ### 4. Access Results
@@ -94,8 +95,10 @@ OpusTaxa/
 │   │   ├── Table/          # Abundance table from all samples
 │   ├── SingleM/            # Microbial Fractions
 │   │   ├── Table/          # Taxonomic Profile table of all samples
+│   ├── Kraken2/            
+│   │   ├── Table/          # Bracken table (relative-abundance)
 │   ├── HUMANnN/
-│   │   ├── merged/         # Merged, normalised, and unstratified tables
+│   │   ├── merged/         # Stratified tables
 │   └── MetaSPAdes/         # Metagenome Assemblies
 └── Reports/
     ├── FastQC/             # Individual QC reports
@@ -125,6 +128,7 @@ OpusTaxa/
 - MetaPhlAn: ~36 GB (As of February 2026)
 - SingleM: ~7.5 GB (Version S5.4.0)
 - HUMAnN: ~55.6 GB (HUMAnN 3.9)
+- Kraken2: 16.1 GB (PlusPF-16)
 
 ### Things to note
 OpusTaxa currently only accepts paired reads. However, we've configured HUMAnN to run only on the forward read.

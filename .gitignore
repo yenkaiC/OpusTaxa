@@ -5,6 +5,7 @@ fasterq.tmp*
 Data/NoHuman/*
 Data/SingleM/*
 Data/Metaphlan/*
+Data/Kraken2/*
 Data/MetaSPAdes/*
 Data/Raw_FastQ/SRR*
 Data/HUMAnN/*
