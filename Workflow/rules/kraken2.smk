@@ -25,6 +25,7 @@ rule dl_kraken2_DB:
         fi
         touch {output.checkpoint}
         """
+# Choose your own database at https://benlangmead.github.io/aws-indexes/k2
 
 ## Run Kraken2 on paired-end reads
 rule kraken2:
