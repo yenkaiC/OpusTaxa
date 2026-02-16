@@ -62,7 +62,7 @@ Edit `config/config.yaml` to customize:
 
 **Local execution:**
 ```bash
-# Dry-run to check everything
+# Dry-run as initial safety check (simulates the run to check that the run is defined correctly)
 snakemake --use-conda --dry-run --cores 8
 
 ## Actual Run
@@ -99,7 +99,7 @@ OpusTaxa/
 │   ├── Kraken2/            
 │   │   ├── Table/          # Bracken table (relative-abundance)
 │   ├── HUMAnN/
-│   │   ├── merged/         # Stratified abundance tables
+│   │   ├── merged/         # Abundance tables of gene-families and pathways (normalised, stratified and unstratified)
 │   └── MetaSPAdes/         # Metagenome Assemblies
 └── Reports/
     ├── FastQC/             # Individual QC reports
