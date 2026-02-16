@@ -18,8 +18,8 @@ rule dl_kraken2_DB:
             mkdir -p {params.db_dir}
             # Includes: archaea, bacteria, viral, plasmid, human, UniVec_Core, protozoa, fungi
             wget -P {params.db_dir} https://genome-idx.s3.amazonaws.com/kraken/k2_pluspf_16_GB_20251015.tar.gz 2> {log}
-            tar -xzvf {params.db_dir}/k2_pluspf_16gb_20240112.tar.gz -C {params.db_dir} 2>> {log}
-            rm {params.db_dir}/k2_pluspf_16gb_20240112.tar.gz
+            tar -xzvf {params.db_dir}/k2_pluspf_16_GB_20251015.tar.gz -C {params.db_dir} 2>> {log}
+            rm {params.db_dir}/k2_pluspf_16_GB_20251015.tar.gz
         else
             echo "Kraken2 PlusPF-16 database already exists, skipping download" > {log}
         fi
