@@ -18,11 +18,9 @@ rule dl_card_DB:
         log_dir + "/rgi/card_db_download.log"
     shell:
         """
-        # Create log directory first
-        mkdir -p $(dirname {log})
+        mkdir -p $(dirname {log}) # Create log directory first
         
-        # Create database directory
-        mkdir -p {params.db_dir}
+        mkdir -p {params.db_dir} # Create database directory
         
         # Save current directory and log path as absolute paths
         WORKDIR=$(pwd)
@@ -30,18 +28,21 @@ rule dl_card_DB:
         
         cd {params.db_dir}
         
+        # Remove any previous loads
+        rgi clean --local
+
         # Download latest CARD data
         wget -O card-data.tar.bz2 https://card.mcmaster.ca/latest/data 2> "$LOGFILE"
         tar -xvf card-data.tar.bz2 2>> "$LOGFILE"
         
-        # Load CARD database into RGI
+        # Load CARD database into local or working directory
         rgi load --card_json card.json --local 2>> "$LOGFILE"
         
-        # Load wildcard data for read mapping - FIXED COMMAND
+        # Load wildcard data for read mapping
         rgi card_annotation -i card.json > card_annotation.log 2>> "$LOGFILE"
         rgi wildcard_annotation -i card.json --card_annotation card_database_v*.fasta --wildcard card_wildcard_v*.fasta 2>> "$LOGFILE"
         
-        # Create k-mer database for read-based analysis - FIXED COMMAND
+        # Create k-mer database for read-based analysis
         rgi load -i card.json --card_annotation card_database_v*.fasta --wildcard card_wildcard_v*.fasta --local 2>> "$LOGFILE"
         
         # Build indices for BWA/Bowtie2
