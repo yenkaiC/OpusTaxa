@@ -18,27 +18,40 @@ rule dl_card_DB:
         log_dir + "/rgi/card_db_download.log"
     shell:
         """
+        # Create log directory first
+        mkdir -p $(dirname {log})
+        
+        # Create database directory
         mkdir -p {params.db_dir}
+        
+        # Save current directory and log path as absolute paths
+        WORKDIR=$(pwd)
+        LOGFILE="$WORKDIR/{log}"
+        
         cd {params.db_dir}
         
         # Download latest CARD data
-        wget -O card-data.tar.bz2 https://card.mcmaster.ca/latest/data 2> {log}
-        tar -xvf card-data.tar.bz2 2>> {log}
+        wget -O card-data.tar.bz2 https://card.mcmaster.ca/latest/data 2> "$LOGFILE"
+        tar -xvf card-data.tar.bz2 2>> "$LOGFILE"
         
         # Load CARD database into RGI
-        rgi load --card_json card.json --local 2>> {log}
+        rgi load --card_json card.json --local 2>> "$LOGFILE"
         
-        # Load wildcard data for read mapping
-        rgi card_annotation -i card.json > card_annotation.log 2>> {log}
-        rgi wildcard_annotation -i card.json --card_annotation card_database_v*.fasta -v card_wildcard_v*.fasta 2>> {log}
+        # Load wildcard data for read mapping - FIXED COMMAND
+        rgi card_annotation -i card.json > card_annotation.log 2>> "$LOGFILE"
+        rgi wildcard_annotation -i card.json --card_annotation card_database_v*.fasta --wildcard card_wildcard_v*.fasta 2>> "$LOGFILE"
         
-        # Create k-mer database for read-based analysis
-        rgi load -i card.json --card_annotation card_database_v*.fasta --wildcard_annotation card_wildcard_v*.fasta --local 2>> {log}
+        # Create k-mer database for read-based analysis - FIXED COMMAND
+        rgi load -i card.json --card_annotation card_database_v*.fasta --wildcard card_wildcard_v*.fasta --local 2>> "$LOGFILE"
         
         # Build indices for BWA/Bowtie2
-        rgi bwt 2>> {log}
+        rgi bwt 2>> "$LOGFILE"
         
+        # Clean up
         rm card-data.tar.bz2
+        
+        # Return to original directory
+        cd "$WORKDIR"
         """
 
 ## MODE 1: Read-based RGI (Fast screening)
