@@ -67,16 +67,18 @@ rule all:
         humann_dir + "/merged/pathcoverage_joined_unstratified.tsv" if run_humann and run_metaphlan else [],
 
         # RGI - Resistome analysis (dual-mode)
+        DB_dir + "/card/card.json" if run_rgi else [],
+        DB_dir + "/card/wildcard/index-for-model-sequences.txt" if run_rgi else [],
         # Read-based mode (always runs when RGI is enabled)
-        expand(rgi_dir + "/{sample}/reads/{sample}.gene_mapping_data.txt", sample=SAMPLES) if run_rgi else [],
-        expand(rgi_dir + "/{sample}/reads/{sample}.overall_mapping_stats.txt", sample=SAMPLES) if run_rgi else [],
+        #expand(rgi_dir + "/{sample}/reads/{sample}.gene_mapping_data.txt", sample=SAMPLES) if run_rgi else [],
+        #expand(rgi_dir + "/{sample}/reads/{sample}.overall_mapping_stats.txt", sample=SAMPLES) if run_rgi else [],
         # Contig-based mode (only runs when both RGI and metaspades are enabled)
         #expand(rgi_dir + "/{sample}/contigs/{sample}_rgi.txt", sample=SAMPLES) if run_rgi and run_metaspades else [],
         #expand(rgi_dir + "/{sample}/contigs/{sample}_rgi.json", sample=SAMPLES) if run_rgi and run_metaspades else [],
         # Summary outputs
-        rgi_dir + "/summary/all_samples_reads_summary.txt" if run_rgi else [],
-        rgi_dir + "/summary/reads_heatmap.png" if run_rgi else [],
-        rgi_dir + "/summary/RGI_comparative_report.html" if run_rgi else []
+        #rgi_dir + "/summary/all_samples_reads_summary.txt" if run_rgi else [],
+        #rgi_dir + "/summary/reads_heatmap.png" if run_rgi else [],
+        #rgi_dir + "/summary/RGI_comparative_report.html" if run_rgi else []
         
 
 ## Check what one should be running
