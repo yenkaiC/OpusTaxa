@@ -136,21 +136,18 @@ pip install snakemake-executor-plugin-slurm
 Use `screen`, `tmux`, or `nohup` to keep the process running if your SSH session disconnects:
 ```bash
 cd OpusTaxa
-conda activate snakemake
 
 # Option 1: Using screen
 screen -S opustaxa
+conda activate snakemake
 snakemake --workflow-profile config/slurm
 # Detach: Ctrl+A, then D | Reattach: screen -r opustaxa
 
 # Option 2: Using tmux
 tmux new -s opustaxa
+conda activate snakemake
 snakemake --workflow-profile config/slurm
 # Detach: Ctrl+B, then D | Reattach: tmux attach -t opustaxa
-
-# Option 3: Using nohup
-nohup snakemake --workflow-profile config/slurm > snakemake.log 2>&1 &
-tail -f snakemake.log
 ```
 
 Dry-run first to verify everything is configured correctly:
