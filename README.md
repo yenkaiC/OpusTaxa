@@ -17,7 +17,7 @@ OpusTaxa is a pipeline that streamlines best-practice end-to-end processing of s
 5. **Metagenomic Assembly** with [MetaSPAdes](https://github.com/ablab/spades)
 6. **Functional Profiling** with
     - [HUMAnN 3.9](https://huttenhower.sph.harvard.edu/humannn)
-    - [RGI](https://github.com/arpcard/rgi/tree/master)
+    - [RGI (Resistance Gene Identifier)](https://github.com/arpcard/rgi/tree/master)
 
 ## Quick Start
 ```bash
