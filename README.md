@@ -17,6 +17,7 @@ OpusTaxa is a pipeline that streamlines best-practice end-to-end processing of s
 5. **Metagenomic Assembly** with [MetaSPAdes](https://github.com/ablab/spades)
 6. **Functional Profiling** with
     - [HUMAnN 3.9](https://huttenhower.sph.harvard.edu/humannn)
+    - [RGI](https://github.com/arpcard/rgi/tree/master)
 
 ## Quick Start
 ```bash
@@ -79,7 +80,7 @@ snakemake --use-conda --cores 8 --config download_sra=true
 snakemake --use-conda --cores 8 --config test_mode=true
 
 # Additional config commands
-snakemake --use-conda --cores 16 --config humann=true metaspades=true kraken2=true
+snakemake --use-conda --cores 16 --config humann=true metaspades=true kraken2=true rgi=true
 ```
 
 ### 4. Access Results
@@ -100,7 +101,8 @@ OpusTaxa/
 │   │   ├── Table/          # Bracken table (relative-abundance)
 │   ├── HUMAnN/
 │   │   ├── merged/         # Abundance tables of gene-families and pathways (normalised, stratified and unstratified)
-│   └── MetaSPAdes/         # Metagenome Assemblies
+│   ├── MetaSPAdes/         # Metagenome Assemblies
+│   └── RGI/                # Antibiotic Resistance Genes
 └── Reports/
     ├── FastQC/             # Individual QC reports
     │   ├── Step_1_Raw/
@@ -175,6 +177,7 @@ snakemake --workflow-profile config/slurm --config download_sra=true metaphlan=t
 - SingleM: ~7.5 GB (Version S5.4.0)
 - HUMAnN: ~55.6 GB (HUMAnN 3.9)
 - Kraken2: 16.1 GB (PlusPF-16)
+- RGI: ~16.8 GB (As of February 2026)
 
 ### Things to note
 OpusTaxa currently only accepts paired reads. However, we've configured HUMAnN to run only on the forward read.
