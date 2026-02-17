@@ -1,7 +1,7 @@
 <img src="/Misc/OpusTaxa_logo.png" alt="OpusTaxa Logo" title="OpusTaxa Logo" width="250">
 
 # OpusTaxa: Metagenomic Processing Pipeline
-OpusTaxa is a pipeline that streamlines best-practice end-to-end processing of shotgun metagenomic data with various metagenomic tools, from quality control to, host-read removal to taxonomic and funcational profiling. 
+OpusTaxa is an easy‑to‑use workflow that helps you process shotgun metagenomic data from start to finish. You can simply add your own FASTQ files or provide SRA IDs for public datasets, and OpusTaxa will automatically handle data and database downloading and setup, quality control, human‑read removal, taxonomic profiling, assembly, and functional analysis. Every step runs in a clear and organised way, and the final outputs are delivered as clean, ready‑to‑use tables for downstream exploration. OpusTaxa is built to make best‑practice metagenomic analysis simple and accessible, without the need for complex setup or advanced coding skills.
 
 ## Summary of pipeline
 1. **Public Dataset Downloading** with [SRA Toolkit](https://github.com/ncbi/sra-tools)
@@ -41,7 +41,7 @@ snakemake --use-conda --dry-run --cores 1
 ### 1. Prepare Input Data
 
 Place your paired-end FASTQ files in `OpusTaxa/Data/Raw_FastQ/`:<br>
-**Input** your SRA IDs into `sra_id.txt` file if you plan on using it. 
+**Input or provide** your SRA IDs into `sra_id.txt` file if you plan on using it. 
 ```bash
 Data/Raw_FastQ/
 ├── sample1_R1_001.fastq.gz
