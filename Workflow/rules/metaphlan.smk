@@ -1,19 +1,22 @@
 ## Download metaphylan Database
 rule dl_metaphlan_DB:
     output: 
-        directory(metaphlanDB_dir)
+        done = metaphlanDB_dir + "/.download_complete"
     conda: 
         workflow.basedir + '/Workflow/envs/metaphlan.yaml'
     resources:
         mem_mb = 4000,
-        time = 480
+        time = 1440
     threads: 1
     params:
         db_dir = metaphlanDB_dir
     log:
         log_dir + "/metaphlan/databaseDL.log"
     shell:
-        "metaphlan --install --db_dir {params.db_dir} 2> {log}"
+        """
+        metaphlan --install --db_dir {params.db_dir} 2> {log}
+        touch {output.done}
+        """
 
 ## Run MetaPhlAn
 # outputs a bowtie and an abundance profile file
@@ -21,7 +24,7 @@ rule metaphlan:
     input:
         r1 = nohuman_dir + "/{sample}_R1_001.fastq.gz",
         r2 = nohuman_dir + "/{sample}_R2_001.fastq.gz",
-        db = metaphlanDB_dir
+        db = metaphlanDB_dir + "/.download_complete"
     output:
         profile = metaphlan_dir + "/{sample}_profile.txt",
         bowtie = metaphlan_dir + "/{sample}_bowtie.bz2"
