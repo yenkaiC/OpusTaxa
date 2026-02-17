@@ -63,7 +63,7 @@ Edit `config/config.yaml` to customize:
 **Local execution:**
 ```bash
 # Dry-run as initial safety check (simulates the run to check that the run is defined correctly)
-snakemake --use-conda --dry-run --cores 8
+snakemake --use-conda --dry-run --cores 8 
 
 ## Actual Run
 # By default, SingleM and MetaPhlAn are on, everything else is off
@@ -110,6 +110,51 @@ OpusTaxa/
         ├── raw_multiqc_report.html
         ├── fastp_multiqc_report.html
         └── nohuman_multiqc_report.html
+```
+
+## Running on an HPC (SLURM)
+
+OpusTaxa supports SLURM-managed HPC clusters via the Snakemake SLURM executor plugin. In this mode, Snakemake runs on the **login/home/entry node** and automatically submits each rule as a separate SLURM job.
+
+### Prerequisites
+
+Install the SLURM executor plugin in your Snakemake environment:
+```bash
+conda activate snakemake
+pip install snakemake-executor-plugin-slurm
+```
+### Running the Pipeline
+
+**Important:** Always run Snakemake from the **login node**, not inside an `sbatch` job. Snakemake needs access to the SLURM controller to submit jobs, which is typically unavailable from compute nodes.
+
+Use `screen`, `tmux`, or `nohup` to keep the process running if your SSH session disconnects:
+```bash
+cd OpusTaxa
+conda activate snakemake
+
+# Option 1: Using screen
+screen -S opustaxa
+snakemake --workflow-profile config/slurm
+# Detach: Ctrl+A, then D | Reattach: screen -r opustaxa
+
+# Option 2: Using tmux
+tmux new -s opustaxa
+snakemake --workflow-profile config/slurm
+# Detach: Ctrl+B, then D | Reattach: tmux attach -t opustaxa
+
+# Option 3: Using nohup
+nohup snakemake --workflow-profile config/slurm > snakemake.log 2>&1 &
+tail -f snakemake.log
+```
+
+Dry-run first to verify everything is configured correctly:
+```bash
+snakemake --workflow-profile config/slurm --dry-run
+```
+
+Pipeline flags work the same as local execution:
+```bash
+snakemake --workflow-profile config/slurm --config download_sra=true metaphlan=true singlem=true
 ```
 
 ## Resource Requirements
