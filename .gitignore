@@ -9,6 +9,8 @@ Data/Kraken2/*
 Data/MetaSPAdes/*
 Data/Raw_FastQ/SRR*
 Data/HUMAnN/*
+Data/RGI/*
+localDB/*
 Reports/*
 fastp*
 .DS_Store
