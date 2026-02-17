@@ -155,9 +155,6 @@ snakemake --workflow-profile config/slurm --dry-run
 Pipeline flags work the same as local execution:
 ```bash
 snakemake --workflow-profile config/slurm --config download_sra=true metaphlan=true singlem=true
-
-# option: supply job names
-snakemake --workflow-profile config/slurm --jobname "OpusTaxa_{rulename}_{jobid}"
 ```
 
 ## Resource Requirements

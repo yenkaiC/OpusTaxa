@@ -119,6 +119,10 @@ rule rgi_load_db:
         "logs/rgi/load_db.log"
     conda:
         "../envs/rgi.yaml"
+    threads: 8
+    resources:
+        mem_mb = 32000,
+        time = 480
     shell:
         """
         rgi load \
@@ -138,6 +142,9 @@ rule rgi_contigs:
     conda:
         "../envs/rgi.yaml"
     threads: 8
+    resources:
+        mem_mb = 32000,
+        time = 960
     shell:
         """
         mkdir -p Data/RGI/{wildcards.sample}/contigs
