@@ -1,7 +1,7 @@
 <img src="/Misc/OpusTaxa_logo.png" alt="OpusTaxa Logo" title="OpusTaxa Logo" width="250">
 
 # OpusTaxa: Metagenomic Processing Pipeline
-OpusTaxa is an easy‑to‑use workflow that helps you process shotgun metagenomic data from start to finish. You can simply add your own FASTQ files or provide SRA IDs for public datasets, and OpusTaxa will automatically handle data and database downloading and setup, quality control, human‑read removal, taxonomic profiling, assembly, and functional analysis. Every step runs in a clear and organised way, and the final outputs are delivered as clean, ready‑to‑use tables for downstream exploration. OpusTaxa is built to make best‑practice metagenomic analysis simple and accessible, without the need for complex setup or advanced coding skills.
+OpusTaxa is an easy‑to‑use workflow that helps you process shotgun metagenomic data from start to finish. Simply add your FastQ files or provide SRA IDs to download public data, and OpusTaxa automatically handles database and data download, quality control, human‑read removal, taxonomic profiling, assembly, and functional analysis. Results are delivered as clean, ready‑to‑use tables for downstream exploration. OpusTaxa enables robust best‑practice metagenomic analysis without complex setup or advanced coding skills.
 
 ## Summary of pipeline
 1. **Public Dataset Downloading** with [SRA Toolkit](https://github.com/ncbi/sra-tools)
