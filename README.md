@@ -4,18 +4,22 @@
 OpusTaxa is a pipeline that streamlines best-practice end-to-end processing of shotgun metagenomic data with various metagenomic tools, from quality control to, host-read removal to taxonomic and funcational profiling. 
 
 ## Summary of pipeline
-1. **Quality Control** with [fastp](https://github.com/OpenGene/fastp)
+1. **Public Dataset Downloading** with [SRA Toolkit](https://github.com/ncbi/sra-tools)
+    - Parallel downloading
+    - Parallel compression with [pigz](https://github.com/madler/pigz)
+    - Or provide your own local files!
+2. **Quality Control** with [fastp](https://github.com/OpenGene/fastp)
     - Filters out low-quality reads
-2. **Host Read Removal** with [NoHuman](https://github.com/mbhall88/nohuman)
-3. **Quality Reports** with [FastQC](https://github.com/s-andrews/FastQC)
+3. **Host Read Removal** with [NoHuman](https://github.com/mbhall88/nohuman)
+4. **Quality Reports** with [FastQC](https://github.com/s-andrews/FastQC)
     - Quality control reports at each step (raw, trimmed and filter)
     - Aggregates FastQC reports with [MultiQC](https://github.com/MultiQC/MultiQC)
-4. **Taxonomic Profiling** with
+5. **Taxonomic Profiling** with
     - [Metaphylan](https://github.com/biobakery/MetaPhlAn)
     - [SingleM](https://wwood.github.io/singlem/)
     - [Kraken2](https://github.com/DerrickWood/kraken2) and [Bracken](https://github.com/jenniferlu717/Bracken)
-5. **Metagenomic Assembly** with [MetaSPAdes](https://github.com/ablab/spades)
-6. **Functional Profiling** with
+6. **Metagenomic Assembly** with [MetaSPAdes](https://github.com/ablab/spades)
+7. **Functional Profiling** with
     - [HUMAnN 3.9](https://huttenhower.sph.harvard.edu/humannn)
     - [RGI (Resistance Gene Identifier)](https://github.com/arpcard/rgi/tree/master)
 
