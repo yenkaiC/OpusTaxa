@@ -33,7 +33,7 @@ cd OpusTaxa
 conda create -n snakemake -c conda-forge -c bioconda snakemake
 conda activate snakemake
 
-# 3. Test with dry-run
+# 3. Test with dry-run (does not download, only checks whether the operation will run correctly)
 snakemake --use-conda --dry-run --cores 1
 ```
 
@@ -67,7 +67,7 @@ Edit `config/config.yaml` to customize:
 
 **Local execution:**
 ```bash
-# Dry-run as initial safety check (simulates the run to check that the run is defined correctly)
+# Dry-run as initial safety check
 snakemake --use-conda --dry-run --cores 8 
 
 ## Actual Run
@@ -100,7 +100,7 @@ OpusTaxa/
 │   ├── MetaPhlAn/          
 │   │   ├── Table/          # Relative abundance table
 │   ├── SingleM/            # Microbial Fractions
-│   │   ├── Table/          # Taxonomic Profile table
+│   │   ├── Table/          # Profile tables in different taxonomic orders
 │   ├── Kraken2/            
 │   │   ├── Table/          # Bracken table (relative-abundance)
 │   ├── HUMAnN/
@@ -120,7 +120,7 @@ OpusTaxa/
 
 ## Running on an HPC (SLURM)
 
-OpusTaxa supports SLURM-managed HPC clusters via the Snakemake SLURM executor plugin. In this mode, Snakemake runs on the **login/home/entry node** and automatically submits each rule as a separate SLURM job.
+OpusTaxa supports SLURM-managed HPC clusters via the Snakemake SLURM executor plugin. In this mode, Snakemake runs on the **login/home/entry node** and automatically submits each step as a separate SLURM job.
 
 ### Prerequisites
 
@@ -131,7 +131,7 @@ pip install snakemake-executor-plugin-slurm
 ```
 ### Running the Pipeline
 
-**Important:** Always run Snakemake from the **login node**, not inside an `sbatch` job. Snakemake needs access to the SLURM controller to submit jobs, which is typically unavailable from compute nodes.
+**Important:** Always run Snakemake from the **home node**, not inside an `sbatch` job. Snakemake needs access to the SLURM controller to submit jobs, which is typically unavailable from compute nodes.
 
 Use `screen`, `tmux`, or `nohup` to keep the process running if your SSH session disconnects:
 ```bash
