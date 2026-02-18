@@ -42,10 +42,12 @@ snakemake --use-conda --dry-run --cores 1
 ## Usage
 ### 1. Prepare Input Data
 
+OpusTaxa accepts two input methods:
+
+**Option A: Local FASTQ files**
 Place your paired-end FASTQ files in `OpusTaxa/Data/Raw_FastQ/`:<br>
-**Input, provide, or replace** your SRA IDs into `sra_id.txt` file if you plan on using it, one SRA ID per line. 
 ```bash
-Data/Raw_FastQ/
+OpusTaxa/Data/Raw_FastQ/
 ├── sample1_R1_001.fastq.gz
 ├── sample1_R2_001.fastq.gz
 ├── sample2_R1_001.fastq.gz
@@ -56,7 +58,18 @@ Data/Raw_FastQ/
 - `{sample}_R1_001.fastq.gz` / `{sample}_R2_001.fastq.gz` (Illumina format)
 - `{sample}_1.fastq.gz` / `{sample}_2.fastq.gz` (SRA format - auto-converts to Illumina format)
 
-**Note / Option:** Start with 2-3 samples to test before running your full dataset. If the sample has already been processed, OpusTaxa will recognise it and will not re-run. 
+**Option B: SRA accessions**
+Add your SRA run IDs to `sra_id.txt`, one per line:
+```
+SRR27916045
+SRR27916046
+SRR27916047
+```
+Then enable SRA downloading in your run command with `--config download_sra=true`. OpusTaxa will download and compress the reads automatically.
+
+You can combine both options to analyse your own samples alongside published data.
+
+**Note:** Start with 2-3 samples to test before running your full dataset. If the sample has already been processed, OpusTaxa will recognise it and will not re-run. 
 
 ### 2. Configure Settings (Optional)
 
