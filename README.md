@@ -44,7 +44,7 @@ snakemake --use-conda --dry-run --cores 1
 
 OpusTaxa accepts two input methods:
 
-**Option A: Local FASTQ files**
+**Option A: Local FASTQ files**<br>
 Place your paired-end FASTQ files in `OpusTaxa/Data/Raw_FastQ/`:<br>
 ```bash
 OpusTaxa/Data/Raw_FastQ/
