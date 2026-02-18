@@ -73,14 +73,7 @@ You can combine both options to analyse your own samples alongside published dat
 
 **Note:** Start with 2-3 samples to test before running your full dataset. If the sample has already been processed, OpusTaxa will recognise it and will not re-run. 
 
-### 2. Configure Settings (Optional)
-
-Edit `config/config.yaml` to customize:
-- Output directories
-- Resource requirements
-- Tool-specific parameters
-
-### 3. Run the Pipeline
+### 2. Run the Pipeline
 
 **Local execution:**
 ```bash
@@ -104,7 +97,7 @@ snakemake --use-conda --cores 8 --config test_mode=true
 snakemake --use-conda --cores 16 --config humann=true metaspades=true kraken2=true rgi=true
 ```
 
-### 4. Access Results
+### 3. Access Results
 
 Results are organised in the `Data/` and `Reports/` directories:
 The tables from MetaPhlAn, SingleM, Kraken2, and HUMAnN are abundances merged across all samples
@@ -136,9 +129,6 @@ OpusTaxa/
 ```
 
 ## Running on an HPC (SLURM)
-
-OpusTaxa supports SLURM-managed HPC clusters via the Snakemake SLURM executor plugin. In this mode, Snakemake runs on the **login/home/entry node** and automatically submits each step as a separate SLURM job.
-
 ### Prerequisites
 
 Install the SLURM executor plugin in your Snakemake environment:
@@ -165,11 +155,6 @@ tmux new -s opustaxa
 conda activate snakemake
 snakemake --workflow-profile config/slurm
 # Detach: Ctrl+B, then D | Reattach: tmux attach -t opustaxa
-```
-
-Dry-run first to verify everything is configured correctly:
-```bash
-snakemake --workflow-profile config/slurm --dry-run
 ```
 
 Pipeline flags work the same as local execution:
