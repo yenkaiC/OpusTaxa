@@ -58,7 +58,7 @@ OpusTaxa/Data/Raw_FastQ/
 - `{sample}_R1_001.fastq.gz` / `{sample}_R2_001.fastq.gz` (Illumina format)
 - `{sample}_1.fastq.gz` / `{sample}_2.fastq.gz` (SRA format - auto-converts to Illumina format)
 
-**Option B: SRA accessions**
+**Option B: SRA accessions**<br>
 Add your SRA run IDs to `sra_id.txt`, one per line:
 ```
 SRR27916045
