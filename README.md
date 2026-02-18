@@ -67,10 +67,6 @@ SRR27916045
 SRR27916046
 SRR27916047
 ```
-Then enable SRA downloading in your run command with `--config download_sra=true`. OpusTaxa will download and compress the reads automatically.
-
-You can combine both options to analyse your own samples alongside published data.
-
 **Note:** Start with 2-3 samples to test before running your full dataset. If the sample has already been processed, OpusTaxa will recognise it and will not re-run. 
 
 ### 2. Run the Pipeline
