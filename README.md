@@ -180,4 +180,4 @@ snakemake --workflow-profile config/slurm --config download_sra=true metaphlan=t
 
 ### Things to note
 OpusTaxa currently only accepts paired reads. However, we've configured HUMAnN to run only on the forward read.
-Databases for the corresponding tool are downloaded automatically on first run (not including dry-tools).
+Databases for the corresponding tool are downloaded automatically on first run.
