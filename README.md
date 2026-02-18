@@ -3,7 +3,7 @@
 # OpusTaxa: Streamlining Metagenome Discoveries
 OpusTaxa is an easy‑to‑use pipeline that helps you process shotgun metagenomic data from raw reads to final results. Simply provide your FASTQ files or SRA IDs, and it handles the rest: downloading data and databases, performing quality checks, removing human reads, profiling the microbiome, assembling the metagenome, and running functional analysis. Results are saved as clean tables ready for downstream exploration. OpusTaxa delivers a clear, reproducible, best‑practice workflow without requiring advanced coding or bioinformatics experience.
 
-OpusTaxa has built‑in integration with the Sequence Read Archive (SRA) API, which makes it straightforward to reanalyse published datasets alongside your own, and every tool can be toggled on or off.
+OpusTaxa has built‑in integration with the Sequence Read Archive (SRA) API, which makes it straightforward to reanalyse published datasets alongside your own.
 
 <img src="/Misc/OpusTaxa_subway 18Feb2026.png" alt="OpusTaxa Subway Plot" title="OpusTaxa Subway Plot">
 
@@ -179,5 +179,6 @@ snakemake --workflow-profile config/slurm --config download_sra=true metaphlan=t
 - RGI: ~16.8 GB (As of February 2026 [latest](https://card.mcmaster.ca/download))
 
 ### Things to note
-OpusTaxa currently only accepts paired reads. However, we've configured HUMAnN to run only on the forward read.
-Databases for the corresponding tool are downloaded automatically on first run.
+OpusTaxa currently only accepts paired reads.<br>
+We've configured HUMAnN to run only on the forward read.<br>
+Databases (for selected tools) are downloaded automatically on first run.
