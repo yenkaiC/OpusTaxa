@@ -43,7 +43,7 @@ snakemake --use-conda --dry-run --cores 1
 ### 1. Prepare Input Data
 
 Place your paired-end FASTQ files in `OpusTaxa/Data/Raw_FastQ/`:<br>
-**Input or provide** your SRA IDs into `sra_id.txt` file if you plan on using it. 
+**Input, provide, or replace** your SRA IDs into `sra_id.txt` file if you plan on using it, one SRA ID per line. 
 ```bash
 Data/Raw_FastQ/
 ├── sample1_R1_001.fastq.gz
@@ -56,7 +56,7 @@ Data/Raw_FastQ/
 - `{sample}_R1_001.fastq.gz` / `{sample}_R2_001.fastq.gz` (Illumina format)
 - `{sample}_1.fastq.gz` / `{sample}_2.fastq.gz` (SRA format - auto-converts to Illumina format)
 
-**Note:** Start with 2-3 samples to test before running your full dataset.
+**Note / Option:** Start with 2-3 samples to test before running your full dataset. If the sample has already been processed, OpusTaxa will recognise it and will not re-run. 
 
 ### 2. Configure Settings (Optional)
 
@@ -91,7 +91,7 @@ snakemake --use-conda --cores 16 --config humann=true metaspades=true kraken2=tr
 
 ### 4. Access Results
 
-Results are organized in the `Data/` and `Reports/` directories:
+Results are organised in the `Data/` and `Reports/` directories:
 The tables from MetaPhlAn, SingleM, Kraken2, and HUMAnN are abundances merged across all samples
 ```
 OpusTaxa/
