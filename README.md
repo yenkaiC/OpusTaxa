@@ -5,6 +5,8 @@ OpusTaxa is an easy‑to‑use pipeline that helps you process shotgun metagenom
 
 OpusTaxa has built‑in integration with the Sequence Read Archive (SRA) API, which makes it straightforward to reanalyse published datasets alongside your own, and every tool can be toggled on or off.
 
+<img src="/Misc/OpusTaxa_subway 18Feb2026.png" alt="OpusTaxa Subway Plot" title="OpusTaxa Subway Plot" width="250">
+
 ## Summary of pipeline
 1. **Public Dataset Downloading** with [SRA Toolkit](https://github.com/ncbi/sra-tools)
     - Parallel downloading
