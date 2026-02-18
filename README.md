@@ -59,7 +59,7 @@ OpusTaxa/Data/Raw_FastQ/
 - `{sample}_1.fastq.gz` / `{sample}_2.fastq.gz` (SRA format - auto-converts to Illumina format)
 
 **Option B: SRA accessions**<br>
-Add your SRA run IDs to `sra_id.txt` in the `OpusTaxa` folder, one per line:
+Add your SRA run IDs to the `sra_id.txt` file in the `OpusTaxa` folder, one per line:
 ```
 SRR27916045
 SRR27916046
