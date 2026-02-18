@@ -8,7 +8,7 @@ rule dl_kraken2_DB:
         db_dir = kraken2DB_dir
     resources:
         mem_mb = 8000,
-        time = 480
+        runtime = 480
     threads: 4
     log:
         log_dir + "/kraken2/database_dl.log"
@@ -43,7 +43,7 @@ rule kraken2:
     threads: 8
     resources:
         mem_mb = 64000,
-        time = 480
+        runtime = 480
     log:
         log_dir + "/kraken2/{sample}.log"
     shell:
@@ -74,7 +74,7 @@ rule bracken:
     threads: 1
     resources:
         mem_mb = 8000,
-        time = 60
+        runtime = 60
     log:
         log_dir + "/kraken2/{sample}_bracken.log"
     shell:

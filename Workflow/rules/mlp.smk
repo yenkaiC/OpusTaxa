@@ -12,7 +12,7 @@ rule mlp:
         log_dir + "/mlp/mlp.log"
     resources:
         mem_mb = 8000,
-        time = 60
+        runtime = 60
     threads: 1
     script:
         workflow.basedir + "/Workflow/scripts/mlp.R"

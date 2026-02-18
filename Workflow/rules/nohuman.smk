@@ -10,7 +10,7 @@ rule dl_noHuman_DB:
         db_dir = DB_dir + "/nohuman"
     resources:
         mem_mb = 4000,
-        time = 480
+        runtime = 480
     threads: 1
     log:
         log_dir + "/nohuman/databaseDL.log"
@@ -42,6 +42,6 @@ rule remove_human_reads:
         db_dir = nohumanDB_dir
     resources:
         mem_mb = 32000, #32GB
-        time = 480
+        runtime = 480
     shell:
         "nohuman --db {params.db_dir} -t 8 --out1 {output.r1} --out2 {output.r2} {input.r1} {input.r2} 2> {log}"

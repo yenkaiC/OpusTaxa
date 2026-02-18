@@ -8,7 +8,7 @@ rule dl_humann_chocophlan:
         db_dir = humannDB_dir + "/chocophlan"
     resources:
         mem_mb = 4000,
-        time = 480
+        runtime = 480
     threads: 1
     log:
         log_dir + "/humann/chocophlan_dl.log"
@@ -31,7 +31,7 @@ rule dl_humann_uniref:
         db_dir = humannDB_dir + "/uniref"
     resources:
         mem_mb = 4000,
-        time = 480
+        runtime = 480
     threads: 1
     log:
         log_dir + "/humann/uniref_dl.log"
@@ -54,7 +54,7 @@ rule dl_humann_utility:
         db_dir = humannDB_dir + "/utility_mapping"
     resources:
         mem_mb = 4000,
-        time = 120
+        runtime = 240
     threads: 1
     log:
         log_dir + "/humann/utility_dl.log"
@@ -91,7 +91,7 @@ rule humann:
     threads: 8
     resources:
         mem_mb = 64000,
-        time = 1440
+        runtime = 1440
     log:
         log_dir + "/humann/{sample}.log"
     shell:

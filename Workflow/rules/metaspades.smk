@@ -13,7 +13,7 @@ rule metaspades:
     threads: 10
     resources:
         mem_mb = 80000,  # 80GB
-        time = 2880       # 48 hours
+        runtime = 2880       # 48 hours
     log:
         log_dir + "/metaspades/{sample}.log"
     shell:

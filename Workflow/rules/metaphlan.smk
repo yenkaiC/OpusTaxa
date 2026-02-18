@@ -6,7 +6,7 @@ rule dl_metaphlan_DB:
         workflow.basedir + '/Workflow/envs/metaphlan.yaml'
     resources:
         mem_mb = 16000,
-        time = 1440
+        runtime = 1440
     threads: 1
     params:
         db_dir = metaphlanDB_dir
@@ -37,7 +37,7 @@ rule metaphlan:
         log_dir + "/metaphlan/{sample}.log"
     resources:
         mem_mb = 38000,
-        time = 720
+        runtime = 720
     shell:
         """
         metaphlan {input.r1},{input.r2} \
