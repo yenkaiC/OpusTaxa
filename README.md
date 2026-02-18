@@ -174,13 +174,13 @@ snakemake --workflow-profile config/slurm --config download_sra=true metaphlan=t
 - **RAM:** 40+ GB (80 GB for MetaSPAdes, 64GB for HUMAnN)
 - **Storage:** 500 GB (depends on dataset size)
 
-### Database Sizes
+### Database Size (Uncompressed)
 - NoHuman: ~6.3 GB (As of February 2026)
 - MetaPhlAn: ~36 GB (As of February 2026)
-- SingleM: ~7.5 GB (Version S5.4.0)
+- SingleM: ~7.5 GB ([Version S5.4.0](https://zenodo.org/records/15232972))
 - HUMAnN: ~55.6 GB (HUMAnN 3.9)
-- Kraken2: 16.1 GB (PlusPF-16)
-- RGI: ~16.8 GB (As of February 2026)
+- Kraken2: 16.1 GB ([PlusPF-16](https://benlangmead.github.io/aws-indexes/k2))
+- RGI: ~16.8 GB (As of February 2026 [latest](https://card.mcmaster.ca/download))
 
 ### Things to note
 OpusTaxa currently only accepts paired reads. However, we've configured HUMAnN to run only on the forward read.
