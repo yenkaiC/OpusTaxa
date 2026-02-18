@@ -58,8 +58,6 @@ OpusTaxa/Data/Raw_FastQ/
 - `{sample}_R1_001.fastq.gz` / `{sample}_R2_001.fastq.gz` (Illumina format)
 - `{sample}_1.fastq.gz` / `{sample}_2.fastq.gz` (SRA format - auto-converts to Illumina format)
 
-<details>
-<summary><strong>Option B: SRA accessions</strong></summary>
 Add your SRA run IDs to `sra_id.txt` in the `OpusTaxa` folder, one per line:
 ```
 SRR27916045
@@ -69,7 +67,6 @@ SRR27916047
 Then enable SRA downloading in your run command with `--config download_sra=true`. OpusTaxa will download and compress the reads automatically.
 
 You can combine both options to analyse your own samples alongside published data.
-</details>
 
 **Note:** Start with 2-3 samples to test before running your full dataset. If the sample has already been processed, OpusTaxa will recognise it and will not re-run. 
 
