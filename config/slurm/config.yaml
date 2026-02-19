@@ -4,7 +4,7 @@ jobs: 100
 
 # Default resources for all jobs
 default-resources:
-  slurm_partition: general
+  # slurm_partition: general
   mem_mb: 24000 # 24 GigaBytes
   runtime: 480 # minutes (8 hours)
 
