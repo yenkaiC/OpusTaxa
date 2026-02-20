@@ -13,6 +13,7 @@ humannDirectory: Data/HUMAnN
 mlpDirectory: Data/MLP
 rgiDirectory: Data/RGI
 antismashDirectory: Data/AntiSMASH
+gutsmashDirectory: Data/GutSMASH
 logDirectory: logs
 slurmLogDirectory: logs/slurm
 
@@ -27,6 +28,7 @@ mlp: false
 humann: false 
 rgi: false
 antismash: false
+gutsmash: false
 
 # HPC
 executor: slurm

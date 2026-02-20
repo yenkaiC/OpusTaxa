@@ -20,6 +20,7 @@ humann_dir   = config['humannDirectory']
 kraken2_dir = config['kraken2Directory']
 rgi_dir = config['rgiDirectory']
 antismash_dir = config['antismashDirectory']
+gutsmash_dir = config['gutsmashDirectory']
 
 # Quality Control
 qc_dir = config['qcOutputDirectory']
@@ -34,6 +35,7 @@ run_metaphlan = str(config.get("metaphlan", True)).lower() not in ("false", "0",
 run_singlem = str(config.get("singlem", True)).lower() not in ("false", "0", "no")
 run_kraken2 = str(config.get("kraken2", False)).lower() not in ("false", "0", "no")
 run_antismash = str(config.get("antismash", False)).lower() not in ("false", "0", "no")
+run_gutsmash = str(config.get("gutsmash", False)).lower() not in ("false", "0", "no")
 download_sra = str(config.get("download_sra", False)).lower() not in ("false", "0", "no")
 run_test = str(config.get("test_mode", False)).lower() not in ("false", "0", "no")
 if run_test:

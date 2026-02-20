@@ -1,0 +1,7 @@
+name: gutsmash
+channels:
+    - conda-forge
+    - bioconda
+    - defaults
+dependencies:
+    - gutsmash
