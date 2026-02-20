@@ -1,29 +1,35 @@
+rule antismash_download_databases:
+    output:
+        touch("Database/antismash/.databases_downloaded")
+    log:
+        "logs/antismash/download_databases.log"
+    conda:
+        "../envs/antismash.yaml"
+    shell:
+        """
+        download-antismash-databases 2> {log}
+        """
+
 rule antismash_contigs:
     input:
-        contigs = metaspades_dir + "/{sample}/contigs.fasta"
+        fasta="Data/MetaSPAdes/{sample}/contigs.fasta",
+        db="Database/antismash/.databases_downloaded"
     output:
-        index = antismash_dir + "/{sample}/index.html",
-        complete = antismash_dir + "/{sample}/.antismash_complete"
-    params:
-        outdir = antismash_dir + "/{sample}"
-    conda:
-        workflow.basedir + "/Workflow/envs/antismash.yaml"
-    threads: 8
-    resources:
-        mem_mb = 32000,
-        runtime = 1440  # 24 hours
+        html="Data/AntiSMASH/{sample}/index.html",
+        gbk="Data/AntiSMASH/{sample}/contigs.gbk",
+        json="Data/AntiSMASH/{sample}/contigs.json",
+        complete=touch("Data/AntiSMASH/{sample}/.antismash_complete")
     log:
-        log_dir + "/antismash/{sample}.log"
+        "logs/antismash/{sample}.log"
+    conda:
+        "../envs/antismash.yaml"
+    threads: 8
     shell:
         """
         antismash \
             --taxon bacteria \
-            --output-dir {params.outdir} \
+            --output-dir Data/AntiSMASH/{wildcards.sample} \
             --genefinding-tool prodigal-m \
             --cpus {threads} \
-            --minimal \
-            --skip-zip-file \
-            {input.contigs} 2> {log}
-        
-        touch {output.complete}
+            Data/MetaSPAdes/{wildcards.sample}/contigs.fasta 2> {log}
         """
