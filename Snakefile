@@ -13,6 +13,7 @@ include: workflow.basedir + "/Workflow/rules/metaspades.smk"
 include: workflow.basedir + "/Workflow/rules/mlp.smk"
 include: workflow.basedir + "/Workflow/rules/humann.smk"
 include: workflow.basedir + "/Workflow/rules/rgi.smk"
+include: workflow.basedir + "/Workflow/rules/antismash.smk"
 
 ## Define Outputs
 rule all:
@@ -72,6 +73,10 @@ rule all:
         # Contig-based mode (only runs when both RGI and metaspades are enabled)
         expand(rgi_dir + "/{sample}/contigs/{sample}_rgi.txt", sample=SAMPLES) if run_rgi and run_metaspades else [],
         expand(rgi_dir + "/{sample}/contigs/{sample}_rgi.json", sample=SAMPLES) if run_rgi and run_metaspades else [],
+
+        # AntiSMASH - Biosynthetic gene clusters (requires metaspades)
+        expand(antismash_dir + "/{sample}/.antismash_complete", sample=SAMPLES) if run_antismash and run_metaspades else [],
+        
         
 
 ## Check what one should be running
@@ -85,3 +90,4 @@ print(f"  HUMAnN: {run_humann}")
 print(f"  metaSPAdes: {run_metaspades}")
 print(f"  MLP: {run_mlp}")
 print(f"  RGI: {run_rgi}")
+print(f"  AntiSMASH: {run_antismash}") 
