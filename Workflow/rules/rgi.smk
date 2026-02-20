@@ -59,56 +59,7 @@ rule dl_card_DB:
         cd "$WORKDIR"
         """
 
-## MODE 1: Read-based RGI (Fast screening)
-rule rgi_reads:
-    input:
-        r1 = nohuman_dir + "/{sample}_R1_001.fastq.gz",
-        r2 = nohuman_dir + "/{sample}_R2_001.fastq.gz",
-        db_json = DB_dir + "/card/card.json",
-        db_wildcard = DB_dir + "/card/wildcard/index-for-model-sequences.txt"
-    output:
-        txt = rgi_dir + "/{sample}/reads/{sample}_rgi.txt",
-        json = rgi_dir + "/{sample}/reads/{sample}_rgi.json"
-    conda:
-        workflow.basedir + "/Workflow/envs/rgi.yaml"
-    params:
-        outdir = rgi_dir + "/{sample}/reads",
-        prefix = "{sample}_rgi",
-        r1_concat = rgi_dir + "/{sample}/reads/{sample}_concat.fastq"
-    threads: 8
-    resources:
-        mem_mb = 32000,
-        time = 480
-    log:
-        log_dir + "/rgi/{sample}_reads.log"
-    shell:
-        """
-        # Create directories and save paths
-        mkdir -p {params.outdir}
-        mkdir -p $(dirname {log})
-        
-        WORKDIR=$(pwd)
-        LOGFILE="$WORKDIR/{log}"
-        
-        # Concatenate reads (rgi main works better with single file)
-        zcat {input.r1} {input.r2} > {params.r1_concat}
-        
-        cd {params.outdir}
-        
-        rgi main \
-            --input_sequence "$WORKDIR/{params.r1_concat}" \
-            --output_file {params.prefix} \
-            --input_type read \
-            --local \
-            --clean \
-            --num_threads {threads} \
-            --alignment_tool DIAMOND 2> "$LOGFILE"
-        
-        # Clean up concatenated file
-        rm -f "$WORKDIR/{params.r1_concat}"
-        """
-
-## MODE 2: Contig-based RGI (Detailed annotation - requires metaSPAdes)
+## Contig-based RGI (Detailed annotation - requires metaSPAdes)
 # Load database
 rule rgi_load_db:
     input:
@@ -121,8 +72,8 @@ rule rgi_load_db:
         "../envs/rgi.yaml"
     threads: 8
     resources:
-        mem_mb = 32000,
-        time = 480
+        mem_mb = 40000,
+        runtime = 480
     shell:
         """
         rgi load \
@@ -143,8 +94,8 @@ rule rgi_contigs:
         "../envs/rgi.yaml"
     threads: 8
     resources:
-        mem_mb = 32000,
-        time = 960
+        mem_mb = 40000,
+        runtime = 960
     shell:
         """
         mkdir -p Data/RGI/{wildcards.sample}/contigs
