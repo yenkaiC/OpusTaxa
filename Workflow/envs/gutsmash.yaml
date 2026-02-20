@@ -1,7 +1,22 @@
 name: gutsmash
 channels:
-    - conda-forge
-    - bioconda
-    - defaults
+  - conda-forge
+  - bioconda
+  - defaults
 dependencies:
-    - gutsmash
+  - python=3.11
+  - pip
+  - setuptools>=65.0
+  - wheel
+  - biopython>=1.78
+  - scikit-learn>=1.0
+  - numpy>=1.19
+  - pandas>=1.3
+  - hmmer>=3.3
+  - fasttree>=2.1
+  - diamond>=2.0
+  - prodigal>=2.6
+  - glimmerhmm
+  - muscle
+  - clustalw
+  - git

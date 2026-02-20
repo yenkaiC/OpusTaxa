@@ -1,27 +1,33 @@
+rule install_gutsmash:
+    output:
+        touch("Database/gutsmash/.installed")
+    log:
+        "logs/gutsmash/install.log"
+    conda:
+        "../envs/gutsmash.yaml"
+    shell:
+        """
+        pip install git+https://github.com/victoriapascal/gutsmash.git 2> {log}
+        """
+
 rule gutsmash_contigs:
     input:
-        contigs = metaspades_dir + "/{sample}/contigs.fasta"
+        fasta="Data/MetaSPAdes/{sample}/contigs.fasta",
+        installed="Database/gutsmash/.installed"
     output:
-        index = gutsmash_dir + "/{sample}/index.html",
-        complete = gutsmash_dir + "/{sample}/.gutsmash_complete"
-    params:
-        outdir = gutsmash_dir + "/{sample}"
-    conda:
-        workflow.basedir + "/Workflow/envs/gutsmash.yaml"
-    threads: 8
-    resources:
-        mem_mb = 32000,
-        runtime = 1440
+        gbk="Data/GutSMASH/{sample}/contigs.gbk",
+        json="Data/GutSMASH/{sample}/contigs.json",
+        complete=touch("Data/GutSMASH/{sample}/.gutsmash_complete")
     log:
-        log_dir + "/gutsmash/{sample}.log"
+        "logs/gutsmash/{sample}.log"
+    conda:
+        "../envs/gutsmash.yaml"
+    threads: 8
     shell:
         """
         gutsmash \
-            --taxon bacteria \
-            --output-dir {params.outdir} \
+            --output-dir Data/GutSMASH/{wildcards.sample} \
             --genefinding-tool prodigal-m \
             --cpus {threads} \
-            {input.contigs} 2> {log}
-        
-        touch {output.complete}
+            Data/MetaSPAdes/{wildcards.sample}/contigs.fasta 2> {log}
         """
