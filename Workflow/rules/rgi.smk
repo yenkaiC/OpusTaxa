@@ -1,6 +1,4 @@
-## RGI (Resistance Gene Identifier) - CARD Database Integration
-## Dual-mode approach: read-based screening + contig-based annotation
-
+### RGI (Resistance Gene Identifier) - CARD Database Integration
 ## Download CARD Database
 rule dl_card_DB:
     output:
@@ -11,7 +9,7 @@ rule dl_card_DB:
     params:
         db_dir = DB_dir + "/card"
     resources:
-        mem_mb = 4000,
+        mem_mb = 16000,
         time = 120
     threads: 1
     log:
@@ -80,7 +78,7 @@ rule rgi_load_db:
             --card_json {input} \
             --local 2> {log}
         """
-# Contigs
+## Contigs
 rule rgi_contigs:
     input:
         fasta="Data/MetaSPAdes/{sample}/contigs.fasta",
