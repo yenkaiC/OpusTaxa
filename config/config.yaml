@@ -1,5 +1,6 @@
 # Directories
 databaseDirectory: Database
+inputFastQDirectory: Data/Raw_FastQ  # user can override
 rawFastQDirectory: Data/Raw_FastQ
 trimmedFastQDirectory: Data/FastP
 nohumanDirectory: Data/NoHuman

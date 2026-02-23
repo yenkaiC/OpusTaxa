@@ -8,7 +8,7 @@ humannDB_dir = DB_dir + "/humann"
 kraken2DB_dir = DB_dir + "/kraken2"
 cardDB_dir = DB_dir + "/card"
 # File locations
-input_dir = config['rawFastQDirectory']
+input_dir = config.get('inputFastQDirectory', config['rawFastQDirectory']) # Use inputFastQDirectory if provided, otherwise fall back to rawFastQDirectory
 clean_dir = config['trimmedFastQDirectory']
 nohuman_dir = config['nohumanDirectory']
 metaphlan_dir = config['metaphlanDirectory']

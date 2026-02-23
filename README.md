@@ -57,6 +57,11 @@ OpusTaxa/Data/Raw_FastQ/
 ├── sample2_R1_001.fastq.gz
 └── sample2_R2_001.fastq.gz
 ```
+Or specify location via command line:
+```bash
+snakemake --workflow-profile config/slurm \
+    --config inputFastQDirectory=/path/to/your/data
+```
 
 **Supported filename formats** (auto-detected and standardised):
 | Pattern | Example | Source |
@@ -101,7 +106,7 @@ snakemake --use-conda --cores 8 --config download_sra=true
 snakemake --use-conda --cores 8 --config test_mode=true
 
 # Additional config commands
-snakemake --use-conda --cores 16 --config humann=true metaspades=true kraken2=true rgi=true antismash=true mlp=true
+snakemake --use-conda --cores 16 --config humann=true metaspades=true kraken2=true rgi=true antismash=true mlp=true inputFastQDirectory=/path/to/your/project_data/fastq
 ```
 
 ### 3. Access Results
