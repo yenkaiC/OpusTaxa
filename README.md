@@ -58,9 +58,18 @@ OpusTaxa/Data/Raw_FastQ/
 └── sample2_R2_001.fastq.gz
 ```
 
-**Supported filename formats:**
-- `{sample}_R1_001.fastq.gz` / `{sample}_R2_001.fastq.gz` (Illumina format)
-- `{sample}_1.fastq.gz` / `{sample}_2.fastq.gz` (SRA format - auto-converts to Illumina format)
+**Supported filename formats** (auto-detected and standardised):
+| Pattern | Example | Source |
+|---------|---------|--------|
+| `{sample}_S#_L###_R1_001.fastq.gz` | `MySample_S1_L001_R1_001.fastq.gz` | Illumina bcl2fastq |
+| `{sample}_S#_R1_001.fastq.gz` | `MySample_S1_R1_001.fastq.gz` | Illumina (no lane) |
+| `{sample}_R1_001.fastq.gz` | `MySample_R1_001.fastq.gz` | Standard |
+| `{sample}_R1.fastq.gz` | `MySample_R1.fastq.gz` | Simple paired |
+| `{sample}_1.fastq.gz` | `SRR12345_1.fastq.gz` | SRA / ENA |
+| `{sample}.R1.fastq.gz` | `MySample.R1.fastq.gz` | Dot-separated |
+| `{sample}.1.fastq.gz` | `MySample.1.fastq.gz` | Dot-separated |
+
+Both `.fastq.gz` and `.fq.gz` extensions are accepted. Non-standard filenames are automatically symlinked to the internal convention (`{sample}_R1_001.fastq.gz`) — your original files are not modified.
 
 **Option B: SRA accessions**<br>
 Add your SRA run IDs to the `sra_id.txt` file in the `OpusTaxa` folder, one per line:
