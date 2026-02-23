@@ -5,7 +5,7 @@ OpusTaxa is an easy‑to‑use pipeline that helps you process shotgun metagenom
 
 OpusTaxa has built‑in integration with the Sequence Read Archive (SRA) API, which makes it straightforward to reanalyse published datasets alongside your own.
 
-<img src="/Misc/OpusTaxa_subway 18Feb2026.png" alt="OpusTaxa Subway Plot" title="OpusTaxa Subway Plot">
+<img src="/Misc/OpusTaxa_subway 23Feb2026.png" alt="OpusTaxa Subway Plot" title="OpusTaxa Subway Plot">
 
 ## Summary of pipeline
 1. **Public Dataset Downloading** with [SRA Toolkit](https://github.com/ncbi/sra-tools)
@@ -27,6 +27,7 @@ OpusTaxa has built‑in integration with the Sequence Read Archive (SRA) API, wh
     - [HUMAnN 3.9](https://huttenhower.sph.harvard.edu/humannn)
     - [RGI (Resistance Gene Identifier)](https://github.com/arpcard/rgi/tree/master)
     - [antiSMASH](https://github.com/antismash/antismash)
+8. **Inference Analysis** with [Microbial Load Predictor](https://github.com/grp-bork/microbial_load_predictor)
 
 ## Quick Start
 ```bash
@@ -91,7 +92,7 @@ snakemake --use-conda --cores 8 --config download_sra=true
 snakemake --use-conda --cores 8 --config test_mode=true
 
 # Additional config commands
-snakemake --use-conda --cores 16 --config humann=true metaspades=true kraken2=true rgi=true antismash=true
+snakemake --use-conda --cores 16 --config humann=true metaspades=true kraken2=true rgi=true antismash=true mlp=true
 ```
 
 ### 3. Access Results
@@ -114,7 +115,8 @@ OpusTaxa/
 │   │   ├── merged/         # Abundance tables of gene-families and pathways (normalised, stratified and unstratified)
 │   ├── MetaSPAdes/         # Metagenome Assemblies
 │   ├── AntiSMASH/          # Biosynthetic Gene Clusters
-│   └── RGI/                # Antibiotic Resistance Genes
+│   ├── RGI/                # Antibiotic Resistance Genes
+│   └── MLP/                # Predicted Microbial Load
 └── Reports/
     ├── FastQC/             # Individual QC reports
     │   ├── Step_1_Raw/
