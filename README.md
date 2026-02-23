@@ -26,6 +26,7 @@ OpusTaxa has built‑in integration with the Sequence Read Archive (SRA) API, wh
 7. **Functional Profiling** with
     - [HUMAnN 3.9](https://huttenhower.sph.harvard.edu/humannn)
     - [RGI (Resistance Gene Identifier)](https://github.com/arpcard/rgi/tree/master)
+    - [antiSMASH](https://github.com/antismash/antismash)
 
 ## Quick Start
 ```bash
@@ -90,7 +91,7 @@ snakemake --use-conda --cores 8 --config download_sra=true
 snakemake --use-conda --cores 8 --config test_mode=true
 
 # Additional config commands
-snakemake --use-conda --cores 16 --config humann=true metaspades=true kraken2=true rgi=true
+snakemake --use-conda --cores 16 --config humann=true metaspades=true kraken2=true rgi=true antismash=true
 ```
 
 ### 3. Access Results
@@ -112,6 +113,7 @@ OpusTaxa/
 │   ├── HUMAnN/
 │   │   ├── merged/         # Abundance tables of gene-families and pathways (normalised, stratified and unstratified)
 │   ├── MetaSPAdes/         # Metagenome Assemblies
+│   ├── AntiSMASH/          # Biosynthetic Gene Clusters
 │   └── RGI/                # Antibiotic Resistance Genes
 └── Reports/
     ├── FastQC/             # Individual QC reports
