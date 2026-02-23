@@ -59,8 +59,9 @@ rule all:
         expand(metaspades_dir + "/{sample}/scaffolds.fasta", sample=SAMPLES) if run_metaspades else [],
 
         # Microbial Load Predictor (requries metaphlan)
-        mlp_dir + "/load.tsv" if run_mlp and run_metaphlan else [],
-        mlp_dir + "/qmp.tsv"  if run_mlp and run_metaphlan else [],
+        mlp_dir + "/.mlp_package_installed" if run_mlp else [],
+        mlp_dir + "/load.tsv" if run_mlp else [],
+        mlp_dir + "/qmp.tsv"  if run_mlp else [],
 
         # HUMAnN - requires MetaPhlAn (conditional)
         humann_dir + "/merged/genefamilies_cpm_unstratified.tsv" if run_humann and run_metaphlan else [],

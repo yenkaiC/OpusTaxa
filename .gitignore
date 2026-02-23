@@ -11,6 +11,7 @@ Data/Raw_FastQ/SRR*
 Data/HUMAnN/*
 Data/RGI/*
 Data/AntiSMASH/*
+Data/MLP/*
 localDB/*
 Reports/*
 fastp*

@@ -1,37 +1,57 @@
 library(MLP)
 
-# Get arguments passed from Snakemake
-input_profile <- snakemake@input[["profile"]] # → "Data/Metaphlan/sample_profile.txt"
-output_load   <- snakemake@output[["load"]]   # → "Data/MLP/sample_load.tsv"
-output_qmp    <- snakemake@output[["qmp"]]    # → "Data/MLP/sample_qmp.tsv"
+# Get arguments from Snakemake
+input_profile <- snakemake@input[["profile"]]
+output_load   <- snakemake@output[["load"]]
+output_qmp    <- snakemake@output[["qmp"]]
 
-# Resolve to absolute paths before changing working directory
+# Resolve paths
 input_profile <- normalizePath(input_profile, mustWork = TRUE)
-output_load   <- normalizePath(output_load,   mustWork = FALSE)
-output_qmp    <- normalizePath(output_qmp,    mustWork = FALSE)
+output_load   <- normalizePath(output_load, mustWork = FALSE)
+output_qmp    <- normalizePath(output_qmp, mustWork = FALSE)
 
-# Explicitly locate model files from extdata
-pkg_extdata <- system.file("extdata", package = "MLP")
-model_path  <- file.path(pkg_extdata, "galaxy", "model.metaphlan4.mpa_vJan25_CHOCOPhlAnSGB_202503.rds")
-model_path_tr <- file.path(pkg_extdata, "galaxy", "model.metaphlan4.mpa_vJan25_CHOCOPhlAnSGB_202503.tr.rds")
-
-# Read MetaPhlAn4 profile (skip comment lines starting with #)
-input <- read.delim(input_profile, header = TRUE, row.names = 1, check.names = FALSE, comment.char = "#")
+# Read MetaPhlAn profile
+input <- read.delim(input_profile, header = TRUE, row.names = 1, 
+                    check.names = FALSE, comment.char = "#")
 
 # Transpose - MLP expects samples as rows, species as columns
-input <- data.frame(t(input), check.names = F)
+input <- data.frame(t(input), check.names = FALSE)
 
-# Predict microbial load using MetaPhlAn4 + GALAXY model
-# Load models directly and predict
-model    <- readRDS(model_path)
-model_tr <- readRDS(model_path_tr)
+cat("Input data dimensions:", nrow(input), "samples x", ncol(input), "species\n")
 
-load <- predict(model,    newdata = input)
-qmp  <- predict(model_tr, newdata = input)
+# Predict microbial load using the MLP function
+# Correct arguments based on documentation:
+# - profiler: "metaphlan4.mpa_vJan25_CHOCOPhlAnSGB_202503" (note the dot after metaphlan4)
+# - training_data: "metacardis" (default, but galaxy is also available)
+# - output: "load" or "qmp"
 
-load <- data.frame(sample = rownames(input), load = load)
-qmp  <- data.frame(sample = rownames(input), qmp  = qmp)
+# Try with galaxy training data first (since that's what the models are named)
+load_pred <- MLP(input, 
+                 profiler = "metaphlan4.mpa_vJan25_CHOCOPhlAnSGB_202503", 
+                 training_data = "galaxy", 
+                 output = "load")
+
+qmp_pred <- MLP(input, 
+                profiler = "metaphlan4.mpa_vJan25_CHOCOPhlAnSGB_202503", 
+                training_data = "galaxy", 
+                output = "qmp")
+
+# Format output
+# MLP function returns a vector or data frame
+if (is.data.frame(load_pred)) {
+  load_out <- load_pred
+} else {
+  load_out <- data.frame(sample = rownames(input), load = load_pred)
+}
+
+if (is.data.frame(qmp_pred)) {
+  qmp_out <- qmp_pred
+} else {
+  qmp_out <- data.frame(sample = rownames(input), qmp = qmp_pred)
+}
 
 # Write outputs
-write.table(load, output_load, sep = "\t", quote = F, row.names = T)
-write.table(qmp,  output_qmp,  sep = "\t", quote = F, row.names = T)
+write.table(load_out, output_load, sep = "\t", quote = FALSE, row.names = FALSE)
+write.table(qmp_out, output_qmp, sep = "\t", quote = FALSE, row.names = FALSE)
+
+cat("MLP prediction complete!\n")
