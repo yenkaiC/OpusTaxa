@@ -69,9 +69,7 @@ rule all:
         humann_dir + "/merged/pathcoverage_joined_unstratified.tsv" if run_humann and run_metaphlan else [],
 
         # RGI - Resistome analysis
-        DB_dir + "/card/card.json" if run_rgi else [],
-        DB_dir + "/card/wildcard/index-for-model-sequences.txt" if run_rgi else [],
-        # Contig-based mode (only runs when both RGI and metaspades are enabled)
+        DB_dir + "/card/.rgi_downloaded" if run_rgi else [],
         expand(rgi_dir + "/{sample}/contigs/{sample}_rgi.txt", sample=SAMPLES) if run_rgi else [],
         expand(rgi_dir + "/{sample}/contigs/{sample}_rgi.json", sample=SAMPLES) if run_rgi else [],
 

@@ -11,15 +11,15 @@ rule raw_qc:
         '../envs/fastqc.yaml'
     threads: 4
     resources:
-        mem_mb = 4000,
-        time = 80
+        mem_mb = 6000,
+        time = 60
     shell:
         "fastqc --outdir {params} {input}"
 
 ## Declare FastQC inputs, outputs and shellscript for FastP outputs
 rule fastp_qc:
     input:
-        input_dir + "/{sample}_{read}_001.fastq.gz"
+        clean_dir + "/{sample}_{read}_001.fastq.gz"
     output:
         fastp_qc_dir + "/{sample}_{read}_001_fastqc.html",
         fastp_qc_dir + "/{sample}_{read}_001_fastqc.zip"
@@ -29,8 +29,8 @@ rule fastp_qc:
         '../envs/fastqc.yaml'
     threads: 4
     resources:
-        mem_mb = 4000,
-        time = 80
+        mem_mb = 6000,
+        time = 60
     shell:
         "fastqc --outdir {params} {input}"
 

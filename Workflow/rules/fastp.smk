@@ -1,8 +1,8 @@
 ## Declare FastP inputs, outputs and shellscript
 rule fastp_trim:
     input: 
-        r1 = input_dir + "/{sample}_R1_001.fastq.gz",
-        r2 = input_dir + "/{sample}_R2_001.fastq.gz"
+        r1 = lambda wc: _detected[wc.sample]['r1'] if wc.sample in _detected else input_dir + f"/{wc.sample}_R1_001.fastq.gz",
+        r2 = lambda wc: _detected[wc.sample]['r2'] if wc.sample in _detected else input_dir + f"/{wc.sample}_R2_001.fastq.gz"
     output: 
         r1 = clean_dir + "/{sample}_R1_001.fastq.gz",
         r2 = clean_dir + "/{sample}_R2_001.fastq.gz"
