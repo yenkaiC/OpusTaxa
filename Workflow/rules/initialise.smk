@@ -65,86 +65,94 @@ if download_sra and os.path.exists("sra_id.txt"):
 # Also accepts .fq.gz extension alongside .fastq.gz.
 # ──────────────────────────────────────────────────────────────────────────────
 
-import os
 import re
 from pathlib import Path
 
-# Detect all FASTQ pairs in input directory
-def detect_all_samples(directory):
-    """Detect all paired FASTQ files regardless of naming convention."""
+# Each tuple: (compiled_regex, pattern_type, needs_standardisation)
+# needs_standardisation = False means the file already matches {sample}_R1_001.fastq.gz
+_R1_PATTERNS = [
+    # Illumina full:  sample_S1_L001_R1_001.fastq.gz  →  sample_S1_L001 as sample name
+    (re.compile(r'^(.+?_S\d+_L\d+)_R1_001\.(?:fastq|fq)\.gz$'), 'illumina_full', False),
+    # Illumina no-lane: sample_S1_R1_001.fastq.gz  →  sample_S1 as sample name
+    (re.compile(r'^(.+?_S\d+)_R1_001\.(?:fastq|fq)\.gz$'), 'illumina_nolane', False),
+    # Standard: sample_R1_001.fastq.gz  →  already standard
+    (re.compile(r'^(.+?)_R1_001\.fastq\.gz$'), 'standard', False),
+    # Standard with .fq.gz: sample_R1_001.fq.gz  →  needs symlink to .fastq.gz
+    (re.compile(r'^(.+?)_R1_001\.fq\.gz$'), 'standard_fq', True),
+    # Simple: sample_R1.fastq.gz
+    (re.compile(r'^(.+?)_R1\.(?:fastq|fq)\.gz$'), 'simple', True),
+    # SRA: sample_1.fastq.gz
+    (re.compile(r'^(.+?)_1\.(?:fastq|fq)\.gz$'), 'sra', True),
+    # Dot-separated R1: sample.R1.fastq.gz
+    (re.compile(r'^(.+?)\.R1\.(?:fastq|fq)\.gz$'), 'dot_R1', True),
+    # Dot-separated 1: sample.1.fastq.gz
+    (re.compile(r'^(.+?)\.1\.(?:fastq|fq)\.gz$'), 'dot_1', True),
+]
+
+def _r2_filename(r1_filename, pattern_type):
+    """Given an R1 filename and its pattern type, return the expected R2 filename."""
+    replacements = {
+        'illumina_full':  ('_R1_001.', '_R2_001.'),
+        'illumina_nolane': ('_R1_001.', '_R2_001.'),
+        'standard':       ('_R1_001.', '_R2_001.'),
+        'standard_fq':    ('_R1_001.', '_R2_001.'),
+        'simple':         ('_R1.', '_R2.'),
+        'sra':            ('_1.', '_2.'),
+        'dot_R1':         ('.R1.', '.R2.'),
+        'dot_1':          ('.1.', '.2.'),
+    }
+    old, new = replacements[pattern_type]
+    return r1_filename.replace(old, new, 1)
+
+def detect_samples(directory):
+    """Scan directory for paired-end FASTQ files.
+
+    Returns:
+        dict: {sample_name: (r1_path, r2_path, needs_standardisation)}
+    """
+    detected = {}
     if not os.path.isdir(directory):
-        return {}
-    
-    files = sorted([f for f in os.listdir(directory) if f.endswith(('.fastq.gz', '.fq.gz'))])
-    samples = {}
-    
-    # Group files by potential sample name
-    for fname in files:
-        # Try different R1 patterns
-        for pattern, read_num in [
-            (r'^(.+)_S\d+_L\d+_R1_001\.(?:fastq|fq)\.gz$', 'R1'),  # Illumina full
-            (r'^(.+)_S\d+_R1_001\.(?:fastq|fq)\.gz$', 'R1'),        # Illumina no lane
-            (r'^(.+)_R1_001\.(?:fastq|fq)\.gz$', 'R1'),              # Standard
-            (r'^(.+)_R1\.(?:fastq|fq)\.gz$', 'R1'),                  # Simple
-            (r'^(.+)_1\.(?:fastq|fq)\.gz$', '1'),                    # SRA
-            (r'^(.+)\.R1\.(?:fastq|fq)\.gz$', 'R1_dot'),             # Dot-separated
-            (r'^(.+)\.1\.(?:fastq|fq)\.gz$', '1_dot'),               # Dot-separated SRA
-        ]:
-            m = re.match(pattern, fname)
+        return detected
+    for fname in sorted(os.listdir(directory)):
+        fpath = os.path.join(directory, fname)
+        if not os.path.isfile(fpath) and not os.path.islink(fpath):
+            continue
+        for pattern, ptype, needs_std in _R1_PATTERNS:
+            m = pattern.match(fname)
             if m:
                 sample = m.group(1)
-                if sample not in samples:
-                    samples[sample] = {}
-                samples[sample]['r1'] = os.path.join(directory, fname)
-                samples[sample]['pattern'] = read_num
+                r2_fname = _r2_filename(fname, ptype)
+                r2_path = os.path.join(directory, r2_fname)
+                if os.path.exists(r2_path):
+                    if sample not in detected:
+                        detected[sample] = (fpath, r2_path, needs_std)
                 break
-    
-    # Now find matching R2 files
-    for sample, info in list(samples.items()):
-        r1_path = info['r1']
-        r1_file = os.path.basename(r1_path)
-        
-        # Determine R2 filename based on pattern
-        if info['pattern'] == 'R1':
-            r2_file = r1_file.replace('_R1_001.', '_R2_001.').replace('_R1.', '_R2.')
-        elif info['pattern'] == '1':
-            r2_file = r1_file.replace('_1.', '_2.')
-        elif info['pattern'] == 'R1_dot':
-            r2_file = r1_file.replace('.R1.', '.R2.')
-        elif info['pattern'] == '1_dot':
-            r2_file = r1_file.replace('.1.', '.2.')
-        else:
-            del samples[sample]
-            continue
-        
-        r2_path = os.path.join(directory, r2_file)
-        if os.path.isfile(r2_path):
-            samples[sample]['r2'] = r2_path
-        else:
-            # R2 not found, remove this sample
-            del samples[sample]
-    
-    return samples
+    return detected
 
-_detected = detect_all_samples(input_dir)
+_detected = detect_samples(input_dir)
+# Samples that need symlinks vs those already in standard naming
+_samples_need_symlink = {s: (r1, r2) for s, (r1, r2, needs_std) in _detected.items() if needs_std}
+_samples_already_standard = {s for s, (_, _, needs_std) in _detected.items() if not needs_std}
 
-SAMPLES = list(set(list(_detected.keys()) + SRA_IDS))
+SAMPLES = sorted(set(list(_detected.keys()) + SRA_IDS))
 
+# Print detected samples for debugging
 if _detected:
     print(f"Detected {len(_detected)} sample(s) in {input_dir}/:")
     for s in sorted(_detected.keys()):
-        r1 = os.path.basename(_detected[s]['r1'])
-        print(f"  {s}  ←  {r1}")
+        r1 = os.path.basename(_detected[s][0])
+        tag = "" if _detected[s][2] else " (standard)"
+        print(f"  {s}  ←  {r1}{tag}")
 
 if not SAMPLES:
     print(f"WARNING: No samples detected in {input_dir}/ and no SRA IDs provided.")
-
-
 
 ## Rule to standardize filenames via symlink
 # Only runs for files that don't already match {sample}_R1_001.fastq.gz
 # Creates symlinks so downstream rules use the standard naming convention.
 # Original files are never modified.
+_symlink_constraint = "|".join(re.escape(s) for s in _samples_need_symlink) if _samples_need_symlink else "IMPOSSIBLE_MATCH_PLACEHOLDER"
+
 rule standardize_filenames:
     input:
         r1 = lambda wc: _samples_need_symlink[wc.sample][0],
@@ -155,7 +163,7 @@ rule standardize_filenames:
     log:
         log_dir + "/file_rename/{sample}.log"
     wildcard_constraints:
-        sample = "|".join(re.escape(s) for s in _samples_need_symlink) if _samples_need_symlink else "NONE"
+        sample = _symlink_constraint
     shell:
         """
         ln -sf $(readlink -f {input.r1}) {output.r1}
