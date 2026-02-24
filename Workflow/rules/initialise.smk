@@ -127,6 +127,21 @@ def detect_all_samples(directory):
     return samples
 
 _detected = detect_all_samples(input_dir)
+
+def get_raw_input(wildcards):
+    """Get the actual raw input file for a sample and read."""
+    sample = wildcards.sample
+    read = wildcards.read  # 'R1' or 'R2'
+    
+    if sample in _detected:
+        if read == 'R1':
+            return _detected[sample]['r1']
+        else:  # R2
+            return _detected[sample]['r2']
+    else:
+        # Fallback to standard naming
+        return f"{input_dir}/{sample}_{read}_001.fastq.gz"
+
 SAMPLES = list(set(list(_detected.keys()) + SRA_IDS))
 
 if _detected:

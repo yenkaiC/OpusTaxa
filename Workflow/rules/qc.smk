@@ -1,7 +1,7 @@
 ## Declare FastQC inputs, outputs and shellscript for Raw data
 rule raw_qc:
     input:
-        input_dir + "/{sample}_{read}_001.fastq.gz"
+        get_raw_input
     output:
         raw_qc_dir + "/{sample}_{read}_001_fastqc.html",
         raw_qc_dir + "/{sample}_{read}_001_fastqc.zip"
@@ -11,8 +11,8 @@ rule raw_qc:
         '../envs/fastqc.yaml'
     threads: 4
     resources:
-        mem_mb = 6000,
-        time = 60
+        mem_mb = 4000,
+        runtime = 80
     shell:
         "fastqc --outdir {params} {input}"
 
