@@ -11,7 +11,7 @@ rule dl_card_DB:
     params:
         db_dir = DB_dir + "/card"
     resources:
-        mem_mb = 4000,
+        mem_mb = 6000,
         time = 120
     threads: 1
     log:
@@ -63,31 +63,44 @@ rule dl_card_DB:
         touch {output.checkpoint}
         """
 
-## Contigs
+## Contig-based RGI (requires metaSPAdes)
+# Runs rgi main from the CARD database directory so --local finds the loaded DB.
 rule rgi_contigs:
     input:
-        fasta = "Data/MetaSPAdes/{sample}/contigs.fasta",
-        db    = DB_dir + "/card/.download_complete"
+        fasta = metaspades_dir + "/{sample}/contigs.fasta",
+        db = DB_dir + "/card/.download_complete"
     output:
-        txt  = "Data/RGI/{sample}/contigs/{sample}_rgi.txt",
-        json = "Data/RGI/{sample}/contigs/{sample}_rgi.json"
-    log:
-        log_dir + "/rgi/{sample}_contigs.log"
+        txt = rgi_dir + "/{sample}/contigs/{sample}_rgi.txt",
+        json = rgi_dir + "/{sample}/contigs/{sample}_rgi.json"
     conda:
-        workflow.basedir + '/Workflow/envs/rgi.yaml'
+        workflow.basedir + "/Workflow/envs/rgi.yaml"
+    params:
+        db_dir = DB_dir + "/card",
+        out_prefix = lambda wc: os.path.abspath(rgi_dir + "/" + wc.sample + "/contigs/" + wc.sample + "_rgi")
     threads: 8
     resources:
-        mem_mb  = 40000,
-        runtime = 960
+        mem_mb = 40000,
+        time = 960
+    log:
+        log_dir + "/rgi/{sample}_contigs.log"
     shell:
         """
-        mkdir -p Data/RGI/{wildcards.sample}/contigs
+        mkdir -p {rgi_dir}/{wildcards.sample}/contigs
+
+        WORKDIR=$(pwd)
+        LOGFILE="$WORKDIR/{log}"
+        INPUT_FASTA="$WORKDIR/{input.fasta}"
+
+        cd {params.db_dir}
+
         rgi main \
-            --input_sequence {input.fasta} \
-            --output_file Data/RGI/{wildcards.sample}/contigs/{wildcards.sample}_rgi \
+            --input_sequence "$INPUT_FASTA" \
+            --output_file {params.out_prefix} \
             --input_type contig \
             --local \
             --clean \
             --num_threads {threads} \
-            --alignment_tool DIAMOND 2> {log}
+            --alignment_tool DIAMOND 2> "$LOGFILE"
+
+        cd "$WORKDIR"
         """
