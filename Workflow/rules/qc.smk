@@ -1,7 +1,7 @@
 ## Declare FastQC inputs, outputs and shellscript for Raw data
 rule raw_qc:
     input:
-        get_raw_input
+        input_dir + "/{sample}_{read}_001.fastq.gz"
     output:
         raw_qc_dir + "/{sample}_{read}_001_fastqc.html",
         raw_qc_dir + "/{sample}_{read}_001_fastqc.zip"

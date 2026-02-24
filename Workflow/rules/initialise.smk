@@ -128,20 +128,6 @@ def detect_all_samples(directory):
 
 _detected = detect_all_samples(input_dir)
 
-def get_raw_input(wildcards):
-    """Get the actual raw input file for a sample and read."""
-    sample = wildcards.sample
-    read = wildcards.read  # 'R1' or 'R2'
-    
-    if sample in _detected:
-        if read == 'R1':
-            return _detected[sample]['r1']
-        else:  # R2
-            return _detected[sample]['r2']
-    else:
-        # Fallback to standard naming
-        return f"{input_dir}/{sample}_{read}_001.fastq.gz"
-
 SAMPLES = list(set(list(_detected.keys()) + SRA_IDS))
 
 if _detected:
@@ -155,25 +141,25 @@ if not SAMPLES:
 
 
 
-## Old file patterns
-#samples_standard, = glob_wildcards(input_dir + "/{sample}_R1_001.fastq.gz") # SAGC
-#samples_srr, = glob_wildcards(input_dir + "/{sample}_1.fastq.gz") # SRA
-#
-## All samples (combination of both)
-#SAMPLES = list(set(samples_standard + samples_srr + SRA_IDS))
-#
-### Rule to standardize SRR filenames
-#rule standardize_filenames:
-#    input:
-#        r1 = input_dir + "/{sample}_1.fastq.gz",
-#        r2 = input_dir + "/{sample}_2.fastq.gz"
-#    output:
-#        r1 = input_dir + "/{sample}_R1_001.fastq.gz",
-#        r2 = input_dir + "/{sample}_R2_001.fastq.gz"
-#    log:
-#        log_dir + "/file_rename/{sample}.log"
-#    shell:
-#        """
-#        mv {input.r1} {output.r1}
-#        mv {input.r2} {output.r2} 2> {log}
-#        """
+## Rule to standardize filenames via symlink
+# Only runs for files that don't already match {sample}_R1_001.fastq.gz
+# Creates symlinks so downstream rules use the standard naming convention.
+# Original files are never modified.
+rule standardize_filenames:
+    input:
+        r1 = lambda wc: _samples_need_symlink[wc.sample][0],
+        r2 = lambda wc: _samples_need_symlink[wc.sample][1],
+    output:
+        r1 = input_dir + "/{sample}_R1_001.fastq.gz",
+        r2 = input_dir + "/{sample}_R2_001.fastq.gz"
+    log:
+        log_dir + "/file_rename/{sample}.log"
+    wildcard_constraints:
+        sample = "|".join(re.escape(s) for s in _samples_need_symlink) if _samples_need_symlink else "NONE"
+    shell:
+        """
+        ln -sf $(readlink -f {input.r1}) {output.r1}
+        ln -sf $(readlink -f {input.r2}) {output.r2}
+        echo "Symlinked {input.r1} → {output.r1}" > {log}
+        echo "Symlinked {input.r2} → {output.r2}" >> {log}
+        """
