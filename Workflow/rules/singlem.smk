@@ -7,9 +7,9 @@ rule dl_singlem_DB:
     conda: 
         workflow.basedir + '/Workflow/envs/singlem.yaml'
     resources:
-        mem_mb = 4000,
+        mem_mb = 6000,
         time = 480
-    threads: 1
+    threads: 2
     log:
         log_dir + "/singlem/databaseDL.log"
     shell:
@@ -29,10 +29,10 @@ rule singlem_profile:
         workflow.basedir + "/Workflow/envs/singlem.yaml"
     params:
         db_dir = singlemDB_dir
-    threads: 8
+    threads: 10
     resources:
-        mem_mb = 38000,
-        time = 480
+        mem_mb = 40000,
+        time = 2000 #need to increase time
     log:
         log_dir + "/singlem/{sample}_profile.log"
     shell:
