@@ -1,16 +1,18 @@
-## Download CARD Database
+## RGI (Resistance Gene Identifier) - CARD Database Integration
+## Contig-based annotation (requires metaSPAdes)
+
+## Download CARD + WildCARD databases
+# All rgi load operations happen here so downstream rules just need the checkpoint.
 rule dl_card_DB:
     output:
-        json     = DB_dir + "/card/card.json",
-        wildcard = DB_dir + "/card/wildcard/index-for-model-sequences.txt",
-        marker   = touch(DB_dir + "/card/.rgi_downloaded")
+        checkpoint = DB_dir + "/card/.download_complete"
     conda:
         workflow.basedir + '/Workflow/envs/rgi.yaml'
     params:
         db_dir = DB_dir + "/card"
     resources:
-        mem_mb = 16000,
-        time   = 120
+        mem_mb = 4000,
+        time = 120
     threads: 1
     log:
         log_dir + "/rgi/card_db_download.log"
@@ -18,49 +20,54 @@ rule dl_card_DB:
         """
         mkdir -p $(dirname {log})
         mkdir -p {params.db_dir}
+
         WORKDIR=$(pwd)
         LOGFILE="$WORKDIR/{log}"
+
         cd {params.db_dir}
 
-        rgi clean --local 2>> "$LOGFILE" || true
+        # Only download if card.json is missing
+        if [ ! -f "card.json" ]; then
+            # Clean any previous RGI data
+            rgi clean --local 2>> "$LOGFILE" || true
 
-        wget -O data.tar.bz2 https://card.mcmaster.ca/latest/data 2>> "$LOGFILE"
-        tar -xjf data.tar.bz2 2>> "$LOGFILE"
+            # Download and extract CARD data
+            wget -O data.tar.bz2 https://card.mcmaster.ca/latest/data 2>> "$LOGFILE"
+            tar -xjf data.tar.bz2 2>> "$LOGFILE"
+            rm -f data.tar.bz2
 
-        wget -O wildcard_data.tar.bz2 https://card.mcmaster.ca/latest/variants 2>> "$LOGFILE"
-        mkdir -p wildcard
-        tar -xjf wildcard_data.tar.bz2 -C wildcard 2>> "$LOGFILE"
-        gunzip wildcard/*.gz 2>> "$LOGFILE" || true
+            # Download and extract WildCARD data
+            wget -O wildcard_data.tar.bz2 https://card.mcmaster.ca/latest/variants 2>> "$LOGFILE"
+            mkdir -p wildcard
+            tar -xjf wildcard_data.tar.bz2 -C wildcard 2>> "$LOGFILE"
+            gunzip wildcard/*.gz 2>> "$LOGFILE" || true
+            rm -f wildcard_data.tar.bz2
+        else
+            echo "CARD database already exists (card.json found), skipping download" >> "$LOGFILE"
+        fi
 
-        rm -f data.tar.bz2 wildcard_data.tar.bz2
+        # Always (re)load to ensure RGI's local index is current
+        rgi load --card_json card.json --local 2>> "$LOGFILE"
+
+        if [ -f "wildcard/index-for-model-sequences.txt" ]; then
+            rgi load \
+                --card_json card.json \
+                --wildcard_index wildcard/index-for-model-sequences.txt \
+                --amr_kmers wildcard/all_amr_61mers.txt \
+                --kmer_database wildcard/61_kmer_db.json \
+                --kmer_size 61 \
+                --local 2>> "$LOGFILE"
+        fi
+
         cd "$WORKDIR"
-
-        touch {output.marker}
-        """
-
-## Load CARD Database
-rule rgi_load_db:
-    input:
-        json = DB_dir + "/card/card.json",
-        downloaded = DB_dir + "/card/.rgi_downloaded"
-    output:
-        touch(DB_dir + "/card/.rgi_loaded")
-    conda:
-        workflow.basedir + '/Workflow/envs/rgi.yaml'
-    log:
-        log_dir + "/rgi/load_db.log"
-    shell:
-        """
-        rgi load \
-            --card_json {input.json} \
-            --local 2> {log}
+        touch {output.checkpoint}
         """
 
 ## Contigs
 rule rgi_contigs:
     input:
         fasta = "Data/MetaSPAdes/{sample}/contigs.fasta",
-        db    = DB_dir + "/card/.rgi_loaded"
+        db    = DB_dir + "/card/.download_complete"
     output:
         txt  = "Data/RGI/{sample}/contigs/{sample}_rgi.txt",
         json = "Data/RGI/{sample}/contigs/{sample}_rgi.json"

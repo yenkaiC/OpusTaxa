@@ -69,7 +69,7 @@ rule all:
         humann_dir + "/merged/pathcoverage_joined_unstratified.tsv" if run_humann and run_metaphlan else [],
 
         # RGI - Resistome analysis
-        DB_dir + "/card/.rgi_downloaded" if run_rgi else [],
+        DB_dir + "/card/.download_complete" if run_rgi else [],
         expand(rgi_dir + "/{sample}/contigs/{sample}_rgi.txt", sample=SAMPLES) if run_rgi else [],
         expand(rgi_dir + "/{sample}/contigs/{sample}_rgi.json", sample=SAMPLES) if run_rgi else [],
 
