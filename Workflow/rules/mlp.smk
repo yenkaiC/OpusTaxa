@@ -42,7 +42,8 @@ rule install_mlp_package:
 
 rule mlp:
     input:
-        profile = metaphlan_dir + "/table/abundance_species.txt"
+        profile = metaphlan_dir + "/table/abundance_species.txt",
+        installed = mlp_dir + "/.mlp_package_installed"
     output:
         load = mlp_dir + "/load.tsv",
         qmp  = mlp_dir + "/qmp.tsv"
