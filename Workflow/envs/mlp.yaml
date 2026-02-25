@@ -4,7 +4,7 @@ channels:
     - bioconda
     - defaults
 dependencies:
-    - r-base
+    - r-base=4.3.1
     - r-tidyverse
     - r-remotes
     - r-data.table
@@ -12,4 +12,4 @@ dependencies:
     - r-rpart
     - r-caret
     - r-clock
-    - r-xgboost=1.7.6=*cpu*  # Force CPU-only build
+    - r-xgboost=1.7.6
