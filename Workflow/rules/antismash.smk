@@ -27,10 +27,46 @@ rule antismash_download_databases:
         touch {output.checkpoint}
         """
 
+## Filter contigs below minimum length threshold before AntiSMASH
+# BGC detection requires sufficient sequence context; short contigs add noise and runtime
+# Default threshold: 1000bp — adjust min_contig_len in config if needed
+rule filter_contigs:
+    input:
+        fasta = metaspades_dir + "/{sample}/contigs.fasta"
+    output:
+        filtered = antismash_dir + "/{sample}/contigs_filtered.fasta"
+    params:
+        min_len = config.get("min_contig_len", 1000)
+    threads: 8
+    resources:
+        mem_mb = 24000,
+        runtime = 240
+    log:
+        log_dir + "/antismash/{sample}_filter.log"
+    shell:
+        """
+        mkdir -p $(dirname {output.filtered})
+        awk 'BEGIN {{seq=""; header=""}}
+             /^>/ {{
+                 if (header != "" && length(seq) >= {params.min_len})
+                     print header "\\n" seq;
+                 header=$0; seq=""
+             }}
+             !/^>/ {{seq=seq $0}}
+             END {{
+                 if (header != "" && length(seq) >= {params.min_len})
+                     print header "\\n" seq
+             }}' {input.fasta} > {output.filtered} 2> {log}
+
+        total=$(grep -c "^>" {input.fasta} || true)
+        kept=$(grep -c "^>" {output.filtered} || true)
+        echo "Filtered contigs: ${{kept}}/${{total}} kept (>= {params.min_len} bp)" >> {log}
+        """
+
 rule antismash_contigs:
     input:
-        fasta = metaspades_dir + "/{sample}/contigs.fasta",
-        db = DB_dir + "/antismash/.databases_downloaded"
+        fasta = antismash_dir + "/{sample}/contigs_filtered.fasta",
+        db = "Database/antismash/.databases_downloaded"
     output:
         html = antismash_dir + "/{sample}/index.html",
         gbk = antismash_dir + "/{sample}/contigs.gbk",
@@ -43,10 +79,10 @@ rule antismash_contigs:
     params:
         db_dir = DB_dir + "/antismash",
         out_dir = antismash_dir + "/{sample}"
-    threads: 8
+    threads: 16
     resources:
-        mem_mb = 16000,
-        runtime = 960
+        mem_mb = 32000,
+        runtime = 2880
     shell:
         """
         # Remove partial output from previous failed runs
