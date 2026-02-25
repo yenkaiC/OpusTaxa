@@ -176,6 +176,30 @@ Pipeline flags work the same as local execution:
 snakemake --workflow-profile config/slurm --config download_sra=true metaphlan=true singlem=true
 ```
 
+### Database Downloads
+
+**Some HPC compute nodes do not have internet access.** If database download jobs fail with errors like `"It seems you do not have internet access"`, you need to download the databases on the login node first before running the full pipeline:
+
+```bash
+# Download databases locally on the login node (has internet access)
+# Only include the databases for tools you plan to use
+
+# Core databases (always needed)
+snakemake --use-conda --cores 1 --until dl_noHuman_DB
+
+# Taxonomic profiling databases
+snakemake --use-conda --cores 1 --until dl_metaphlan_DB    # if using MetaPhlAn
+snakemake --use-conda --cores 1 --until dl_singlem_DB      # if using SingleM
+snakemake --use-conda --cores 1 --until dl_kraken2_DB      # if using Kraken2
+
+# Functional profiling databases
+snakemake --use-conda --cores 1 --until dl_humann_chocophlan dl_humann_uniref dl_humann_utility  # if using HUMAnN
+
+# Resistome / biosynthetic gene cluster databases
+snakemake --use-conda --cores 1 --until dl_card_DB                  # if using RGI
+snakemake --use-conda --cores 1 --until antismash_download_databases # if using AntiSMASH
+```
+
 ## Resource Requirements
 
 ### Minimum (for testing)
