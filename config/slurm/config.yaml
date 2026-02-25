@@ -8,6 +8,9 @@ default-resources:
   mem_mb: 24000 # 24 GigaBytes
   runtime: 480 # minutes (8 hours)
 
+# Job naming - includes rule and sample info
+jobname: "OpusTaxa.{rulename}.{wildcards}"
+
 # Workflow settings
 rerun-incomplete: true
 restart-times: 1
