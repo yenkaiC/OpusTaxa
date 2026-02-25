@@ -8,7 +8,7 @@ rule dl_singlem_DB:
         workflow.basedir + '/Workflow/envs/singlem.yaml'
     resources:
         mem_mb = 6000,
-        time = 480
+        runtime = 480
     threads: 2
     log:
         log_dir + "/singlem/databaseDL.log"
@@ -32,7 +32,7 @@ rule singlem_profile:
     threads: 10
     resources:
         mem_mb = 40000,
-        time = 2000 #need to increase time
+        runtime = 2000 #need to increase time
     log:
         log_dir + "/singlem/{sample}_profile.log"
     shell:
@@ -62,7 +62,7 @@ rule singlem_extra:
     threads: 8
     resources:
         mem_mb = 38000,
-        time = 480
+        runtime = 480
     log:
         log_dir + "/singlem/{sample}_profile.log"
     shell:

@@ -12,7 +12,7 @@ rule dl_card_DB:
         db_dir = DB_dir + "/card"
     resources:
         mem_mb = 6000,
-        time = 120
+        runtime = 120
     threads: 1
     log:
         log_dir + "/rgi/card_db_download.log"
@@ -80,7 +80,7 @@ rule rgi_contigs:
     threads: 8
     resources:
         mem_mb = 40000,
-        time = 960
+        runtime = 960
     log:
         log_dir + "/rgi/{sample}_contigs.log"
     shell:

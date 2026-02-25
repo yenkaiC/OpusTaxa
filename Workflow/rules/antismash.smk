@@ -1,35 +1,64 @@
+## AntiSMASH - Biosynthetic Gene Cluster detection
+## Contig-based annotation (requires metaSPAdes)
+
+## Download AntiSMASH databases
+
 rule antismash_download_databases:
     output:
-        touch("Database/antismash/.databases_downloaded")
+        checkpoint = DB_dir + "/antismash/.databases_downloaded"
     log:
-        "logs/antismash/download_databases.log"
+        log_dir + "/antismash/download_databases.log"
     conda:
         "../envs/antismash.yaml"
+    params:
+        db_dir = DB_dir + "/antismash"
+    resources:
+        mem_mb = 8000,
+        runtime = 480
+    threads: 1
     shell:
         """
-        download-antismash-databases 2> {log}
+        mkdir -p {params.db_dir}
+        if [ ! -f "{params.db_dir}/clusterblast/proteins.dmnd" ]; then
+            download-antismash-databases --database-dir {params.db_dir} 2> {log}
+        else
+            echo "AntiSMASH databases already exist, skipping download" > {log}
+        fi
+        touch {output.checkpoint}
         """
 
 rule antismash_contigs:
     input:
-        fasta="Data/MetaSPAdes/{sample}/contigs.fasta",
-        db="Database/antismash/.databases_downloaded"
+        fasta = metaspades_dir + "/{sample}/contigs.fasta",
+        db = DB_dir + "/antismash/.databases_downloaded"
     output:
-        html="Data/AntiSMASH/{sample}/index.html",
-        gbk="Data/AntiSMASH/{sample}/contigs.gbk",
-        json="Data/AntiSMASH/{sample}/contigs.json",
-        complete=touch("Data/AntiSMASH/{sample}/.antismash_complete")
+        html = antismash_dir + "/{sample}/index.html",
+        gbk = antismash_dir + "/{sample}/contigs.gbk",
+        json = antismash_dir + "/{sample}/contigs.json",
+        complete = touch(antismash_dir + "/{sample}/.antismash_complete")
     log:
-        "logs/antismash/{sample}.log"
+        log_dir + "/antismash/{sample}.log"
     conda:
         "../envs/antismash.yaml"
+    params:
+        db_dir = DB_dir + "/antismash",
+        out_dir = antismash_dir + "/{sample}"
     threads: 8
+    resources:
+        mem_mb = 16000,
+        runtime = 960
     shell:
         """
+        # Remove partial output from previous failed runs
+        if [ -d "{params.out_dir}" ]; then
+            rm -rf {params.out_dir}
+        fi
+        
         antismash \
             --taxon bacteria \
-            --output-dir Data/AntiSMASH/{wildcards.sample} \
+            --output-dir {params.out_dir} \
+            --databases {params.db_dir} \
             --genefinding-tool prodigal-m \
             --cpus {threads} \
-            Data/MetaSPAdes/{wildcards.sample}/contigs.fasta 2> {log}
+            {input.fasta} 2> {log}
         """
