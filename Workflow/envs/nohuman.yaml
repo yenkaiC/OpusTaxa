@@ -4,4 +4,4 @@ channels:
     - bioconda
     - defaults
 dependencies:
-    - nohuman
+    - nohuman=0.5.0

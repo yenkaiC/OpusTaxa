@@ -214,11 +214,12 @@ snakemake --use-conda --cores 1 --until antismash_download_databases # if using 
 
 ### Database Size (Uncompressed)
 - NoHuman: ~6.3 GB (As of February 2026)
-- MetaPhlAn: ~36 GB (As of February 2026)
+- MetaPhlAn: ~36 GB ([Version 4.2.4 - mpa_vJan25_CHOCOPhlAnSGB_202503](https://github.com/biobakery/MetaPhlAn/wiki/MetaPhlAn-4.2))
 - SingleM: ~7.5 GB ([Version S5.4.0](https://zenodo.org/records/15232972))
 - HUMAnN: ~55.6 GB (HUMAnN 3.9)
 - Kraken2: 16.1 GB ([PlusPF-16](https://benlangmead.github.io/aws-indexes/k2))
 - RGI: ~16.8 GB (As of February 2026 [latest](https://card.mcmaster.ca/download))
+- AntiSMASH: ~ 9.4GB (Version 8.0.4)
 
 ### Things to note
 OpusTaxa currently only accepts paired reads.<br>

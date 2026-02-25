@@ -4,5 +4,5 @@ channels:
     - bioconda
     - defaults
 dependencies:
-    - sra-tools
+    - sra-tools=3.2.1
     - pigz

@@ -4,4 +4,4 @@ channels:
     - bioconda
     - defaults
 dependencies:
-    - antismash>=8.0
+    - antismash=8.0.4

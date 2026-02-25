@@ -5,4 +5,4 @@ channels:
     - defaults
 dependencies:
     - python=3.10
-    - rgi>=6.0.5
+    - rgi=6.0.5

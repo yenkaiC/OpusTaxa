@@ -4,4 +4,4 @@ channels:
     - conda-forge
     - defaults
 dependencies:
-    - fastqc
+    - fastqc=0.12.1

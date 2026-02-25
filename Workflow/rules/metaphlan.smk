@@ -14,7 +14,7 @@ rule dl_metaphlan_DB:
         log_dir + "/metaphlan/databaseDL.log"
     shell:
         """
-        metaphlan --install --db_dir {params.db_dir} 2> {log}
+        metaphlan --install --index mpa_vJan25_CHOCOPhlAnSGB_202503 --db_dir {params.db_dir} 2> {log}
         touch {output.done}
         """
 

@@ -4,5 +4,5 @@ channels:
     - bioconda
     - defaults
 dependencies:
-    - kraken2
+    - kraken2=2.1.6
     - bracken

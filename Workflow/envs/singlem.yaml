@@ -4,5 +4,5 @@ channels:
     - bioconda
     - defaults
 dependencies:
-    - singlem>=0.20.3
+    - singlem=0.20.3
 
