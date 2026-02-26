@@ -34,7 +34,7 @@ rule filter_contigs:
     input:
         fasta = metaspades_dir + "/{sample}/contigs.fasta"
     output:
-        filtered = antismash_dir + "/{sample}/contigs_filtered.fasta"
+        filtered = metaspades_dir + "/{sample}/contigs_filtered.fasta"
     params:
         min_len = config.get("min_contig_len", 1000)
     threads: 8
@@ -65,12 +65,12 @@ rule filter_contigs:
 
 rule antismash_contigs:
     input:
-        fasta = antismash_dir + "/{sample}/contigs_filtered.fasta",
+        fasta = metaspades_dir + "/{sample}/contigs_filtered.fasta",
         db = "Database/antismash/.databases_downloaded"
     output:
         html = antismash_dir + "/{sample}/index.html",
-        gbk = antismash_dir + "/{sample}/contigs.gbk",
-        json = antismash_dir + "/{sample}/contigs.json",
+        gbk = antismash_dir + "/{sample}/contigs_filtered.gbk",
+        json = antismash_dir + "/{sample}/contigs_filtered.json",
         complete = touch(antismash_dir + "/{sample}/.antismash_complete")
     log:
         log_dir + "/antismash/{sample}.log"
