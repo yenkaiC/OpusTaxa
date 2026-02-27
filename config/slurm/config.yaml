@@ -9,7 +9,7 @@ default-resources:
   runtime: 480 # minutes (8 hours)
 
 # Job naming - includes rule and sample info
-jobname: "OpusTaxa.{rulename}.{wildcards}"
+jobname: "OpusTaxa.{rulename}.{jobid}.{wildcards}"
 
 # Workflow settings
 rerun-incomplete: true
