@@ -74,7 +74,8 @@ rule all:
         expand(rgi_dir + "/{sample}/contigs/{sample}_rgi.json", sample=SAMPLES) if run_rgi else [],
 
         # AntiSMASH - Biosynthetic gene clusters (requires metaspades)
-        expand(antismash_dir + "/{sample}/.antismash_complete", sample=SAMPLES) if run_antismash else [],        
+        expand(antismash_dir + "/{sample}/.antismash_complete", sample=SAMPLES) if run_antismash else [],
+        antismash_dir + "/table/antismash_summary.tsv" if run_antismash else [],      
         
 
 ## Check what one should be running

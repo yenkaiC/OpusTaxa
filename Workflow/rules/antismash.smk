@@ -98,3 +98,21 @@ rule antismash_contigs:
             --cpus {threads} \
             {input.fasta} 2> {log}
         """
+
+## Generate a merged summary table from all antiSMASH outputs
+rule antismash_summary_table:
+    input:
+        complete = expand(antismash_dir + "/{sample}/.antismash_complete", sample=SAMPLES)
+    output:
+        summary = antismash_dir + "/table/antismash_summary.tsv"
+    params:
+        antismash_dir = antismash_dir,
+        samples = SAMPLES
+    log:
+        log_dir + "/antismash/summary_table.log"
+    resources:
+        mem_mb = 4000,
+        runtime = 30
+    threads: 1
+    script:
+        workflow.basedir + "/Workflow/scripts/antismash_summary.py"
