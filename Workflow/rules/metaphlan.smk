@@ -36,9 +36,8 @@ rule metaphlan:
     log:
         log_dir + "/metaphlan/{sample}.log"
     resources:
-        mem_mb = 64000,
-        runtime = 720,
-        slurm_extra = "--mem=64G"  # Explicitly tell SLURM
+        mem_mb = 50000,
+        runtime = 720
     shell:
         """
         metaphlan {input.r1},{input.r2} \
