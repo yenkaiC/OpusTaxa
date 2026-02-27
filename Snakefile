@@ -72,6 +72,7 @@ rule all:
         DB_dir + "/card/.download_complete" if run_rgi else [],
         expand(rgi_dir + "/{sample}/contigs/{sample}_rgi.txt", sample=SAMPLES) if run_rgi else [],
         expand(rgi_dir + "/{sample}/contigs/{sample}_rgi.json", sample=SAMPLES) if run_rgi else [],
+        rgi_dir + "/table/rgi_merged.tsv" if run_rgi else [],
 
         # AntiSMASH - Biosynthetic gene clusters (requires metaspades)
         expand(antismash_dir + "/{sample}/.antismash_complete", sample=SAMPLES) if run_antismash else [],
