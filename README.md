@@ -129,7 +129,9 @@ OpusTaxa/
 │   │   ├── merged/         # Abundance tables of gene-families and pathways (normalised, stratified and unstratified)
 │   ├── MetaSPAdes/         # Metagenome Assemblies
 │   ├── AntiSMASH/          # Biosynthetic Gene Clusters
+│   │   ├── Table/ 
 │   ├── RGI/                # Antibiotic Resistance Genes
+│   │   ├── Table/ 
 │   └── MLP/                # Predicted Microbial Load
 └── Reports/
     ├── FastQC/             # Individual QC reports
@@ -213,11 +215,11 @@ snakemake --use-conda --cores 1 --until antismash_download_databases # if using 
 - **Storage:** 500 GB (depends on dataset size)
 
 ### Database Size (Uncompressed)
-- NoHuman: ~6.3 GB (As of February 2026)
-- MetaPhlAn: ~36 GB ([Version 4.2.4 - mpa_vJan25_CHOCOPhlAnSGB_202503](https://github.com/biobakery/MetaPhlAn/wiki/MetaPhlAn-4.2))
-- SingleM: ~7.5 GB ([Version S5.4.0](https://zenodo.org/records/15232972))
-- HUMAnN: ~55.6 GB (HUMAnN 3.9)
-- Kraken2: 16.1 GB ([PlusPF-16](https://benlangmead.github.io/aws-indexes/k2))
+- NoHuman: ~5.9 GB (As of February 2026)
+- MetaPhlAn: ~34 GB ([Version 4.2.4 - mpa_vJan25_CHOCOPhlAnSGB_202503](https://github.com/biobakery/MetaPhlAn/wiki/MetaPhlAn-4.2))
+- SingleM: ~7 GB ([Version S5.4.0](https://zenodo.org/records/15232972))
+- HUMAnN: ~52 GB (HUMAnN 3.9)
+- Kraken2: 16 GB ([PlusPF-16](https://benlangmead.github.io/aws-indexes/k2))
 - RGI: ~16.8 GB (As of February 2026 [latest](https://card.mcmaster.ca/download))
 - AntiSMASH: ~ 9.4GB (Version 8.0.4)
 
