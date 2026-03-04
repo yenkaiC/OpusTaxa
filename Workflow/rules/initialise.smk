@@ -171,6 +171,7 @@ if not SAMPLES:
 # Only runs for files that don't already match {sample}_R1_001.fastq.gz
 # Creates symlinks so downstream rules use the standard naming convention.
 # Original files are never modified.
+_samples_need_symlink_only = {s: v for s, v in _samples_need_symlink.items() if s not in SRA_IDS}
 _symlink_constraint = "|".join(re.escape(s) for s in _samples_need_symlink) if _samples_need_symlink else "IMPOSSIBLE_MATCH_PLACEHOLDER"
 
 rule standardize_filenames:
