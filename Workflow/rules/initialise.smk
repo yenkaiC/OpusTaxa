@@ -130,6 +130,17 @@ def detect_samples(directory):
     return detected
 
 _detected = detect_samples(input_dir)
+
+# Add SRA samples to _detected
+if download_sra and SRA_IDS:
+    for sra_id in SRA_IDS:
+        if sra_id not in _detected:
+            _detected[sra_id] = {
+                'r1': input_dir + f"/{sra_id}_1.fastq.gz",
+                'r2': input_dir + f"/{sra_id}_2.fastq.gz",
+                'pattern': '1'
+            }
+
 # Samples that need symlinks vs those already in standard naming
 _samples_need_symlink = {s: (r1, r2) for s, (r1, r2, needs_std) in _detected.items() if needs_std}
 _samples_already_standard = {s for s, (_, _, needs_std) in _detected.items() if not needs_std}
