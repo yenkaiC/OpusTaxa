@@ -94,7 +94,7 @@ rule singlem_merged_table:
         log_dir + "/singlem/merge_table.log"
     resources:
         mem_mb = 8000,
-        time = 120
+        runtime = 120
     threads: 1
     shell:
         """

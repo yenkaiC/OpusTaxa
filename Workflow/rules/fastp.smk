@@ -12,7 +12,7 @@ rule fastp_trim:
         8
     resources:
         mem_mb = 32000, #32GB
-        time = 480 # 8 hours
+        runtime = 480 # 8 hours
     log:
         log_dir + "/fastp/{sample}.log"
     shell:

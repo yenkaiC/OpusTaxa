@@ -30,7 +30,7 @@ rule fastp_qc:
     threads: 4
     resources:
         mem_mb = 6000,
-        time = 60
+        runtime = 60
     shell:
         "fastqc --outdir {params} {input}"
 
@@ -48,7 +48,7 @@ rule nohuman_qc:
     threads: 4
     resources:
         mem_mb = 4000,
-        time = 80
+        runtime = 80
     shell:
         "fastqc --outdir {params} {input}"
 
@@ -73,7 +73,7 @@ rule multi_qc:
     threads: 4
     resources:
         mem_mb = 4000,
-        time = 80
+        runtime = 80
     shell:
         """
         multiqc {raw_qc_dir} -o {params} -n raw_multiqc_report.html --force

@@ -60,6 +60,9 @@ rule metaphlan_abundance_table:
         workflow.basedir + "/Workflow/envs/metaphlan.yaml"
     log:
         log_dir + "/metaphlan/merge_table.log"
+    resources:
+        mem_mb = 24000,
+        runtime = 120
     shell:
         """
         # Create output directory if it doesn't exist

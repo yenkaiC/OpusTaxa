@@ -164,6 +164,9 @@ rule standardize_filenames:
         log_dir + "/file_rename/{sample}.log"
     wildcard_constraints:
         sample = _symlink_constraint
+    resources:
+        mem_mb = 4000,
+        runtime = 60
     shell:
         """
         ln -sf $(readlink -f {input.r1}) {output.r1}

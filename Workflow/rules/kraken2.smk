@@ -57,7 +57,7 @@ rule kraken2:
             --gzip-compressed 2> {log}
         """
 
-## Run Bracken for abundance estimation (optional but recommended)
+## Run Bracken for abundance estimation
 rule bracken:
     input:
         report = kraken2_dir + "/{sample}_report.txt",
@@ -98,6 +98,9 @@ rule combine_bracken_reports:
         workflow.basedir + "/Workflow/envs/kraken2.yaml"
     log:
         log_dir + "/kraken2/combine_reports.log"
+    resources:
+        mem_mb = 16000,
+        runtime = 60
     shell:
         """
         mkdir -p {kraken2_dir}/table

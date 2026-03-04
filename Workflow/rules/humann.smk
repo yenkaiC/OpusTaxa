@@ -137,7 +137,7 @@ rule humann_merge_tables:
         merge_dir = humann_dir + "/merged"
     resources:
         mem_mb = 8000,
-        time = 60
+        runtime = 120
     log:
         log_dir + "/humann/merge_tables.log"
     shell:
