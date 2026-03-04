@@ -151,8 +151,15 @@ SAMPLES = sorted(set(list(_detected.keys()) + SRA_IDS))
 if _detected:
     print(f"Detected {len(_detected)} sample(s) in {input_dir}/:")
     for s in sorted(_detected.keys()):
-        r1 = os.path.basename(_detected[s][0])
-        tag = "" if _detected[s][2] else " (standard)"
+        # Handle both tuple format (from detect_all_samples) and dict format (from SRA)
+        if isinstance(_detected[s], dict):
+            # Dictionary format (SRA samples)
+            r1 = os.path.basename(_detected[s]['r1'])
+            tag = " (SRA)"
+        else:
+            # Tuple format (detected files)
+            r1 = os.path.basename(_detected[s][0])
+            tag = "" if _detected[s][2] else " (standard)"
         print(f"  {s}  ←  {r1}{tag}")
 
 if not SAMPLES:
