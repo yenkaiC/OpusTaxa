@@ -135,33 +135,25 @@ _detected = detect_samples(input_dir)
 if download_sra and SRA_IDS:
     for sra_id in SRA_IDS:
         if sra_id not in _detected:
-            _detected[sra_id] = {
-                'r1': input_dir + f"/{sra_id}_1.fastq.gz",
-                'r2': input_dir + f"/{sra_id}_2.fastq.gz",
-                'pattern': '1'
-            }
+            r1 = os.path.join(input_dir, f"{sra_id}_1.fastq.gz")
+            r2 = os.path.join(input_dir, f"{sra_id}_2.fastq.gz")
+            _detected[sra_id] = (r1, r2, True)
 
 SAMPLES = sorted(set(list(_detected.keys())))
+#SAMPLES = sorted(set(list(_detected.keys()) + SRA_IDS))
 
 # Samples that need symlinks vs those already in standard naming
 _samples_need_symlink = {s: (r1, r2) for s, (r1, r2, needs_std) in _detected.items() if needs_std}
 _samples_already_standard = {s for s, (_, _, needs_std) in _detected.items() if not needs_std}
 
-#SAMPLES = sorted(set(list(_detected.keys()) + SRA_IDS))
-
 # Print detected samples for debugging
 if _detected:
     print(f"Detected {len(_detected)} sample(s) in {input_dir}/:")
     for s in sorted(_detected.keys()):
-        # Handle both tuple format (from detect_all_samples) and dict format (from SRA)
-        if isinstance(_detected[s], dict):
-            # Dictionary format (SRA samples)
-            r1 = os.path.basename(_detected[s]['r1'])
+        r1 = os.path.basename(_detected[s][0])
+        tag = "" if _detected[s][2] else " (standard)"
+        if s in SRA_IDS:
             tag = " (SRA)"
-        else:
-            # Tuple format (detected files)
-            r1 = os.path.basename(_detected[s][0])
-            tag = "" if _detected[s][2] else " (standard)"
         print(f"  {s}  ←  {r1}{tag}")
 
 if not SAMPLES:
@@ -171,7 +163,6 @@ if not SAMPLES:
 # Only runs for files that don't already match {sample}_R1_001.fastq.gz
 # Creates symlinks so downstream rules use the standard naming convention.
 # Original files are never modified.
-_samples_need_symlink_only = {s: v for s, v in _samples_need_symlink.items() if s not in SRA_IDS}
 _symlink_constraint = "|".join(re.escape(s) for s in _samples_need_symlink) if _samples_need_symlink else "IMPOSSIBLE_MATCH_PLACEHOLDER"
 
 rule standardize_filenames:
