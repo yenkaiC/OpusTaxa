@@ -141,11 +141,13 @@ if download_sra and SRA_IDS:
                 'pattern': '1'
             }
 
+SAMPLES = sorted(set(list(_detected.keys())))
+
 # Samples that need symlinks vs those already in standard naming
 _samples_need_symlink = {s: (r1, r2) for s, (r1, r2, needs_std) in _detected.items() if needs_std}
 _samples_already_standard = {s for s, (_, _, needs_std) in _detected.items() if not needs_std}
 
-SAMPLES = sorted(set(list(_detected.keys()) + SRA_IDS))
+#SAMPLES = sorted(set(list(_detected.keys()) + SRA_IDS))
 
 # Print detected samples for debugging
 if _detected:
