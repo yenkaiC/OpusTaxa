@@ -40,6 +40,7 @@ rule all:
         # Merged table for SingleM
         singlem_dir + "/table/merged_profile.tsv" if run_singlem else [],
         directory(singlem_dir + "/table/species_by_site/") if run_singlem else [],
+        singlem_dir + "/table/merged_prokaryotic_fraction.tsv" if run_singlem else [],
         
         # MetaPhlAn
         expand(metaphlan_dir + "/{sample}_profile.txt", sample=SAMPLES) if run_metaphlan else [],

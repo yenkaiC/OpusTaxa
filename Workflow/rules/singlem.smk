@@ -110,3 +110,36 @@ rule singlem_merged_table:
             --output-species-by-site-relative-abundance-prefix {output.species_by_site}/merged \
             2>> {log}
         """
+        
+## Merge prokaryotic fraction tables across all samples
+rule singlem_merge_prokaryotic_fraction:
+    input:
+        spf_files = expand(singlem_dir + "/{sample}.spf.tsv", sample=SAMPLES)
+    output:
+        merged = singlem_dir + "/table/merged_prokaryotic_fraction.tsv"
+    log:
+        log_dir + "/singlem/merge_prokaryotic_fraction.log"
+    resources:
+        mem_mb = 4000,
+        time = 30
+    threads: 1
+    run:
+        import os
+
+        os.makedirs(os.path.dirname(output.merged), exist_ok=True)
+
+        header_written = False
+        with open(output.merged, "w") as out_f:
+            for spf_file in input.spf_files:
+                with open(spf_file, "r") as in_f:
+                    lines = in_f.readlines()
+                    if not header_written:
+                        out_f.write(lines[0])  # header
+                        header_written = True
+                    for line in lines[1:]:
+                        if line.strip():
+                            out_f.write(line)
+
+        with open(log[0], "w") as log_f:
+            total = sum(1 for line in open(output.merged)) - 1
+            log_f.write(f"Merged prokaryotic fraction from {len(input.spf_files)} samples ({total} rows)\n")
