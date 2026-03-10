@@ -34,6 +34,7 @@ rule remove_human_reads:
     output:
         r1 = nohuman_dir + "/{sample}_R1_001.fastq.gz",
         r2 = nohuman_dir + "/{sample}_R2_001.fastq.gz"
+    priority: 50
     conda: 
         '../envs/nohuman.yaml'
     log:

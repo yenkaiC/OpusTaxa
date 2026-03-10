@@ -28,6 +28,7 @@ rule metaphlan:
     output:
         profile = metaphlan_dir + "/{sample}_profile.txt",
         bowtie = metaphlan_dir + "/{sample}_bowtie.bz2"
+    priority: 45
     conda:
         workflow.basedir + "/Workflow/envs/metaphlan.yaml"
     params:

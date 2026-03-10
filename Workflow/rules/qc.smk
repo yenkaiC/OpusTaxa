@@ -66,6 +66,7 @@ rule multi_qc:
         multiqc_dir + "/raw_multiqc_report.html",
         multiqc_dir + "/fastp_multiqc_report.html",
         multiqc_dir + "/nohuman_multiqc_report.html"
+    priority: 45
     params:
         multiqc_dir
     conda:
