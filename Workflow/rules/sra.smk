@@ -13,6 +13,7 @@ rule SRA_downloader:
         r2 = temp(input_dir + "/{sra_id}_2.fastq")
     conda: 
         workflow.basedir + '/Workflow/envs/sra.yaml'
+    group: "sra_download"
     resources:
         mem_mb = 20000,
         runtime = 400
@@ -39,6 +40,7 @@ rule parallel_gzip:
         r2 = input_dir + "/{sra_id}_2.fastq.gz"
     conda: 
         workflow.basedir + '/Workflow/envs/sra.yaml'
+    group: "sra_download"
     resources:
         mem_mb = 20000,
         runtime = 240
