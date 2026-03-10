@@ -211,7 +211,7 @@ snakemake --use-conda --cores 1 --until antismash_download_databases # if using 
 
 ### Recommended (for production)
 - **CPU:** 8+ cores
-- **RAM:** 40+ GB (80 GB for MetaSPAdes, 64GB for HUMAnN)
+- **RAM:** 40+ GB (100 GB for MetaSPAdes, 64GB for HUMAnN)
 - **Storage:** 500 GB (depends on dataset size)
 
 ### Database Size (Uncompressed)

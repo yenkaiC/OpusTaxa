@@ -12,7 +12,7 @@ rule metaspades:
         outdir = metaspades_dir + "/{sample}"
     threads: 10
     resources:
-        mem_mb = 80000,  # 80GB
+        mem_mb = 100000,  # 100GB
         runtime = 2880       # 48 hours
     log:
         log_dir + "/metaspades/{sample}.log"
