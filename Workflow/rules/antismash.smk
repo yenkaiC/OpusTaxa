@@ -79,7 +79,7 @@ rule antismash_contigs:
     params:
         db_dir = DB_dir + "/antismash",
         out_dir = antismash_dir + "/{sample}"
-    threads: 16
+    threads: get_threads("antismash")
     resources:
         mem_mb = 32000,
         runtime = 2880

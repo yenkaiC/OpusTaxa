@@ -11,7 +11,7 @@ rule dl_noHuman_DB:
     resources:
         mem_mb = 10000,
         runtime = 480
-    threads: 1
+    threads: 2
     log:
         log_dir + "/nohuman/databaseDL.log"
     shell:
@@ -37,6 +37,7 @@ rule remove_human_reads:
     priority: 50
     conda: 
         '../envs/nohuman.yaml'
+    threads: get_threads("nohuman")
     log:
         log_dir + "/nohuman/{sample}.log"
     params:
@@ -45,4 +46,4 @@ rule remove_human_reads:
         mem_mb = 32000, #32GB
         runtime = 480
     shell:
-        "nohuman --db {params.db_dir} -t 8 --out1 {output.r1} --out2 {output.r2} {input.r1} {input.r2} 2> {log}"
+        "nohuman --db {params.db_dir} -t {threads} --out1 {output.r1} --out2 {output.r2} {input.r1} {input.r2} 2> {log}"

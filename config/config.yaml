@@ -33,3 +33,16 @@ antismash: false
 executor: slurm
 default_resources: []
 jobs: 20
+
+# Thread allocations for each tool (users can customize these)
+threads:
+  fastp: 10
+  nohuman: 8
+  fastqc: 4
+  metaphlan: 8
+  singlem: 10
+  kraken2: 8
+  humann: 10
+  metaspades: 12
+  rgi: 10
+  antismash: 16

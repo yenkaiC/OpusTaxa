@@ -88,7 +88,7 @@ rule humann:
         gf_dir  = humann_dir + "/genefamilies",
         pa_dir  = humann_dir + "/pathabundance",
         pc_dir  = humann_dir + "/pathcoverage"
-    threads: 8
+    threads: get_threads("humann")
     resources:
         mem_mb = 64000,
         runtime = 1440

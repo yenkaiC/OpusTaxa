@@ -8,8 +8,7 @@ rule fastp_trim:
         r2 = clean_dir + "/{sample}_R2_001.fastq.gz"
     conda: 
         '../envs/fastp.yaml'
-    threads:
-        12
+    threads: get_threads("fastp")
     resources:
         mem_mb = 32000, #32GB
         runtime = 480 # 8 hours

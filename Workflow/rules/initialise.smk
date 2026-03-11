@@ -43,6 +43,24 @@ run_mlp = str(config.get("mlp", False)).lower() not in ("false", "0", "no")
 run_humann = str(config.get("humann", False)).lower() not in ("false", "0", "no")
 run_rgi = str(config.get("rgi", True)).lower() not in ("false", "0", "no")
 
+# Thread configuration
+DEFAULT_THREADS = {
+    "fastp": 10,
+    "nohuman": 8,
+    "fastqc": 4,
+    "metaphlan": 8,
+    "singlem": 10,
+    "kraken2": 8,
+    "humann": 10,
+    "metaspades": 12,
+    "rgi": 10,
+    "antismash": 16
+}
+
+def get_threads(tool_name):
+    """Get thread count from config or use default"""
+    return config.get("threads", {}).get(tool_name, DEFAULT_THREADS.get(tool_name, 1))
+
 # Read SRA IDs if download_sra is enabled
 import os
 SRA_IDS = []

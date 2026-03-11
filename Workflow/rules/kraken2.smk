@@ -40,7 +40,7 @@ rule kraken2:
         workflow.basedir + "/Workflow/envs/kraken2.yaml"
     params:
         db_dir = kraken2DB_dir
-    threads: 8
+    threads: get_threads("kraken2")
     resources:
         mem_mb = 64000,
         runtime = 480

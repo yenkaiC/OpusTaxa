@@ -205,6 +205,23 @@ snakemake --use-conda --cores 1 Database/card/.rgi_downloaded                   
 snakemake --use-conda --cores 1 Database/antismash/.databases_downloaded        # if using AntiSMASH
 ```
 
+## Customizing Thread Usage
+
+By default, OpusTaxa uses sensible thread allocations for each tool. You can customize these in `config/config.yaml`:
+```yaml
+threads:
+  fastp: 16          # Increase for faster QC (default: 8)
+  metaspades: 24     # Increase for faster assembly (default: 12)
+  metaphlan: 12      # Increase for larger datasets (default: 6)
+  humann: 16         # Increase for faster functional profiling (default: 8)
+```
+
+Or override via command line:
+```bash
+snakemake --workflow-profile config/slurm \
+    --config threads='{"metaspades": 32, "metaphlan": 16}'
+```
+
 ## Resource Requirements
 
 ### Minimum (for testing)

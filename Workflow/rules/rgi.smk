@@ -77,7 +77,7 @@ rule rgi_contigs:
     params:
         db_dir = DB_dir + "/card",
         out_prefix = lambda wc: os.path.abspath(rgi_dir + "/" + wc.sample + "/contigs/" + wc.sample + "_rgi")
-    threads: 8
+    threads: get_threads("rgi")
     resources:
         mem_mb = 40000,
         runtime = 960

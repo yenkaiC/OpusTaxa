@@ -10,7 +10,7 @@ rule metaspades:
         workflow.basedir + "/Workflow/envs/spades.yaml"
     params:
         outdir = metaspades_dir + "/{sample}"
-    threads: 12
+    threads: get_threads("metaspades")
     resources:
         mem_mb = 100000,  # 100GB
         runtime = 2880       # 48 hours

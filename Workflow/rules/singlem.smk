@@ -29,7 +29,7 @@ rule singlem_profile:
         workflow.basedir + "/Workflow/envs/singlem.yaml"
     params:
         db_dir = singlemDB_dir
-    threads: 10
+    threads: get_threads("singlem")
     resources:
         mem_mb = 40000,
         runtime = 2000 #need to increase time
@@ -59,7 +59,7 @@ rule singlem_extra:
         microbial_fraction = singlem_dir + "/{sample}.spf.tsv"
     conda:
         workflow.basedir + "/Workflow/envs/singlem.yaml"
-    threads: 8
+    threads: get_threads("singlem")
     resources:
         mem_mb = 38000,
         runtime = 480
