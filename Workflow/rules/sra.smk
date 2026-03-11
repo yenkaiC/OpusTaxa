@@ -15,9 +15,9 @@ rule SRA_downloader:
         workflow.basedir + '/Workflow/envs/sra.yaml'
     group: "sra_download"
     resources:
-        mem_mb = 20000,
+        mem_mb = 22000,
         runtime = 400
-    threads: 6
+    threads: 8
     params:
         dl_dir = input_dir
     log:
@@ -42,9 +42,9 @@ rule parallel_gzip:
         workflow.basedir + '/Workflow/envs/sra.yaml'
     group: "sra_download"
     resources:
-        mem_mb = 20000,
+        mem_mb = 24000,
         runtime = 240
-    threads: 6
+    threads: 8
     log:
         log_dir + "/sra/{sra_id}_compress.log"
     shell:

@@ -5,9 +5,9 @@ rule dl_metaphlan_DB:
     conda: 
         workflow.basedir + '/Workflow/envs/metaphlan.yaml'
     resources:
-        mem_mb = 16000,
+        mem_mb = 24000,
         runtime = 1440
-    threads: 1
+    threads: 2
     params:
         db_dir = metaphlanDB_dir
     log:
@@ -33,7 +33,7 @@ rule metaphlan:
         workflow.basedir + "/Workflow/envs/metaphlan.yaml"
     params:
         db_dir = metaphlanDB_dir
-    threads: 6
+    threads: 10
     log:
         log_dir + "/metaphlan/{sample}.log"
     resources:

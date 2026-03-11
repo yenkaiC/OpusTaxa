@@ -9,11 +9,11 @@ rule fastp_trim:
     conda: 
         '../envs/fastp.yaml'
     threads:
-        8
+        12
     resources:
         mem_mb = 32000, #32GB
         runtime = 480 # 8 hours
     log:
         log_dir + "/fastp/{sample}.log"
     shell:
-        "fastp -i {input.r1} -I {input.r2} -o {output.r1} -O {output.r2} 2> {log}"
+        "fastp -i {input.r1} -I {input.r2} -o {output.r1} -O {output.r2} -w {threads} 2> {log}"

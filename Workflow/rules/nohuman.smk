@@ -9,7 +9,7 @@ rule dl_noHuman_DB:
     params:
         db_dir = DB_dir + "/nohuman"
     resources:
-        mem_mb = 4000,
+        mem_mb = 10000,
         runtime = 480
     threads: 1
     log:

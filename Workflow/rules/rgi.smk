@@ -11,9 +11,9 @@ rule dl_card_DB:
     params:
         db_dir = DB_dir + "/card"
     resources:
-        mem_mb = 6000,
+        mem_mb = 16000,
         runtime = 120
-    threads: 1
+    threads: 2
     log:
         log_dir + "/rgi/card_db_download.log"
     shell:

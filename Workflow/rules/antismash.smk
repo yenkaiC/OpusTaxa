@@ -13,9 +13,9 @@ rule antismash_download_databases:
     params:
         db_dir = DB_dir + "/antismash"
     resources:
-        mem_mb = 8000,
+        mem_mb = 16000,
         runtime = 480
-    threads: 1
+    threads: 2
     shell:
         """
         mkdir -p {params.db_dir}
@@ -111,7 +111,7 @@ rule antismash_summary_table:
     log:
         log_dir + "/antismash/summary_table.log"
     resources:
-        mem_mb = 4000,
+        mem_mb = 8000,
         runtime = 30
     threads: 1
     script:

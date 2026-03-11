@@ -52,8 +52,8 @@ rule mlp:
     log:
         log_dir + "/mlp/mlp.log"
     resources:
-        mem_mb = 8000,
+        mem_mb = 16000,
         runtime = 60
-    threads: 1
+    threads: 2
     script:
         workflow.basedir + "/Workflow/scripts/mlp.R"

@@ -7,7 +7,7 @@ rule dl_kraken2_DB:
     params:
         db_dir = kraken2DB_dir
     resources:
-        mem_mb = 8000,
+        mem_mb = 20000,
         runtime = 480
     threads: 4
     log:

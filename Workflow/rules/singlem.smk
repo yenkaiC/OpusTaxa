@@ -40,7 +40,7 @@ rule singlem_profile:
         singlem pipe \
             --metapackage "{input.db}" \
             -1 {input.r1} -2 {input.r2} \
-            --threads 8 \
+            --threads {threads} \
             -p {output.profile} \
             --otu-table {output.otu_table} 2> {log}
         """
@@ -120,7 +120,7 @@ rule singlem_merge_prokaryotic_fraction:
     log:
         log_dir + "/singlem/merge_prokaryotic_fraction.log"
     resources:
-        mem_mb = 4000,
+        mem_mb = 6000,
         time = 30
     threads: 1
     run:

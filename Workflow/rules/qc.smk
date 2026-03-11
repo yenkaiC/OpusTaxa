@@ -11,7 +11,7 @@ rule raw_qc:
         '../envs/fastqc.yaml'
     threads: 4
     resources:
-        mem_mb = 4000,
+        mem_mb = 6000,
         runtime = 80
     shell:
         "fastqc --outdir {params} {input}"
@@ -47,7 +47,7 @@ rule nohuman_qc:
         '../envs/fastqc.yaml'
     threads: 4
     resources:
-        mem_mb = 4000,
+        mem_mb = 6000,
         runtime = 80
     shell:
         "fastqc --outdir {params} {input}"
@@ -73,7 +73,7 @@ rule multi_qc:
         '../envs/multiqc.yaml'
     threads: 4
     resources:
-        mem_mb = 4000,
+        mem_mb = 6000,
         runtime = 80
     shell:
         """

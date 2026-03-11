@@ -10,7 +10,7 @@ rule metaspades:
         workflow.basedir + "/Workflow/envs/spades.yaml"
     params:
         outdir = metaspades_dir + "/{sample}"
-    threads: 10
+    threads: 12
     resources:
         mem_mb = 100000,  # 100GB
         runtime = 2880       # 48 hours
@@ -22,7 +22,7 @@ rule metaspades:
             -1 {input.r1} \
             -2 {input.r2} \
             -t {threads} \
-            -m 80 \
+            -m {params.mem_gb} \
             -o {params.outdir} 2> {log}
         
         # Keep only contigs and scaffolds, remove everything else
