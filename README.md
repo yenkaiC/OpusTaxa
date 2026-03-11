@@ -187,19 +187,22 @@ snakemake --workflow-profile config/slurm --config download_sra=true metaphlan=t
 # Only include the databases for tools you plan to use
 
 # Core databases (always needed)
-snakemake --use-conda --cores 1 --until dl_noHuman_DB
+snakemake --use-conda --cores 1 Database/nohuman/HPRC.r2/db/taxo.k2d
 
 # Taxonomic profiling databases
-snakemake --use-conda --cores 1 --until dl_metaphlan_DB    # if using MetaPhlAn
-snakemake --use-conda --cores 1 --until dl_singlem_DB      # if using SingleM
-snakemake --use-conda --cores 1 --until dl_kraken2_DB      # if using Kraken2
+snakemake --use-conda --cores 1 Database/metaphlan/.download_complete    # if using MetaPhlAn
+snakemake --use-conda --cores 1 Database/singlem/S5.4.0.GTDB_r226.metapackage_20250331.smpkg.zb      # if using SingleM
+snakemake --use-conda --cores 1 Database/kraken2/.download_complete      # if using Kraken2
 
 # Functional profiling databases
-snakemake --use-conda --cores 1 --until dl_humann_chocophlan dl_humann_uniref dl_humann_utility  # if using HUMAnN
+snakemake --use-conda --cores 1 \
+    Database/humann/chocophlan/.download_complete \
+    Database/humann/uniref/.download_complete \
+    Database/humann/utility_mapping/.download_complete  # if using HUMAnN
 
 # Resistome / biosynthetic gene cluster databases
-snakemake --use-conda --cores 1 --until dl_card_DB                  # if using RGI
-snakemake --use-conda --cores 1 --until antismash_download_databases # if using AntiSMASH
+snakemake --use-conda --cores 1 Database/card/.rgi_downloaded                   # if using RGI
+snakemake --use-conda --cores 1 Database/antismash/.databases_downloaded        # if using AntiSMASH
 ```
 
 ## Resource Requirements
