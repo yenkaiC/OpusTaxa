@@ -186,8 +186,11 @@ snakemake --workflow-profile config/slurm --config download_sra=true metaphlan=t
 # Download databases locally on the login node (has internet access)
 # Only include the databases for tools you plan to use
 
-# Core databases (always needed)
-snakemake --use-conda --cores 1 Database/nohuman/HPRC.r2/db/taxo.k2d
+# Core databases (Required for NoHuman)
+snakemake --use-conda --cores 1 \
+    Database/nohuman/HPRC.r2/db/taxo.k2d \
+    Database/nohuman/HPRC.r2/db/hash.k2d \
+    Database/nohuman/HPRC.r2/db/opts.k2d
 
 # Taxonomic profiling databases
 snakemake --use-conda --cores 1 Database/metaphlan/.download_complete    # if using MetaPhlAn
