@@ -9,7 +9,7 @@ rule metaspades:
     conda:
         workflow.basedir + "/Workflow/envs/spades.yaml"
     params:
-        outdir = metaspades_dir + "/{sample}"
+        outdir = metaspades_dir + "/{sample}",
         mem_gb = lambda wildcards, resources: int(resources.mem_mb / 1000)
     threads: get_threads("metaspades")
     resources:
