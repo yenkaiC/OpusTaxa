@@ -1,6 +1,6 @@
 # Executor settings
 executor: slurm
-jobs: 100
+jobs: 50
 
 # Default resources for all jobs
 default-resources:
@@ -8,10 +8,20 @@ default-resources:
   mem_mb: 24000 # 24 GigaBytes
   runtime: 480 # minutes (8 hours)
 
+# Limit heavy jobs
+set-resources:
+  - "remove_human_reads:jobs=20"
+  - "metaphlan:jobs=15"
+  - "singlem:jobs=15"
+  - "metaspades:jobs=5"    # Very memory-intensive
+  - "humann:jobs=8"        # Very memory-intensive
+  - "antismash:jobs=5"     # Very CPU/memory-intensive
+  - "rgi:jobs=7"
+
 # Job naming - includes rule and sample info
 jobname: "OpusTaxa.{rulename}.{jobid}"
 
 # Workflow settings
 rerun-incomplete: true
-restart-times: 1
+restart-times: 3
 use-conda: true
