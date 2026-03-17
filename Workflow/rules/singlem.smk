@@ -32,7 +32,7 @@ rule singlem_profile:
     threads: get_threads("singlem")
     resources:
         mem_mb = 40000,
-        runtime = 2000 #need to increase time
+        runtime = 1400 
     log:
         log_dir + "/singlem/{sample}_profile.log"
     shell:

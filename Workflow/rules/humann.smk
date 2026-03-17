@@ -91,7 +91,7 @@ rule humann:
     threads: get_threads("humann")
     resources:
         mem_mb = 64000,
-        runtime = 1440
+        runtime = 1400
     log:
         log_dir + "/humann/{sample}.log"
     shell:
