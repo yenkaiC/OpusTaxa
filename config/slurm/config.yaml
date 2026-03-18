@@ -16,7 +16,7 @@ set-resources:
   - "metaspades:jobs=5"
   #- "metaspades:runtime=2880"           # 48 hours - adjust as required
   #- "metaspades:slurm_partition=long"   # Use long partition for assembly - adjust partition as requried
-  - "humann:jobs=8"        
+  - "humann:jobs=8"
   - "antismash:jobs=5"
   #- "antismash:runtime=1400"
   - "rgi:jobs=7"

@@ -28,7 +28,6 @@ rule metaphlan:
     output:
         profile = metaphlan_dir + "/{sample}_profile.txt",
         bowtie = metaphlan_dir + "/{sample}_bowtie.bz2"
-    priority: 45
     conda:
         workflow.basedir + "/Workflow/envs/metaphlan.yaml"
     params:
@@ -59,6 +58,7 @@ rule metaphlan_abundance_table:
         species = metaphlan_dir + "/table/abundance_species.txt"
     conda:
         workflow.basedir + "/Workflow/envs/metaphlan.yaml"
+    priority: 45
     log:
         log_dir + "/metaphlan/merge_table.log"
     resources:
