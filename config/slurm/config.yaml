@@ -6,23 +6,25 @@ jobs: 50
 default-resources:
   mem_mb: 24000 # 24 GigaBytes
   runtime: 480 # minutes (8 hours)
+  slurm_extra: "'--job-name=OpusTaxa_{rule}'"
   #slurm_partition: general #adjust as required
 
 # Limit heavy jobs
 set-resources:
-  - "remove_human_reads:jobs=20"
-  - "metaphlan:jobs=15"
-  - "singlem:jobs=15"
-  - "metaspades:jobs=5"
+  - "remove_human_reads:jobs=45"
+  #- "metaphlan:jobs=30"
+  #- "singlem:jobs=30"
+  #- "metaspades:jobs=15"
   #- "metaspades:runtime=2880"           # 48 hours - adjust as required
   #- "metaspades:slurm_partition=long"   # Use long partition for assembly - adjust partition as requried
-  - "humann:jobs=8"
-  - "antismash:jobs=5"
-  #- "antismash:runtime=1400"
-  - "rgi:jobs=7"
+  #- "humann:jobs=20"
+  #- "antismash_contigs:jobs=15"
+  #- "antismash_contigs:runtime=1400"    # reduce runtime or change partition
+  #- "antismash_contigs:slurm_partition=long"
+  #- "rgi:jobs=15"
 
 # Job naming - includes rule and sample info
-jobname: "OpusTaxa.{rulename}.{jobid}"
+#jobname: "OpusTaxa.{rulename}.{jobid}"
 
 # Workflow settings
 rerun-incomplete: true
