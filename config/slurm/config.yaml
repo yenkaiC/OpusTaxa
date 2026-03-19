@@ -6,7 +6,7 @@ jobs: 50
 default-resources:
   mem_mb: 24000 # 24 GigaBytes
   runtime: 480 # minutes (8 hours)
-  slurm_extra: "'--job-name=OpusTaxa_{rule}'"
+  #slurm_extra: "'--exclude=hpc-lin-cmp0[8,9]'" # exclude nodes to stop people complaining
   #slurm_partition: general #adjust as required
 
 # Limit heavy jobs
@@ -23,8 +23,8 @@ set-resources:
   #- "antismash_contigs:slurm_partition=long"
   #- "rgi:jobs=15"
 
-# Job naming - includes rule and sample info
-#jobname: "OpusTaxa.{rulename}.{jobid}"
+# Job naming
+#jobname: "OpusTaxa.{rulename}.{jobid}" # currently not supported
 
 # Workflow settings
 rerun-incomplete: true
