@@ -8,6 +8,8 @@ rule metaspades:
         scaffolds = metaspades_dir + "/{sample}/scaffolds.fasta",   # For Daedalus
     conda:
         workflow.basedir + "/Workflow/envs/spades.yaml"
+    container:
+        get_container("metaspades")
     params:
         outdir = metaspades_dir + "/{sample}",
         mem_gb = lambda wildcards, resources: int(resources.mem_mb / 1000)

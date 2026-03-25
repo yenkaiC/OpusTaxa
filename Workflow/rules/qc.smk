@@ -9,6 +9,8 @@ rule raw_qc:
         raw_qc_dir
     conda: 
         '../envs/fastqc.yaml'
+    container:
+        get_container("fastqc")
     threads: get_threads("fastqc")
     resources:
         mem_mb = 12000,
@@ -27,6 +29,8 @@ rule fastp_qc:
         fastp_qc_dir
     conda: 
         '../envs/fastqc.yaml'
+    container:
+        get_container("fastqc")
     threads: get_threads("fastqc")
     resources:
         mem_mb = 12000,
@@ -45,6 +49,8 @@ rule nohuman_qc:
         nohuman_qc_dir
     conda: 
         '../envs/fastqc.yaml'
+    container:
+        get_container("fastqc")
     threads: get_threads("fastqc")
     resources:
         mem_mb = 12000,
@@ -71,6 +77,8 @@ rule multi_qc:
         multiqc_dir
     conda:
         '../envs/multiqc.yaml'
+    container:
+        get_container("multiqc")
     threads: 4
     resources:
         mem_mb = 8000,

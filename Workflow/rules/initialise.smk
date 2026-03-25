@@ -43,6 +43,28 @@ run_mlp = str(config.get("mlp", False)).lower() not in ("false", "0", "no")
 run_humann = str(config.get("humann", False)).lower() not in ("false", "0", "no")
 run_rgi = str(config.get("rgi", True)).lower() not in ("false", "0", "no")
 
+# ── Container / Conda toggle ─────────────────────────────────────────────────
+# When use_containers is true in config, rules use Singularity .sif files
+# instead of conda environments. This avoids conda corruption on Lustre
+# filesystems (e.g. Pawsey Setonix /scratch).
+#
+# Config example:
+#   use_containers: true
+#   containers:
+#     fastp: "/software/projects/<project>/<user>/containers/fastp.sif"
+#     ...
+#
+# When use_containers is false (default), rules use conda as before.
+# ──────────────────────────────────────────────────────────────────────────────
+use_containers = str(config.get("use_containers", False)).lower() not in ("false", "0", "no")
+CONTAINERS = config.get("containers", {})
+
+def get_container(tool_name):
+    """Return the container path for a tool if containers are enabled, else None."""
+    if use_containers:
+        return CONTAINERS.get(tool_name, None)
+    return None
+
 # Thread configuration
 DEFAULT_THREADS = {
     "fastp": 10,

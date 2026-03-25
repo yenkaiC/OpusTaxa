@@ -52,7 +52,7 @@ threads:
 # Replace <project> and <user> with your actual project ID and username (if applicable).
 # ============================================================================
 
-use_containers: false
+use_containers: true
 
 containers:
   fastp:      "/software/projects/<project>/<user>/containers/fastp.sif"

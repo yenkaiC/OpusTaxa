@@ -4,6 +4,8 @@ rule dl_metaphlan_DB:
         done = metaphlanDB_dir + "/.download_complete"
     conda: 
         workflow.basedir + '/Workflow/envs/metaphlan.yaml'
+    container:
+        get_container("metaphlan")
     resources:
         mem_mb = 24000,
         runtime = 1440
@@ -30,6 +32,8 @@ rule metaphlan:
         bowtie = metaphlan_dir + "/{sample}_bowtie.bz2"
     conda:
         workflow.basedir + "/Workflow/envs/metaphlan.yaml"
+    container:
+        get_container("metaphlan")
     params:
         db_dir = metaphlanDB_dir
     threads: get_threads("metaphlan")
@@ -58,6 +62,8 @@ rule metaphlan_abundance_table:
         species = metaphlan_dir + "/table/abundance_species.txt"
     conda:
         workflow.basedir + "/Workflow/envs/metaphlan.yaml"
+    container:
+        get_container("metaphlan")
     priority: 45
     log:
         log_dir + "/metaphlan/merge_table.log"

@@ -5,6 +5,8 @@ rule install_mlp_package:
         installed = mlp_dir + "/.mlp_package_installed"
     conda:
         workflow.basedir + "/Workflow/envs/mlp.yaml"
+    container:
+        get_container("mlp")
     log:
         log_dir + "/mlp/install_package.log"
     shell:
@@ -49,6 +51,8 @@ rule mlp:
         qmp  = mlp_dir + "/qmp.tsv"
     conda:
         workflow.basedir + "/Workflow/envs/mlp.yaml"
+    container:
+        get_container("mlp")
     log:
         log_dir + "/mlp/mlp.log"
     resources:

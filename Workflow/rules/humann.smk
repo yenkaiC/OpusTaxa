@@ -4,6 +4,8 @@ rule dl_humann_chocophlan:
         checkpoint = humannDB_dir + "/chocophlan/.download_complete"
     conda:
         workflow.basedir + '/Workflow/envs/humann.yaml'
+    container:
+        get_container("humann")
     params:
         db_dir = humannDB_dir + "/chocophlan"
     resources:
@@ -27,6 +29,8 @@ rule dl_humann_uniref:
         checkpoint = humannDB_dir + "/uniref/.download_complete"
     conda:
         workflow.basedir + '/Workflow/envs/humann.yaml'
+    container:
+        get_container("humann")
     params:
         db_dir = humannDB_dir + "/uniref"
     resources:
@@ -50,6 +54,8 @@ rule dl_humann_utility:
         checkpoint = humannDB_dir + "/utility_mapping/.download_complete"
     conda:
         workflow.basedir + '/Workflow/envs/humann.yaml'
+    container:
+        get_container("humann")
     params:
         db_dir = humannDB_dir + "/utility_mapping"
     resources:
@@ -82,6 +88,8 @@ rule humann:
         pathcoverage  = humann_dir + "/pathcoverage/{sample}_pathcoverage.tsv"
     conda:
         workflow.basedir + "/Workflow/envs/humann.yaml"
+    container:
+        get_container("humann")
     params:
         outdir  = humann_dir + "/temp/{sample}",
         protdb  = humannDB_dir + "/uniref/uniref",
@@ -130,6 +138,8 @@ rule humann_merge_tables:
         pc_unstrat     = humann_dir + "/merged/pathcoverage_joined_unstratified.tsv"
     conda:
         workflow.basedir + "/Workflow/envs/humann.yaml"
+    container:
+        get_container("humann")
     params:
         gf_dir = humann_dir + "/genefamilies",
         pa_dir = humann_dir + "/pathabundance",

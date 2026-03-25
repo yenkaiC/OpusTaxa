@@ -4,6 +4,8 @@ rule dl_kraken2_DB:
         checkpoint = kraken2DB_dir + "/.download_complete"
     conda:
         workflow.basedir + '/Workflow/envs/kraken2.yaml'
+    container:
+        get_container("kraken2")
     params:
         db_dir = kraken2DB_dir
     resources:
@@ -38,6 +40,8 @@ rule kraken2:
         output = kraken2_dir + "/{sample}_output.txt"
     conda:
         workflow.basedir + "/Workflow/envs/kraken2.yaml"
+    container:
+        get_container("kraken2")
     params:
         db_dir = kraken2DB_dir
     threads: get_threads("kraken2")
@@ -67,6 +71,8 @@ rule bracken:
         bracken_report = kraken2_dir + "/{sample}_bracken_report.txt"
     conda:
         workflow.basedir + "/Workflow/envs/kraken2.yaml"
+    container:
+        get_container("kraken2")
     params:
         db_dir = kraken2DB_dir,
         read_len = 150,  # Adjust based on your sequencing read length
@@ -96,6 +102,8 @@ rule combine_bracken_reports:
         combined = kraken2_dir + "/table/combined_bracken_species.txt"
     conda:
         workflow.basedir + "/Workflow/envs/kraken2.yaml"
+    container:
+        get_container("kraken2")
     log:
         log_dir + "/kraken2/combine_reports.log"
     resources:

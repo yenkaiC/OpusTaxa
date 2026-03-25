@@ -6,6 +6,8 @@ rule dl_noHuman_DB:
         nohumanDB_dir + "/opts.k2d"
     conda: 
         '../envs/nohuman.yaml'
+    container:
+        get_container("nohuman")
     params:
         db_dir = DB_dir + "/nohuman"
     resources:
@@ -37,6 +39,8 @@ rule remove_human_reads:
     priority: 50
     conda: 
         '../envs/nohuman.yaml'
+    container:
+        get_container("nohuman")
     threads: get_threads("nohuman")
     log:
         log_dir + "/nohuman/{sample}.log"

@@ -10,6 +10,8 @@ rule antismash_download_databases:
         log_dir + "/antismash/download_databases.log"
     conda:
         "../envs/antismash.yaml"
+    container:
+        get_container("antismash")
     params:
         db_dir = DB_dir + "/antismash"
     resources:
@@ -76,6 +78,8 @@ rule antismash_contigs:
         log_dir + "/antismash/{sample}.log"
     conda:
         "../envs/antismash.yaml"
+    container:
+        get_container("antismash")
     params:
         db_dir = DB_dir + "/antismash",
         out_dir = antismash_dir + "/{sample}"

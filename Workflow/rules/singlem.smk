@@ -6,8 +6,10 @@ rule dl_singlem_DB:
         directory(singlemDB_dir + "/S5.4.0.GTDB_r226.metapackage_20250331.smpkg.zb")
     conda: 
         workflow.basedir + '/Workflow/envs/singlem.yaml'
+    container:
+        get_container("singlem")
     resources:
-        mem_mb = 6000,
+        mem_mb = 10000,
         runtime = 480
     threads: 2
     log:
@@ -27,6 +29,8 @@ rule singlem_profile:
         otu_table = singlem_dir + "/{sample}_otu-table.tsv"
     conda:
         workflow.basedir + "/Workflow/envs/singlem.yaml"
+    container:
+        get_container("singlem")
     params:
         db_dir = singlemDB_dir
     threads: get_threads("singlem")
@@ -59,6 +63,8 @@ rule singlem_extra:
         microbial_fraction = singlem_dir + "/{sample}.spf.tsv"
     conda:
         workflow.basedir + "/Workflow/envs/singlem.yaml"
+    container:
+        get_container("singlem")
     threads: get_threads("singlem")
     resources:
         mem_mb = 38000,
@@ -90,12 +96,14 @@ rule singlem_merged_table:
         species_by_site = directory(singlem_dir + "/table/species_by_site/")
     conda:
         workflow.basedir + "/Workflow/envs/singlem.yaml"
+    container:
+        get_container("singlem")
     log:
         log_dir + "/singlem/merge_table.log"
     resources:
-        mem_mb = 8000,
+        mem_mb = 10000,
         runtime = 120
-    threads: 1
+    threads: 2
     shell:
         """
         mkdir -p {singlem_dir}/table
@@ -120,9 +128,9 @@ rule singlem_merge_prokaryotic_fraction:
     log:
         log_dir + "/singlem/merge_prokaryotic_fraction.log"
     resources:
-        mem_mb = 6000,
-        time = 30
-    threads: 1
+        mem_mb = 8000,
+        time = 60
+    threads: 2
     run:
         import os
 

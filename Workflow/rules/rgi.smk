@@ -8,6 +8,8 @@ rule dl_card_DB:
         checkpoint = DB_dir + "/card/.download_complete"
     conda:
         workflow.basedir + '/Workflow/envs/rgi.yaml'
+    container:
+        get_container("rgi")
     params:
         db_dir = DB_dir + "/card"
     resources:
@@ -74,6 +76,8 @@ rule rgi_contigs:
         json = rgi_dir + "/{sample}/contigs/{sample}_rgi.json"
     conda:
         workflow.basedir + "/Workflow/envs/rgi.yaml"
+    container:
+        get_container("rgi")
     params:
         db_dir = DB_dir + "/card",
         out_prefix = lambda wc: os.path.abspath(rgi_dir + "/" + wc.sample + "/contigs/" + wc.sample + "_rgi")
@@ -106,6 +110,8 @@ rule rgi_contigs:
         """
 
 ## Merge RGI results across all samples into a single table
+## NOTE: Uses script: directive (compatible with both conda and Singularity)
+
 rule rgi_merge_tables:
     input:
         txt_files = expand(rgi_dir + "/{sample}/contigs/{sample}_rgi.txt", sample=SAMPLES)
@@ -114,33 +120,49 @@ rule rgi_merge_tables:
     log:
         log_dir + "/rgi/merge_tables.log"
     resources:
-        mem_mb = 8000,
-        runtime = 30
-    threads: 1
-    run:
-        import csv
-        import os
+        mem_mb = 10000,
+        runtime = 60
+    threads: 2
+    script:
+        workflow.basedir + "/Workflow/scripts/rgi_merge.py"
 
-        os.makedirs(os.path.dirname(output.merged), exist_ok=True)
 
-        header_written = False
-        with open(output.merged, "w", newline="") as out_f:
-            writer = None
-            for txt_file in input.txt_files:
-                # Extract sample name from path
-                sample = os.path.basename(txt_file).replace("_rgi.txt", "")
-                with open(txt_file, "r") as in_f:
-                    reader = csv.DictReader(in_f, delimiter="\t")
-                    if not header_written:
-                        fieldnames = ["Sample"] + reader.fieldnames
-                        writer = csv.DictWriter(out_f, fieldnames=fieldnames, delimiter="\t")
-                        writer.writeheader()
-                        header_written = True
-                    for row in reader:
-                        row["Sample"] = sample
-                        writer.writerow(row)
-
-        # Log summary
-        with open(log[0], "w") as log_f:
-            total = sum(1 for line in open(output.merged)) - 1  # minus header
-            log_f.write(f"Merged {len(input.txt_files)} samples, {total} total AMR hits\n")
+## Old Script
+#rule rgi_merge_tables:
+#    input:
+#        txt_files = expand(rgi_dir + "/{sample}/contigs/{sample}_rgi.txt", sample=SAMPLES)
+#    output:
+#        merged = rgi_dir + "/table/rgi_merged.tsv"
+#    log:
+#        log_dir + "/rgi/merge_tables.log"
+#    resources:
+#        mem_mb = 8000,
+#        runtime = 30
+#    threads: 1
+#    run:
+#        import csv
+#        import os
+#
+#        os.makedirs(os.path.dirname(output.merged), exist_ok=True)
+#
+#        header_written = False
+#        with open(output.merged, "w", newline="") as out_f:
+#            writer = None
+#            for txt_file in input.txt_files:
+#                # Extract sample name from path
+#                sample = os.path.basename(txt_file).replace("_rgi.txt", "")
+#                with open(txt_file, "r") as in_f:
+#                    reader = csv.DictReader(in_f, delimiter="\t")
+#                    if not header_written:
+#                        fieldnames = ["Sample"] + reader.fieldnames
+#                        writer = csv.DictWriter(out_f, fieldnames=fieldnames, delimiter="\t")
+#                        writer.writeheader()
+#                        header_written = True
+#                    for row in reader:
+#                        row["Sample"] = sample
+#                        writer.writerow(row)
+#
+#        # Log summary
+#        with open(log[0], "w") as log_f:
+#            total = sum(1 for line in open(output.merged)) - 1  # minus header
+#            log_f.write(f"Merged {len(input.txt_files)} samples, {total} total AMR hits\n")
