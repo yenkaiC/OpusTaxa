@@ -33,7 +33,7 @@ antismash: false
 threads:
   fastp: 10
   nohuman: 8
-  fastqc: 4
+  fastqc: 8
   metaphlan: 8
   singlem: 10
   kraken2: 8

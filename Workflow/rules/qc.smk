@@ -11,7 +11,7 @@ rule raw_qc:
         '../envs/fastqc.yaml'
     threads: get_threads("fastqc")
     resources:
-        mem_mb = 10000,
+        mem_mb = 12000,
         runtime = 80
     shell:
         "fastqc --outdir {params} {input}"
@@ -29,7 +29,7 @@ rule fastp_qc:
         '../envs/fastqc.yaml'
     threads: get_threads("fastqc")
     resources:
-        mem_mb = 10000,
+        mem_mb = 12000,
         runtime = 60
     shell:
         "fastqc --outdir {params} {input}"
@@ -47,7 +47,7 @@ rule nohuman_qc:
         '../envs/fastqc.yaml'
     threads: get_threads("fastqc")
     resources:
-        mem_mb = 10000,
+        mem_mb = 12000,
         runtime = 80
     shell:
         "fastqc --outdir {params} {input}"

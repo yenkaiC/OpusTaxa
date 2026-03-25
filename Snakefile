@@ -1,5 +1,4 @@
 configfile: "config/config.yaml"
-container: "docker://condaforge/mambaforge:latest"
 
 ## Load rules
 include: workflow.basedir + "/Workflow/rules/initialise.smk"
