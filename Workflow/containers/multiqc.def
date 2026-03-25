@@ -1,0 +1,19 @@
+Bootstrap: docker
+From: continuumio/miniconda3:latest
+
+%labels
+    Author OpusTaxa
+    Tool multiqc
+    Version 1.33
+
+%post
+    apt-get update && apt-get install -y procps && apt-get clean -y
+    /opt/conda/bin/conda install -y -c conda-forge -c bioconda -c defaults \
+        multiqc=1.33
+    /opt/conda/bin/conda clean -a -y
+
+%environment
+    export PATH=/opt/conda/bin:$PATH
+
+%runscript
+    exec "$@"

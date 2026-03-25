@@ -1,0 +1,25 @@
+# ============================================================================
+# Snakemake SLURM profile for Singularity (E.g. in Pawsey Setonix)
+# ============================================================================
+#
+# Usage:
+#   snakemake --workflow-profile config/slurm_singularity
+# ============================================================================
+
+executor: slurm
+jobs: 50
+use-singularity: true
+use-conda: false
+latency-wait: 120
+restart-times: 1
+
+# Bind-mount /scratch and /software so containers can see data and databases
+singularity-args: "-B /scratch -B /software"
+
+# SLURM defaults
+default-resources:
+  - "slurm_account=env('PAWSEY_PROJECT')"
+  - "slurm_partition=work"
+  - "mem_mb=32000"
+  - "runtime=480"
+  - "disk_mb=0"

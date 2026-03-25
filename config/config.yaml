@@ -41,3 +41,30 @@ threads:
   metaspades: 12
   rgi: 10
   antismash: 16
+
+  # ============================================================================
+# Container Configuration for Singularity (E.g. Pawsey Setonix)
+# ============================================================================
+#
+# Set use_containers: true to use Singularity containers instead of conda.
+# Point each tool to the .sif file on /software/.
+#
+# Replace <project> and <user> with your actual project ID and username (if applicable).
+# ============================================================================
+
+use_containers: false
+
+containers:
+  fastp:      "/software/projects/<project>/<user>/containers/fastp.sif"
+  nohuman:    "/software/projects/<project>/<user>/containers/nohuman.sif"
+  fastqc:     "/software/projects/<project>/<user>/containers/fastqc.sif"
+  multiqc:    "/software/projects/<project>/<user>/containers/multiqc.sif"
+  metaphlan:  "/software/projects/<project>/<user>/containers/metaphlan.sif"
+  singlem:    "/software/projects/<project>/<user>/containers/singlem.sif"
+  kraken2:    "/software/projects/<project>/<user>/containers/kraken2.sif"
+  humann:     "/software/projects/<project>/<user>/containers/humann.sif"
+  sra:        "/software/projects/<project>/<user>/containers/sra.sif"
+  metaspades: "/software/projects/<project>/<user>/containers/metaspades.sif"
+  rgi:        "/software/projects/<project>/<user>/containers/rgi.sif"
+  antismash:  "/software/projects/<project>/<user>/containers/antismash.sif"
+  mlp:        "/software/projects/<project>/<user>/containers/mlp.sif"

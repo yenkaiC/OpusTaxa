@@ -1,0 +1,19 @@
+Bootstrap: docker
+From: continuumio/miniconda3:latest
+
+%labels
+    Author OpusTaxa
+    Tool nohuman
+    Version 0.5.0
+
+%post
+    apt-get update && apt-get install -y procps && apt-get clean -y
+    /opt/conda/bin/conda install -y -c conda-forge -c bioconda -c defaults \
+        nohuman=0.5.0
+    /opt/conda/bin/conda clean -a -y
+
+%environment
+    export PATH=/opt/conda/bin:$PATH
+
+%runscript
+    exec "$@"

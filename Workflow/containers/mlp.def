@@ -1,0 +1,30 @@
+Bootstrap: docker
+From: continuumio/miniconda3:latest
+
+%labels
+    Author OpusTaxa
+    Tool mlp
+    Description Microbial Load Predictor (R package)
+
+%post
+    apt-get update && apt-get install -y procps libcurl4-openssl-dev libssl-dev libxml2-dev && apt-get clean -y
+    /opt/conda/bin/conda install -y -c conda-forge -c bioconda -c defaults \
+        r-base=4.3.1 \
+        r-tidyverse \
+        r-remotes \
+        r-data.table \
+        r-nnet \
+        r-rpart \
+        r-caret \
+        r-clock \
+        r-xgboost=1.7.6
+    /opt/conda/bin/conda clean -a -y
+
+    # Install MLP R package from GitHub
+    /opt/conda/bin/Rscript -e "remotes::install_github('grp-bork/microbial_load_predictor', upgrade='never')"
+
+%environment
+    export PATH=/opt/conda/bin:$PATH
+
+%runscript
+    exec "$@"

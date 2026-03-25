@@ -1,0 +1,19 @@
+Bootstrap: docker
+From: continuumio/miniconda3:latest
+
+%labels
+    Author OpusTaxa
+    Tool fastqc
+    Version 0.12.1
+
+%post
+    apt-get update && apt-get install -y procps && apt-get clean -y
+    /opt/conda/bin/conda install -y -c bioconda -c conda-forge -c defaults \
+        fastqc=0.12.1
+    /opt/conda/bin/conda clean -a -y
+
+%environment
+    export PATH=/opt/conda/bin:$PATH
+
+%runscript
+    exec "$@"

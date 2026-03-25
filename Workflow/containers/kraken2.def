@@ -1,0 +1,20 @@
+Bootstrap: docker
+From: continuumio/miniconda3:latest
+
+%labels
+    Author OpusTaxa
+    Tool kraken2
+    Version 2.1.6
+
+%post
+    apt-get update && apt-get install -y procps && apt-get clean -y
+    /opt/conda/bin/conda install -y -c conda-forge -c bioconda -c defaults \
+        kraken2=2.1.6 \
+        bracken
+    /opt/conda/bin/conda clean -a -y
+
+%environment
+    export PATH=/opt/conda/bin:$PATH
+
+%runscript
+    exec "$@"

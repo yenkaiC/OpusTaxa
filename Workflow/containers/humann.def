@@ -1,0 +1,24 @@
+Bootstrap: docker
+From: continuumio/miniconda3:latest
+
+%labels
+    Author OpusTaxa
+    Tool humann
+    Version 3.9
+
+%post
+    apt-get update && apt-get install -y procps && apt-get clean -y
+    /opt/conda/bin/conda install -y -c conda-forge -c bioconda -c defaults \
+        python=3.9 \
+        diamond \
+        glpk \
+        pip
+    /opt/conda/bin/pip install humann==3.9
+    /opt/conda/bin/conda clean -a -y
+    /opt/conda/bin/pip cache purge
+
+%environment
+    export PATH=/opt/conda/bin:$PATH
+
+%runscript
+    exec "$@"
