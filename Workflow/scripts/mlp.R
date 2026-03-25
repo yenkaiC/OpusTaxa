@@ -28,12 +28,12 @@ cat("Input data dimensions:", nrow(input), "samples x", ncol(input), "species\n"
 # Try with galaxy training data first (since that's what the models are named)
 load_pred <- MLP(input, 
                  profiler = "metaphlan4.mpa_vJan25_CHOCOPhlAnSGB_202503", 
-                 training_data = "galaxy", 
+                 training_data = "metacardis", 
                  output = "load")
 
 qmp_pred <- MLP(input, 
                 profiler = "metaphlan4.mpa_vJan25_CHOCOPhlAnSGB_202503", 
-                training_data = "galaxy", 
+                training_data = "metacardis", 
                 output = "qmp")
 
 # Format output
