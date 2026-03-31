@@ -1,5 +1,5 @@
 Bootstrap: docker
-From: continuumio/miniconda3:latest
+From: condaforge/miniforge3:latest
 
 %labels
     Author OpusTaxa
@@ -8,9 +8,9 @@ From: continuumio/miniconda3:latest
 
 %post
     apt-get update && apt-get install -y procps && apt-get clean -y
-    /opt/conda/bin/conda install -y -c conda-forge -c bioconda -c defaults \
+    mamba install -y -c conda-forge -c bioconda \
         singlem=0.20.3
-    /opt/conda/bin/conda clean -a -y
+    mamba clean -a -y
 
 %environment
     export PATH=/opt/conda/bin:$PATH

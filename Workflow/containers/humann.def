@@ -1,5 +1,5 @@
 Bootstrap: docker
-From: continuumio/miniconda3:latest
+From: condaforge/miniforge3:latest
 
 %labels
     Author OpusTaxa
@@ -8,14 +8,14 @@ From: continuumio/miniconda3:latest
 
 %post
     apt-get update && apt-get install -y procps && apt-get clean -y
-    /opt/conda/bin/conda install -y -c conda-forge -c bioconda -c defaults \
+    mamba install -y -c conda-forge -c bioconda \
         python=3.9 \
         diamond \
         glpk \
         pip
-    /opt/conda/bin/pip install humann==3.9
-    /opt/conda/bin/conda clean -a -y
-    /opt/conda/bin/pip cache purge
+    pip install humann==3.9
+    mamba clean -a -y
+    pip cache purge
 
 %environment
     export PATH=/opt/conda/bin:$PATH

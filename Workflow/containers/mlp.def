@@ -1,5 +1,5 @@
 Bootstrap: docker
-From: continuumio/miniconda3:latest
+From: condaforge/miniforge3:latest
 
 %labels
     Author OpusTaxa
@@ -8,7 +8,7 @@ From: continuumio/miniconda3:latest
 
 %post
     apt-get update && apt-get install -y procps libcurl4-openssl-dev libssl-dev libxml2-dev && apt-get clean -y
-    /opt/conda/bin/conda install -y -c conda-forge -c bioconda -c defaults \
+    mamba install -y -c conda-forge -c bioconda \
         r-base=4.3.1 \
         r-tidyverse \
         r-remotes \
@@ -18,10 +18,10 @@ From: continuumio/miniconda3:latest
         r-caret \
         r-clock \
         r-xgboost=1.7.6
-    /opt/conda/bin/conda clean -a -y
+    mamba clean -a -y
 
     # Install MLP R package from GitHub
-    /opt/conda/bin/Rscript -e "remotes::install_github('grp-bork/microbial_load_predictor', upgrade='never')"
+    Rscript -e "remotes::install_github('grp-bork/microbial_load_predictor', upgrade='never')"
 
 %environment
     export PATH=/opt/conda/bin:$PATH
