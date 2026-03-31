@@ -3,14 +3,13 @@ From: condaforge/miniforge3:latest
 
 %labels
     Author OpusTaxa
-    Tool singlem
-    Version 0.20.3
+    Tool fastp
+    Version 1.1.0
 
 %post
     apt-get update && apt-get install -y procps && apt-get clean -y
     mamba install -y -c conda-forge -c bioconda \
-        python=3.12 \
-        singlem=0.20.3
+        fastp=1.1.0
     mamba clean -a -y
 
 %environment

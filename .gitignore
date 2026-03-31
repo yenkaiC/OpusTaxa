@@ -14,10 +14,12 @@ Data/AntiSMASH/*
 Data/MLP/*
 localDB/*
 Reports/*
-fastp*
+fastp.html
+fastp.json
 .DS_Store
 .Rhistory
 logs/*
+*.sif
 
 # Keep this folder
 !Data/Raw_FastQ/
