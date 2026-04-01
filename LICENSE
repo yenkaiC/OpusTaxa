@@ -1,0 +1,46 @@
+MIT License
+
+Copyright (c) 2026 OpusTaxa Contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+THIRD-PARTY TOOL NOTICE
+
+OpusTaxa orchestrates a number of third-party tools, each governed by its own
+license. Users are responsible for complying with the terms of each tool they
+enable. Key licenses to be aware of:
+
+  - antiSMASH         https://github.com/antismash/antismash/blob/main/LICENSE
+  - RGI / CARD        https://github.com/arpcard/rgi/blob/master/LICENSE
+  - MetaPhlAn         https://github.com/biobakery/MetaPhlAn/blob/master/license.txt
+  - HUMAnN            https://github.com/biobakery/humann/blob/master/LICENSE
+  - Kraken2           https://github.com/DerrickWood/kraken2/blob/master/LICENSE
+  - SingleM           https://github.com/wwood/singlem/blob/master/LICENSE.txt
+  - NoHuman           https://github.com/mbhall88/nohuman/blob/main/LICENSE
+  - SPAdes / metaSPAdes https://github.com/ablab/spades/blob/main/LICENSE
+  - FastQC            https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
+  - fastp             https://github.com/OpenGene/fastp/blob/master/LICENSE
+  - MultiQC           https://github.com/MultiQC/MultiQC/blob/main/LICENSE
+
+Notable restrictions:
+  antiSMASH and CARD/RGI impose non-commercial or academic-use restrictions
+  on their databases and software. Commercial users must consult those licenses
+  before use.
