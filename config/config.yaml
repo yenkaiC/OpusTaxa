@@ -16,6 +16,7 @@ rgiDirectory: Data/RGI
 antismashDirectory: Data/AntiSMASH
 logDirectory: logs
 slurmLogDirectory: logs/slurm
+strainphlanDirectory: "Data/StrainPhlAn"
 
 # Flags
 test_mode: false
@@ -28,6 +29,8 @@ mlp: false
 humann: false 
 rgi: false
 antismash: false
+strainphlan: false
+strainphlan_species: []
 
 # Thread allocations for each tool (users can customize these)
 threads:

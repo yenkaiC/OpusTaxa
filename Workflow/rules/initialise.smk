@@ -12,6 +12,7 @@ input_dir = config.get('inputFastQDirectory', config['rawFastQDirectory']) # Use
 clean_dir = config['trimmedFastQDirectory']
 nohuman_dir = config['nohumanDirectory']
 metaphlan_dir = config['metaphlanDirectory']
+strainphlan_dir = config.get('strainphlanDirectory', 'Data/StrainPhlAn')
 singlem_dir = config['singlemDirectory']
 multiqc_dir = config['multiQCDirectory']
 metaspades_dir = config['metaspadesDirectory']
@@ -31,6 +32,8 @@ log_dir = config['logDirectory']
 
 # Flags
 run_metaphlan = str(config.get("metaphlan", True)).lower() not in ("false", "0", "no")
+run_strainphlan = str(config.get("strainphlan", False)).lower() not in ("false", "0", "no")
+STRAINPHLAN_SPECIES = config.get("strainphlan_species", [])
 run_singlem = str(config.get("singlem", True)).lower() not in ("false", "0", "no")
 run_kraken2 = str(config.get("kraken2", False)).lower() not in ("false", "0", "no")
 run_antismash = str(config.get("antismash", False)).lower() not in ("false", "0", "no")

@@ -14,6 +14,7 @@ include: workflow.basedir + "/Workflow/rules/mlp.smk"
 include: workflow.basedir + "/Workflow/rules/humann.smk"
 include: workflow.basedir + "/Workflow/rules/rgi.smk"
 include: workflow.basedir + "/Workflow/rules/antismash.smk"
+include: workflow.basedir + "/Workflow/rules/strainphlan.smk"
 
 ## Define Outputs
 rule all:
@@ -48,6 +49,9 @@ rule all:
         # Merged table for MetaPhlAn
         metaphlan_dir + "/table/abundance_all.txt" if run_metaphlan else [],
         metaphlan_dir + "/table/abundance_species.txt" if run_metaphlan else [],
+
+        expand(strainphlan_dir + "/output/{species}/RAxML_bestTree.{species}.StrainPhlAn4.tre",
+        species=STRAINPHLAN_SPECIES) if run_strainphlan and STRAINPHLAN_SPECIES else [],
 
         # Kraken2
         expand(kraken2_dir + "/{sample}_report.txt", sample=SAMPLES) if run_kraken2 else [],
