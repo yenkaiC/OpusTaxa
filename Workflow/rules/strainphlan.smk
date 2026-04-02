@@ -110,3 +110,20 @@ rule strainphlan:
             -n {threads} \
             --phylophlan_mode accurate 2> {log}
         """
+
+### Example of running it ###
+## First, find which species/SGBs are detectable across your samples
+#grep "t__" Data/MetaPhlAn/sample1_profile.txt | head -20
+#
+## Then run
+#snakemake --use-conda --cores 16 \
+#    --config strainphlan=true \
+#    strainphlan_species='["t__SGB1877","t__SGB6080"]'
+#
+## Find t__ (SGB) level entries present in the merged table
+#grep "t__" Data/MetaPhlAn/table/abundance_all.txt | \
+#    awk -F'\t' '{
+#        present=0; 
+#        for(i=2;i<=NF;i++) if($i>0) present++; 
+#        if(present>=4) print present, $0
+#    }' | sort -rn | head -20
