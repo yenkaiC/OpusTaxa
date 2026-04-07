@@ -14,8 +14,7 @@ rule strainphlan_sample2markers:
     container:
         get_container("metaphlan")
     params:
-        db_dir = metaphlanDB_dir,
-        db_file = metaphlanDB_dir + "/mpa_vJan25_CHOCOPhlAnSGB_202503.pkl.bz2"
+        db_file = metaphlanDB_dir + "/mpa_vJan25_CHOCOPhlAnSGB_202503.pkl"
     threads: get_threads("metaphlan")
     resources:
         mem_mb = 16000,
