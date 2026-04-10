@@ -1,0 +1,38 @@
+cff-version: 1.0.0
+message: "If you use OpusTaxa, please cite it using the metadata below."
+title: OpusTaxa
+abstract: "An open-source Snakemake workflow for end-to-end processing of paired-end
+  shotgun metagenomic data. OpusTaxa automates database provisioning, quality control,
+  host read removal, taxonomic profiling, metagenome assembly, and functional analysis,
+  with built-in integration with the Sequence Read Archive."
+authors:
+  - family-names: Chen
+    given-names: Yen-Kai
+    affiliation: "Flinders Health and Medical Research Institute, Flinders University"
+  - family-names: Grundy
+    given-names: Luke
+    affiliation: "Flinders Health and Medical Research Institute, Flinders University"
+  - family-names: Wardill
+    given-names: Hannah R
+    affiliation: "School of Pharmacy and Biomedical Science, Adelaide University"
+  - family-names: Roach
+    given-names: Michael
+    affiliation: "Flinders Health and Medical Research Institute, Flinders University"
+  - family-names: Ryan
+    given-names: Feargal J
+    affiliation: "Flinders Health and Medical Research Institute, Flinders University"
+    email: feargal.ryan@flinders.edu.au
+type: software
+license: MIT
+repository-code: "https://github.com/yenkaiC/OpusTaxa"
+url: "https://github.com/yenkaiC/OpusTaxa"
+version: 0.3.0
+date-released: "2026-03-10"
+keywords:
+  - metagenomics
+  - shotgun sequencing
+  - snakemake
+  - bioinformatics
+  - microbiome
+  - taxonomic profiling
+  - workflow
