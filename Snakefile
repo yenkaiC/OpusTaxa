@@ -69,9 +69,9 @@ rule all:
         mlp_dir + "/qmp.tsv"  if run_mlp else [],
 
         # HUMAnN - requires MetaPhlAn (conditional)
-        humann_dir + "/merged/genefamilies_cpm_unstratified.tsv" if run_humann and run_metaphlan else [],
-        humann_dir + "/merged/pathabundance_cpm_unstratified.tsv" if run_humann and run_metaphlan else [],
-        humann_dir + "/merged/pathcoverage_joined_unstratified.tsv" if run_humann and run_metaphlan else [],
+        humann_dir + "/merged/genefamilies_cpm_unstratified.tsv" if run_humann else [],
+        humann_dir + "/merged/pathabundance_cpm_unstratified.tsv" if run_humann else [],
+        humann_dir + "/merged/pathcoverage_joined_unstratified.tsv" if run_humann else [],
 
         # RGI - Resistome analysis
         DB_dir + "/card/.download_complete" if run_rgi else [],
