@@ -27,16 +27,16 @@ include: os.path.join(workflow.basedir, "Workflow","rules","hecatomb.smk")
 rule all:
     input:
         targets["qc"],
-        targets["singlem"] if run_singlem else None,
-        targets["metaphlan"] if run_metaphlan else None,
-        targets["strainphlan"] if run_strainphlan else None,
-        targets["kraken2"] if run_kraken2 else None,
-        targets["metaspades"] if run_metaspades else None,
-        targets["mlp"] if run_mlp else None,
-        targets["human"] if run_humann else None,
-        targets["rgi"] if run_rgi else None,
-        targets["antismash"] if run_antismash else None,
-        targets["hecatomb"] if run_hecatomb else None,
+        targets["singlem"] if run_singlem else [],
+        targets["metaphlan"] if run_metaphlan else [],
+        targets["strainphlan"] if run_strainphlan else [],
+        targets["kraken2"] if run_kraken2 else [],
+        targets["metaspades"] if run_metaspades else [],
+        targets["mlp"] if run_mlp else [],
+        targets["human"] if run_humann else [],
+        targets["rgi"] if run_rgi else [],
+        targets["antismash"] if run_antismash else [],
+        targets["hecatomb"] if run_hecatomb else [],
 
 
 

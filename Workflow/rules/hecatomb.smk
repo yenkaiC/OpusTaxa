@@ -82,7 +82,7 @@ rule download_taxdump:
         md5 = config["hecatomb"]["dbtax"]["md5"],
         dir = os.path.join(config["hecatomb"]["args"]["databases"], "taxonomy")
     conda:
-        os.path.join("..", "..", "envs", "krona_curl_zstd_pysam.yaml")
+        os.path.join("..", "envs", "krona_curl_zstd_pysam.yaml")
     container:
         config["hecatomb"]["container"]["krona_curl_zstd_pysam"]
     shell:
@@ -114,7 +114,7 @@ rule contig_annotation_mmseqs_search:
         prefix=os.path.join(hecatomb_dir,"{sample}","result","result"),
         tmppath=os.path.join(hecatomb_dir,"{sample}","tmp"),
         sensnt=config["hecatomb"]["mmseqs"][config["hecatomb"]["args"]["search"]],
-        memsplit=str(int(0.75 * int(config["resources"]["big"]["mem"]))) + "M",
+        memsplit=str(int(0.75 * int(config["resources"]["big"]["mem_mb"]))) + "M",
         filtnt=config["hecatomb"]["mmseqs"]["filtNT"]
     benchmark:
         os.path.join(log_dir,"mmseqs_contig_annotation.{sample}.bench")
@@ -145,7 +145,7 @@ rule contig_annotation_mmseqs_summary:
     input:
         queryDB=os.path.join(hecatomb_dir,"{sample}","queryDB"),
         db=os.path.join(config["hecatomb"]["args"]["database_paths"]["secondaryNT"],"sequenceDB"),
-        taxdb=config["hecatomb"]["args"]["database_paths"]["taxonomy"]
+        taxdb=expand(os.path.join(config["hecatomb"]["args"]["databases"], "{file}"), file=config["hecatomb"]["dbtax"]["files"]),
     output:
         result=os.path.join(hecatomb_dir,"{sample}","result","tophit.index"),
         align=os.path.join(hecatomb_dir,"{sample}","result","tophit.m8"),
@@ -154,7 +154,8 @@ rule contig_annotation_mmseqs_summary:
         inputpath=os.path.join(hecatomb_dir,"{sample}","result"),
         respath=os.path.join(hecatomb_dir,"{sample}","result","tophit"),
         header=config["hecatomb"]["immutable"]["contigAnnotHeader"],
-        secondaryNtFormat=config["hecatomb"]["immutable"]["secondaryNtFormat"]
+        secondaryNtFormat=config["hecatomb"]["immutable"]["secondaryNtFormat"],
+        taxdump = os.path.join(config["hecatomb"]["args"]["database_paths"]["taxonomy"])
     benchmark:
         os.path.join(log_dir,"mmseqs_contig_annotation_summary.{sample}.bench")
     log:
@@ -176,8 +177,8 @@ rule contig_annotation_mmseqs_summary:
             "printf '{params.header}\n' > {output.tsv}; "
             "sed 's/tid|//' {output.align} | "
                 r"sed 's/|/\t/' | "
-                "taxonkit lineage --data-dir {input.taxdb} -i 2 | "
-                "taxonkit reformat2 --data-dir {input.taxdb} -I 19 --miss-rank-repl NA "
+                "taxonkit lineage --data-dir {input.taxdump} -i 2 | "
+                "taxonkit reformat2 --data-dir {input.taxdump} -I 19 --miss-rank-repl NA "
                     r"-f '{{domain|acellular root|superkingdom}}\t{{phylum}}\t{{class}}\t{{order}}\t{{family}}\t{{genus}}\t{{species}}' | "
                 "cut --complement -f2,19 >> {output.tsv}; "
         "}} &> {log}; "
