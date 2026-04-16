@@ -30,6 +30,9 @@ rule all:
         expand(fastp_qc_dir + "/{sample}_R1_001_fastqc.html", sample=SAMPLES),
         expand(fastp_qc_dir + "/{sample}_R2_001_fastqc.html", sample=SAMPLES),
         
+        # NoHuman Human Read Extraction
+        nohuman_dir + "/nohuman_summary.tsv",
+        
         # MultiQC reports
         multiqc_dir + "/raw_multiqc_report.html",
         multiqc_dir + "/fastp_multiqc_report.html",

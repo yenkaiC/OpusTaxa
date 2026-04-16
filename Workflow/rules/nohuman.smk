@@ -51,3 +51,40 @@ rule remove_human_reads:
         runtime = 480
     shell:
         "nohuman --db {params.db_dir} -t {threads} --out1 {output.r1} --out2 {output.r2} {input.r1} {input.r2} 2> {log}"
+
+## Summarise human read removal stats from NoHuman logs
+rule nohuman_summary:
+    input:
+        logs = expand(log_dir + "/nohuman/{sample}.log", sample=SAMPLES)
+    output:
+        summary = nohuman_dir + "/nohuman_summary.tsv"
+    log:
+        log_dir + "/nohuman/summary.log"
+    resources:
+        mem_mb = 6000,
+        runtime = 30
+    threads: 1
+    shell:
+        """
+        echo -e "sample\ttotal_reads\thuman_reads\thuman_percent\tnonhuman_reads\tnonhuman_percent" > {output.summary}
+
+        for f in {input.logs}; do
+            sample=$(basename "$f" .log)
+
+            line=$(grep "sequences classified as human" "$f" 2>/dev/null || true)
+
+            if [ -n "$line" ]; then
+                human=$(echo "$line" | grep -oP '\\b[0-9,]+ / ' | sed 's/ \/ //' | tr -d ',')
+                total=$(echo "$line" | grep -oP '/ [0-9,]+ ' | sed 's/[/ ]//g' | tr -d ',')
+                human_pct=$(echo "$line" | grep -oP '\\([0-9.]+%\\)' | head -1 | tr -d '()')
+                nonhuman=$(echo "$line" | grep -oP '[0-9,]+ \\(' | tail -1 | grep -oP '[0-9,]+' | tr -d ',')
+                nonhuman_pct=$(echo "$line" | grep -oP '\\([0-9.]+%\\)' | tail -1 | tr -d '()')
+
+                echo -e "${{sample}}\t${{total}}\t${{human}}\t${{human_pct}}\t${{nonhuman}}\t${{nonhuman_pct}}" >> {output.summary}
+            else
+                echo -e "${{sample}}\tNA\tNA\tNA\tNA\tNA" >> {output.summary}
+            fi
+        done
+
+        echo "Summarised $(wc -l < {output.summary}) samples" > {log}
+        """
