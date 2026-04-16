@@ -17,6 +17,7 @@ antismashDirectory: Data/AntiSMASH
 logDirectory: logs
 slurmLogDirectory: logs/slurm
 strainphlanDirectory: "Data/StrainPhlAn"
+prodigalGVDirectory: "Data/ProdigalGV"
 
 # Flags
 test_mode: false
@@ -31,6 +32,7 @@ rgi: false
 antismash: false
 strainphlan: false
 strainphlan_species: []
+prodigal_gv: false  # Enable with --config prodigal_gv=true
 
 # Thread allocations for each tool (users can customize these)
 threads:
@@ -71,3 +73,4 @@ containers:
   rgi:        "/software/projects/<project>/<user>/containers/rgi.sif"
   antismash:  "/software/projects/<project>/<user>/containers/antismash.sif"
   mlp:        "/software/projects/<project>/<user>/containers/mlp.sif"
+  prodigal_gv: "/software/projects/<project>/<user>/containers/prodigal-gv.sif"

@@ -1,0 +1,20 @@
+Bootstrap: docker
+From: condaforge/miniforge3:latest
+
+%labels
+    Author OpusTaxa
+    Tool prodigal-gv
+    Version 2.11.0
+
+%post
+    apt-get update && apt-get install -y procps && apt-get clean -y
+    mamba install -y -c conda-forge -c bioconda \
+        python=3.12 \
+        prodigal-gv=2.11.0
+    mamba clean -a -y
+
+%environment
+    export PATH=/opt/conda/bin:$PATH
+
+%runscript
+    exec "$@"

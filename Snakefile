@@ -15,6 +15,7 @@ include: workflow.basedir + "/Workflow/rules/humann.smk"
 include: workflow.basedir + "/Workflow/rules/rgi.smk"
 include: workflow.basedir + "/Workflow/rules/antismash.smk"
 include: workflow.basedir + "/Workflow/rules/strainphlan.smk"
+include: workflow.basedir + "/Workflow/rules/prodigal_gv.smk"
 
 ## Define Outputs
 rule all:
@@ -81,7 +82,11 @@ rule all:
 
         # AntiSMASH - Biosynthetic gene clusters (requires metaspades)
         expand(antismash_dir + "/{sample}/.antismash_complete", sample=SAMPLES) if run_antismash else [],
-        antismash_dir + "/table/antismash_summary.tsv" if run_antismash else [],      
+        antismash_dir + "/table/antismash_summary.tsv" if run_antismash else [],  
+
+        # Prodigal-GV
+        expand(prodigalgv_dir + "/{sample}/{sample}_proteins.faa", sample=SAMPLES) if run_prodigalgv else [],
+        prodigalgv_dir + "/table/prodigal_gv_summary.tsv" if run_prodigalgv else [],    
         
 
 ## Check what one should be running
@@ -97,3 +102,4 @@ print(f"  metaSPAdes: {run_metaspades}")
 print(f"  MLP: {run_mlp}")
 print(f"  RGI: {run_rgi}")
 print(f"  AntiSMASH: {run_antismash}")
+print(f"  AntiSMASH: {run_prodigalgv}")
