@@ -105,11 +105,14 @@ rule contig_annotation_mmseqs_search:
     """
     input:
         contigs=os.path.join(metaspades_dir, "{sample}","scaffolds.fasta"),
-        db=os.path.join(config["hecatomb"]["args"]["database_paths"]["secondaryNT"],"sequenceDB")
+        db=expand(os.path.join(config["hecatomb"]["args"]["database_paths"]["secondaryNT"],"{file}"),
+            file=["sequenceDB","sequenceDB.dbtype","sequenceDB_h","sequenceDB_h.dbtype","sequenceDB_h.index", "sequenceDB.index", "sequenceDB.lookup", "sequenceDB.source"
+        ]),
     output:
         queryDB=os.path.join(hecatomb_dir,"{sample}","queryDB"),
         result=os.path.join(hecatomb_dir,"{sample}","result", "result.index")
     params:
+        db = os.path.join(config["hecatomb"]["args"]["database_paths"]["secondaryNT"],"sequenceDB"),
         resdir=os.path.join(hecatomb_dir,"{sample}","result"),
         prefix=os.path.join(hecatomb_dir,"{sample}","result","result"),
         tmppath=os.path.join(hecatomb_dir,"{sample}","tmp"),
@@ -135,7 +138,7 @@ rule contig_annotation_mmseqs_search:
         "if [[ -d {params.tmppath} ]]; then rm -r {params.tmppath}; fi; "
         "mkdir -p {params.resdir}; "
         "mmseqs createdb {input.contigs} {output.queryDB} --dbtype 2; "
-        "mmseqs search {output.queryDB} {input.db} {params.prefix} {params.tmppath} "
+        "mmseqs search {output.queryDB} {params.db} {params.prefix} {params.tmppath} "
         "{params.sensnt} --split-memory-limit {params.memsplit} {params.filtnt} "
         "--search-type 3 --threads {threads} ; }} &> {log}"
 
@@ -144,13 +147,16 @@ rule contig_annotation_mmseqs_summary:
     """Contig annotation step 02: Summarize mmseqs contig annotation results"""
     input:
         queryDB=os.path.join(hecatomb_dir,"{sample}","queryDB"),
-        db=os.path.join(config["hecatomb"]["args"]["database_paths"]["secondaryNT"],"sequenceDB"),
+        db=expand(os.path.join(config["hecatomb"]["args"]["database_paths"]["secondaryNT"],"{file}"),
+            file=["sequenceDB","sequenceDB.dbtype","sequenceDB_h","sequenceDB_h.dbtype","sequenceDB_h.index", "sequenceDB.index", "sequenceDB.lookup", "sequenceDB.source"
+        ]),
         taxdb=expand(os.path.join(config["hecatomb"]["args"]["databases"], "{file}"), file=config["hecatomb"]["dbtax"]["files"]),
     output:
         result=os.path.join(hecatomb_dir,"{sample}","result","tophit.index"),
         align=os.path.join(hecatomb_dir,"{sample}","result","tophit.m8"),
         tsv=os.path.join(hecatomb_dir, "{sample}.hecatomb.tsv")
     params:
+        db = os.path.join(config["hecatomb"]["args"]["database_paths"]["secondaryNT"],"sequenceDB"),
         inputpath=os.path.join(hecatomb_dir,"{sample}","result"),
         respath=os.path.join(hecatomb_dir,"{sample}","result","tophit"),
         header=config["hecatomb"]["immutable"]["contigAnnotHeader"],
@@ -173,7 +179,7 @@ rule contig_annotation_mmseqs_summary:
     shell:
         "{{ "
             "mmseqs filterdb {params.inputpath} {params.respath} --extract-lines 1; "
-            "mmseqs convertalis {input.queryDB} {input.db} {params.respath} {output.align} {params.secondaryNtFormat}; "
+            "mmseqs convertalis {input.queryDB} {params.db} {params.respath} {output.align} {params.secondaryNtFormat}; "
             "printf '{params.header}\n' > {output.tsv}; "
             "sed 's/tid|//' {output.align} | "
                 r"sed 's/|/\t/' | "
