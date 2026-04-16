@@ -1,6 +1,6 @@
 resources:
   big:
-    mem: 64000
+#    mem: 64000
     mem_mb: 64000
     cpu: 32
     time: 1440

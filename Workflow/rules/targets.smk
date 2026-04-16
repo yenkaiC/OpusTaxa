@@ -22,7 +22,7 @@ targets["singlem"] = [
     expand(os.path.join(singlem_dir, "{sample}_otu-table.tsv"), sample=SAMPLES),
     expand(os.path.join(singlem_dir, "{sample}.spf.tsv"), sample=SAMPLES),
     os.path.join(singlem_dir, "table","merged_profile.tsv"),
-    directory(os.path.join(singlem_dir, "table","species_by_site")),
+    # directory(os.path.join(singlem_dir, "table","species_by_site")),
     os.path.join(singlem_dir, "table","merged_prokaryotic_fraction.tsv"),
 ]
 

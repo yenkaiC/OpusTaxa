@@ -1,6 +1,7 @@
 import os
 
 configfile: os.path.join("config","config.yaml")
+configfile: os.path.join("config","hecatomb","config.yaml")
 
 ## Load rules
 include: os.path.join(workflow.basedir, "Workflow","rules","initialise.smk")
@@ -26,16 +27,16 @@ include: os.path.join(workflow.basedir, "Workflow","rules","hecatomb.smk")
 rule all:
     input:
         targets["qc"],
-        targets["singlem"] if run_singlem,
-        targets["metaphlan"] if run_metaphlan,
-        targets["strainphlan"] if run_strainphlan,
-        targets["kraken2"] if run_kraken2,
-        targets["metaspades"] if run_metaspades,
-        targets["mlp"] if run_mlp,
-        targets["human"] if run_humann,
-        targets["rgi"] if run_rgi,
-        targets["antismash"] if run_antismash,
-        targets["hecatomb"] if run_hecatomb,
+        targets["singlem"] if run_singlem else None,
+        targets["metaphlan"] if run_metaphlan else None,
+        targets["strainphlan"] if run_strainphlan else None,
+        targets["kraken2"] if run_kraken2 else None,
+        targets["metaspades"] if run_metaspades else None,
+        targets["mlp"] if run_mlp else None,
+        targets["human"] if run_humann else None,
+        targets["rgi"] if run_rgi else None,
+        targets["antismash"] if run_antismash else None,
+        targets["hecatomb"] if run_hecatomb else None,
 
 
 
