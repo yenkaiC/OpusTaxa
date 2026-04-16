@@ -20,15 +20,11 @@ rule metaspades:
     log:
         log_dir + "/metaspades/{sample}.log"
     shell:
-        """
-        spades.py --meta \
-            -1 {input.r1} \
-            -2 {input.r2} \
-            -t {threads} \
-            -m {params.mem_gb} \
-            -o {params.outdir} 2> {log}
-        
-        # Keep only contigs and scaffolds, remove everything else
-        cd {params.outdir}
-        ls | grep -v -E '^(contigs\.fasta|scaffolds\.fasta)$' | xargs rm -rf
-        """
+        "spades.py --meta "
+            "-1 {input.r1} "
+            "-2 {input.r2} "
+            "-t {threads} "
+            "-m {params.mem_gb} "
+            "-o {params.outdir} 2> {log}; "
+        "cd {params.outdir}; "
+        r"ls | grep -v -E '^(contigs\.fasta|scaffolds\.fasta)$' | xargs rm -rf; "
