@@ -20,10 +20,10 @@ slurmLogDirectory: logs/slurm
 strainphlanDirectory: "Data/StrainPhlAn"
 
 # Flags
-test_mode: false
+test_mode: true
 download_sra: false
-metaphlan: true
-singlem: true
+metaphlan: false
+singlem: false
 kraken2: false
 metaspades: false
 mlp: false
@@ -32,7 +32,7 @@ rgi: false
 antismash: false
 strainphlan: false
 strainphlan_species: []
-hecatomb: false
+hecatomb: true
 
 # Thread allocations for each tool (users can customize these)
 threads:
