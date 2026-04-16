@@ -1,5 +1,3 @@
-<img src="/Misc/OpusTaxa_logo.png" alt="OpusTaxa Logo" title="OpusTaxa Logo" width="250">
-
 # OpusTaxa: Streamlining Metagenome Discoveries
 OpusTaxa is an easy‑to‑use pipeline that helps you process shotgun metagenomic data from raw reads to final results. Simply provide your FASTQ files or SRA IDs, and it handles the rest: downloading data and databases, performing quality checks, removing human reads, profiling the microbiome, assembling the metagenome, and running functional analysis. Results are saved as clean tables ready for downstream exploration. OpusTaxa delivers a clear, reproducible, best‑practice workflow without requiring advanced coding or bioinformatics experience.
 
@@ -247,6 +245,8 @@ snakemake --workflow-profile config/slurm \
 - AntiSMASH: ~ 9.4GB (Version 8.0.4)
 
 ### Things to note
-OpusTaxa currently only accepts paired reads.<br>
-We've configured HUMAnN to run only on the forward read due to drawbacks of collapsing forward and reverse read together.<br>
-Databases (for selected tools) are downloaded automatically on first run.
+- OpusTaxa currently only accepts paired reads.<br>
+- We've configured HUMAnN to run only on the forward read due to drawbacks of collapsing forward and reverse read together.<br>
+- Databases (for selected tools) are downloaded automatically on first run.
+- Small Datasets are not recommended for Microbial Load Predictor
+- Microbial Load Predictor was trained only with faecal samples, so may not be suitable for saliva, skin, and other sample types. 
