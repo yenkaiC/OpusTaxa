@@ -50,7 +50,7 @@ targets["kraken2"] = [
 # metaSPAdes assembly
 targets["metaspades"] = [
     expand(os.path.join(metaspades_dir, "{sample}","contigs.fasta"), sample=SAMPLES),
-    oexpand(os.path.join(metaspades_dir, "{sample}","scaffolds.fasta"), sample=SAMPLES),
+    expand(os.path.join(metaspades_dir, "{sample}","scaffolds.fasta"), sample=SAMPLES),
 ]
 
 # Microbial Load Predictor (requries metaphlan)
@@ -81,3 +81,7 @@ targets["antismash"] = [
     os.path.join(antismash_dir, "table","antismash_summary.tsv"),
 ]
 
+# hecatomb contig annotation
+targets["hecatomb"] = [
+    expand(os.path.join(hecatomb_dir, "{sample}.hecatomb.tsv"), sample=SAMPLES)
+]

@@ -14,6 +14,7 @@ humannDirectory: Data/HUMAnN
 mlpDirectory: Data/MLP
 rgiDirectory: Data/RGI
 antismashDirectory: Data/AntiSMASH
+hecatombDirectory: Data/Hecatomb
 logDirectory: logs
 slurmLogDirectory: logs/slurm
 strainphlanDirectory: "Data/StrainPhlAn"
@@ -31,6 +32,7 @@ rgi: false
 antismash: false
 strainphlan: false
 strainphlan_species: []
+hecatomb: false
 
 # Thread allocations for each tool (users can customize these)
 threads:
@@ -71,3 +73,4 @@ containers:
   rgi:        "/software/projects/<project>/<user>/containers/rgi.sif"
   antismash:  "/software/projects/<project>/<user>/containers/antismash.sif"
   mlp:        "/software/projects/<project>/<user>/containers/mlp.sif"
+

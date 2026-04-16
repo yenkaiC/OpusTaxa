@@ -21,6 +21,7 @@ humann_dir   = config['humannDirectory']
 kraken2_dir = config['kraken2Directory']
 rgi_dir = config['rgiDirectory']
 antismash_dir = config['antismashDirectory']
+hecatomb_dir = config["hecatombDirectory"]
 
 # Quality Control
 qc_dir = config['qcOutputDirectory']
@@ -45,6 +46,7 @@ run_metaspades = str(config.get("metaspades", False)).lower() not in ("false", "
 run_mlp = str(config.get("mlp", False)).lower() not in ("false", "0", "no")
 run_humann = str(config.get("humann", False)).lower() not in ("false", "0", "no")
 run_rgi = str(config.get("rgi", True)).lower() not in ("false", "0", "no")
+run_hecatomb = str(config.get("hecatomb", True)).lower() not in ("false", "0", "no")
 
 # ── Container / Conda toggle ─────────────────────────────────────────────────
 # When use_containers is true in config, rules use Singularity .sif files

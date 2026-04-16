@@ -18,6 +18,7 @@ include: os.path.join(workflow.basedir, "Workflow","rules","humann.smk")
 include: os.path.join(workflow.basedir, "Workflow","rules","rgi.smk")
 include: os.path.join(workflow.basedir, "Workflow","rules","antismash.smk")
 include: os.path.join(workflow.basedir, "Workflow","rules","strainphlan.smk")
+include: os.path.join(workflow.basedir, "Workflow","rules","hecatomb.smk")
 
 
 
@@ -34,6 +35,7 @@ rule all:
         targets["human"] if run_humann,
         targets["rgi"] if run_rgi,
         targets["antismash"] if run_antismash,
+        targets["hecatomb"] if run_hecatomb,
 
 
 
