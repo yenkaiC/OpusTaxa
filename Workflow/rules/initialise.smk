@@ -22,6 +22,7 @@ kraken2_dir = config['kraken2Directory']
 rgi_dir = config['rgiDirectory']
 antismash_dir = config['antismashDirectory']
 prodigalgv_dir = config.get('prodigalGVDirectory', 'Data/ProdigalGV')
+genomad_dir = config.get('genomadDirectory', 'Data/geNomad')
 
 # Quality Control
 qc_dir = config['qcOutputDirectory']
@@ -47,6 +48,7 @@ run_mlp = str(config.get("mlp", False)).lower() not in ("false", "0", "no")
 run_humann = str(config.get("humann", False)).lower() not in ("false", "0", "no")
 run_rgi = str(config.get("rgi", True)).lower() not in ("false", "0", "no")
 run_prodigalgv = str(config.get("prodigal_gv", False)).lower() not in ("false", "0", "no")
+run_genomad = str(config.get("genomad", False)).lower() not in ("false", "0", "no")
 
 def get_param(tool, key, default=None):
     """Safely fetch a nested param from config with fallback."""
@@ -86,7 +88,8 @@ DEFAULT_THREADS = {
     "metaspades": 12,
     "rgi": 10,
     "antismash": 16,
-    "prodigal_gv": 8
+    "prodigal_gv": 8,
+    "genomad": 8
 }
 
 def get_threads(tool_name):

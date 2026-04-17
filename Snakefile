@@ -16,6 +16,7 @@ include: workflow.basedir + "/Workflow/rules/rgi.smk"
 include: workflow.basedir + "/Workflow/rules/antismash.smk"
 include: workflow.basedir + "/Workflow/rules/strainphlan.smk"
 include: workflow.basedir + "/Workflow/rules/prodigal_gv.smk"
+include: workflow.basedir + "/Workflow/rules/genomad.smk"
 
 ## Define Outputs
 rule all:
@@ -89,7 +90,12 @@ rule all:
 
         # Prodigal-GV
         expand(prodigalgv_dir + "/{sample}/{sample}_proteins.faa", sample=SAMPLES) if run_prodigalgv else [],
-        prodigalgv_dir + "/table/prodigal_gv_summary.tsv" if run_prodigalgv else [],    
+        prodigalgv_dir + "/table/prodigal_gv_summary.tsv" if run_prodigalgv else [],  
+
+        # geNomad - Plasmid and virus identification (requires metaspades)
+        expand(genomad_dir + "/{sample}/.genomad_complete", sample=SAMPLES) if run_genomad else [],
+        genomad_dir + "/table/genomad_plasmid_summary.tsv" if run_genomad else [],
+        genomad_dir + "/table/genomad_virus_summary.tsv"   if run_genomad else [],  
         
 
 ## Check what one should be running
@@ -106,3 +112,4 @@ print(f"  MLP: {run_mlp}")
 print(f"  RGI: {run_rgi}")
 print(f"  AntiSMASH: {run_antismash}")
 print(f"  Prodigal-GV: {run_prodigalgv}")
+print(f"  geNomad: {run_genomad}")
