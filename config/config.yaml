@@ -47,6 +47,49 @@ threads:
   rgi: 10
   antismash: 16
 
+# ==============================================================================
+# Tool parameters — edit these to customise tool behaviour
+# ==============================================================================
+params:
+  # FastP quality trimming
+  fastp:
+    quality_threshold: 20      # -q, minimum quality
+    min_length: 50             # -l, minimum read length
+    adapter_trimming: true     # --detect_adapter_for_pe
+
+  # MetaSPAdes assembly
+  metaspades:
+    kmer_sizes: "21,33,55,77"  # -k, comma-separated k-mer sizes
+    only_assembler: false      # --only-assembler (skip error correction)
+
+  # Kraken2 / Bracken
+  kraken2:
+    confidence: 0.0            # --confidence, 0.0-1.0
+  bracken:
+    read_length: 150           # -r, sequencing read length
+    level: "S"                 # -l, S=species, G=genus, F=family
+    threshold: 10              # -t, minimum reads required
+
+  # AntiSMASH
+  antismash:
+    min_contig_len: 1000       # filter contigs below this length
+    taxon: "bacteria"          # bacteria or fungi
+    genefinding_tool: "prodigal-m"  # prodigal, prodigal-m, glimmerhmm, none
+
+  # RGI
+  rgi:
+    alignment_tool: "DIAMOND"  # DIAMOND or BLAST
+    include_loose: false       # --include_loose
+
+  # Prodigal-GV
+  prodigal_gv:
+    output_format: "gff"       # gff, gbk, sco
+
+  # HUMAnN
+  humann:
+    memory_use: "maximum"      # minimum, maximum
+    bypass_nucleotide_search: true
+
   # ============================================================================
 # Container Configuration for Singularity (E.g. Pawsey Setonix)
 # ============================================================================

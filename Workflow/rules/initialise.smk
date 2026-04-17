@@ -48,6 +48,10 @@ run_humann = str(config.get("humann", False)).lower() not in ("false", "0", "no"
 run_rgi = str(config.get("rgi", True)).lower() not in ("false", "0", "no")
 run_prodigalgv = str(config.get("prodigal_gv", False)).lower() not in ("false", "0", "no")
 
+def get_param(tool, key, default=None):
+    """Safely fetch a nested param from config with fallback."""
+    return config.get("params", {}).get(tool, {}).get(key, default)
+
 # ── Container / Conda toggle ─────────────────────────────────────────────────
 # When use_containers is true in config, rules use Singularity .sif files
 # instead of conda environments. This avoids conda corruption on Lustre
