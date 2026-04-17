@@ -85,27 +85,20 @@ SRR27916047
 
 ### 2. Run the Pipeline
 
-**Local execution:**
 ```bash
-# Dry-run as initial safety check
-snakemake --use-conda --dry-run --cores 8 
+# Local
+snakemake --use-conda --cores 16
 
-## Actual Run
-# By default, SingleM and MetaPhlAn are on, everything else is off
-snakemake --use-conda --cores 8
-
-# Run with SingleM, and without MetaPhlAn
-snakemake --use-conda --cores 8 --config metaphlan=false singlem=true
-
-# Run with SRA integration (off by default)
-snakemake --use-conda --cores 8 --config download_sra=true
-
-# Run with test files (off by default)
-snakemake --use-conda --cores 8 --config test_mode=true
-
-# Additional config commands
-snakemake --use-conda --cores 16 --config humann=true metaspades=true kraken2=true rgi=true antismash=true mlp=true inputFastQDirectory=/path/to/your/project_data/fastq
+# HPC / SLURM
+snakemake --workflow-profile config/slurm
 ```
+
+## Tutorials
+
+For full setup instructions, module flags, and troubleshooting:
+
+- [Running locally](docs/local.md)
+- [Running on HPC / SLURM](docs/hpc.md) — read this if you are on a cluster
 
 ### 3. Access Results
 
@@ -142,87 +135,6 @@ OpusTaxa/
         └── nohuman_multiqc_report.html
 ```
 
-## Running on an HPC (SLURM)
-### Prerequisites
-
-Install the SLURM executor plugin in your Snakemake environment:
-```bash
-conda activate snakemake
-pip install snakemake-executor-plugin-slurm
-```
-### Running the Pipeline
-
-**Important:** Always run Snakemake from the **home node**, not inside an `sbatch` job. Snakemake needs access to the SLURM controller to submit jobs, which is typically unavailable from compute nodes.
-
-Use `screen`, `tmux`, or `nohup` to keep the process running if your SSH session disconnects:
-```bash
-cd OpusTaxa
-
-# Option 1: Using screen
-screen -S opustaxa
-conda activate snakemake
-snakemake --workflow-profile config/slurm
-# Detach: Ctrl+A, then D | Reattach: screen -r opustaxa
-
-# Option 2: Using tmux
-tmux new -s opustaxa
-conda activate snakemake
-snakemake --workflow-profile config/slurm
-# Detach: Ctrl+B, then D | Reattach: tmux attach -t opustaxa
-```
-
-Pipeline flags work the same as local execution:
-```bash
-snakemake --workflow-profile config/slurm --config download_sra=true metaphlan=true singlem=true
-```
-
-### Database Downloads
-
-**Some HPC compute nodes do not have internet access.** If database download jobs fail with errors like `"It seems you do not have internet access"`, you need to download the databases on the login node first before running the full pipeline:
-
-```bash
-# Download databases locally on the login node (has internet access)
-# Only include the databases for tools you plan to use
-
-# Core databases (Required for NoHuman)
-snakemake --use-conda --cores 1 \
-    Database/nohuman/HPRC.r2/db/taxo.k2d \
-    Database/nohuman/HPRC.r2/db/hash.k2d \
-    Database/nohuman/HPRC.r2/db/opts.k2d
-
-# Taxonomic profiling databases
-snakemake --use-conda --cores 1 Database/metaphlan/.download_complete    # if using MetaPhlAn
-snakemake --use-conda --cores 1 Database/singlem/S5.4.0.GTDB_r226.metapackage_20250331.smpkg.zb      # if using SingleM
-snakemake --use-conda --cores 1 Database/kraken2/.download_complete      # if using Kraken2
-
-# Functional profiling databases
-snakemake --use-conda --cores 1 \
-    Database/humann/chocophlan/.download_complete \
-    Database/humann/uniref/.download_complete \
-    Database/humann/utility_mapping/.download_complete  # if using HUMAnN
-
-# Resistome / biosynthetic gene cluster databases
-snakemake --use-conda --cores 1 Database/card/.rgi_downloaded                   # if using RGI
-snakemake --use-conda --cores 1 Database/antismash/.databases_downloaded        # if using AntiSMASH
-```
-
-## Customizing Thread Usage
-
-By default, OpusTaxa uses sensible thread allocations for each tool. You can customize these in `config/config.yaml`:
-```yaml
-threads:
-  fastp: 16          # Increase for faster QC (default: 8)
-  metaspades: 24     # Increase for faster assembly (default: 12)
-  metaphlan: 12      # Increase for larger datasets (default: 6)
-  humann: 16         # Increase for faster functional profiling (default: 8)
-```
-
-Or override via command line:
-```bash
-snakemake --workflow-profile config/slurm \
-    --config threads='{"metaspades": 32, "metaphlan": 16}'
-```
-
 ## Resource Requirements
 
 ### Minimum (for testing)
@@ -243,6 +155,14 @@ snakemake --workflow-profile config/slurm \
 - Kraken2: 16 GB ([PlusPF-16](https://benlangmead.github.io/aws-indexes/k2))
 - RGI: ~16.8 GB (As of February 2026 [latest](https://card.mcmaster.ca/download))
 - AntiSMASH: ~ 9.4GB (Version 8.0.4)
+
+Databases are **downloaded automatically** on first run (~140 GB total if all modules enabled).
+
+## Citation
+
+If you use OpusTaxa, please cite:
+
+> Chen Y-K, Harker CM, Pham CM, Grundy L, Wardill HR, Roach MJ, Ryan FJ. *OpusTaxa: A Unified Workflow for Taxonomic Profiling, Assembly, and Functional Analysis of Shotgun Metagenomes.* 2026. doi: [10.5281/zenodo.19491844](https://doi.org/10.5281/zenodo.19491844)
 
 ### Things to note
 - OpusTaxa currently only accepts paired reads.<br>
