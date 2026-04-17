@@ -109,7 +109,6 @@ Set `--cores` to the number of CPU cores available on your machine.
 | Resistance genes (RGI / CARD) | `rgi=true` | Off |
 | Biosynthetic gene clusters (antiSMASH) | `antismash=true` | Off |
 | Microbial load prediction (MLP) | `mlp=true` | Off |
-| Strain-level analysis (StrainPhlAn) | `strainphlan=true` | Off |
 
 ### Database Size (Uncompressed)
 - NoHuman: ~5.9 GB (As of February 2026)
