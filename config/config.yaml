@@ -55,7 +55,6 @@ params:
   bracken:
     read_length: 150           # -r, sequencing read length
     level: "S"                 # -l, S=species, G=genus, F=family
-    threshold: 10              # -t, minimum reads required
 
   # AntiSMASH
   antismash:
