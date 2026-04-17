@@ -18,6 +18,8 @@ hecatombDirectory: Data/Hecatomb
 logDirectory: logs
 slurmLogDirectory: logs/slurm
 strainphlanDirectory: "Data/StrainPhlAn"
+prodigalGVDirectory: "Data/ProdigalGV"
+genomadDirectory: "Data/geNomad"
 
 # Flags
 test_mode: true
@@ -32,7 +34,10 @@ rgi: false
 antismash: false
 strainphlan: false
 strainphlan_species: []
-hecatomb: true
+hecatomb: false
+
+prodigal_gv: false
+genomad: false
 
 # Thread allocations for each tool (users can customize these)
 threads:
@@ -46,6 +51,32 @@ threads:
   metaspades: 12
   rgi: 10
   antismash: 16
+  genomad: 8
+
+# ==============================================================================
+# Tool parameters — edit these to customise tool behaviour
+# ==============================================================================
+params:
+    # Bracken
+  bracken:
+    read_length: 150           # -r, sequencing read length
+    level: "S"                 # -l, S=species, G=genus, F=family
+
+  # AntiSMASH
+  antismash:
+    taxon: "bacteria"          # bacteria or fungi
+    genefinding_tool: "prodigal-m"  # prodigal, prodigal-m, glimmerhmm, none
+
+  # RGI
+  rgi:
+    alignment_tool: "DIAMOND"  # DIAMOND or BLAST
+    include_loose: false       # --include_loose
+
+  genomad:
+    splits: 8           # split MMseqs2 search to reduce memory usage
+    min_score: 0.7      # minimum classification confidence score (0–1)
+    min_plasmid_size: 1000  # minimum plasmid contig length (bp)
+    min_virus_size: 1000    # minimum virus contig length (bp)
 
   # ============================================================================
 # Container Configuration for Singularity (E.g. Pawsey Setonix)

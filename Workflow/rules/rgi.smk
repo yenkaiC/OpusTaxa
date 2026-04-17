@@ -80,7 +80,8 @@ rule rgi_contigs:
         get_container("rgi")
     params:
         db_dir = DB_dir + "/card",
-        out_prefix = lambda wc: os.path.abspath(rgi_dir + "/" + wc.sample + "/contigs/" + wc.sample + "_rgi")
+        out_prefix = lambda wc: os.path.abspath(rgi_dir + "/" + wc.sample + "/contigs/" + wc.sample + "_rgi"),
+        aligner = get_param("rgi", "alignment_tool", "DIAMOND")
     threads: get_threads("rgi")
     resources:
         mem_mb = 40000,
@@ -104,7 +105,7 @@ rule rgi_contigs:
             --local \
             --clean \
             --num_threads {threads} \
-            --alignment_tool DIAMOND 2> "$LOGFILE"
+            --alignment_tool {params.aligner} 2> "$LOGFILE"
 
         cd "$WORKDIR"
         """
@@ -125,44 +126,3 @@ rule rgi_merge_tables:
     threads: 2
     script:
         workflow.basedir + "/Workflow/scripts/rgi_merge.py"
-
-
-## Old Script
-#rule rgi_merge_tables:
-#    input:
-#        txt_files = expand(rgi_dir + "/{sample}/contigs/{sample}_rgi.txt", sample=SAMPLES)
-#    output:
-#        merged = rgi_dir + "/table/rgi_merged.tsv"
-#    log:
-#        log_dir + "/rgi/merge_tables.log"
-#    resources:
-#        mem_mb = 8000,
-#        runtime = 30
-#    threads: 1
-#    run:
-#        import csv
-#        import os
-#
-#        os.makedirs(os.path.dirname(output.merged), exist_ok=True)
-#
-#        header_written = False
-#        with open(output.merged, "w", newline="") as out_f:
-#            writer = None
-#            for txt_file in input.txt_files:
-#                # Extract sample name from path
-#                sample = os.path.basename(txt_file).replace("_rgi.txt", "")
-#                with open(txt_file, "r") as in_f:
-#                    reader = csv.DictReader(in_f, delimiter="\t")
-#                    if not header_written:
-#                        fieldnames = ["Sample"] + reader.fieldnames
-#                        writer = csv.DictWriter(out_f, fieldnames=fieldnames, delimiter="\t")
-#                        writer.writeheader()
-#                        header_written = True
-#                    for row in reader:
-#                        row["Sample"] = sample
-#                        writer.writerow(row)
-#
-#        # Log summary
-#        with open(log[0], "w") as log_f:
-#            total = sum(1 for line in open(output.merged)) - 1  # minus header
-#            log_f.write(f"Merged {len(input.txt_files)} samples, {total} total AMR hits\n")

@@ -1,0 +1,7 @@
+name: prodigal-gv
+channels:
+    - conda-forge
+    - bioconda
+    - defaults
+dependencies:
+    - prodigal-gv=2.11.0

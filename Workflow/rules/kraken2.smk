@@ -75,8 +75,8 @@ rule bracken:
         get_container("kraken2")
     params:
         db_dir = kraken2DB_dir,
-        read_len = 150,  # Adjust based on your sequencing read length
-        level = "S"      # S=species, G=genus, F=family, etc.
+        read_len = get_param("bracken", "read_length", 150),
+        level = get_param("bracken", "level", "S")
     threads: 1
     resources:
         mem_mb = 8000,
