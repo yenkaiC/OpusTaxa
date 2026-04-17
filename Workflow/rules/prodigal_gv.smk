@@ -1,11 +1,10 @@
 ## Prodigal-GV - Gene prediction for prokaryotes and viruses (including giant viruses)
-## Uses parallel-prodigal-gv.py for multi-threaded execution
 ## Runs on contigs from MetaSPAdes (requires metaspades)
 
-## Run prodigal-gv on assembled contigs (parallelised)
+## Run prodigal-gv on assembled contigs
 rule prodigal_gv:
     input:
-        contigs = metaspades_dir + "/{sample}/contigs.fasta"
+        scaffold = metaspades_dir + "/{sample}/scaffolds.fasta"
     output:
         proteins = prodigalgv_dir + "/{sample}/{sample}_proteins.faa",
         genes    = prodigalgv_dir + "/{sample}/{sample}_genes.fna",
@@ -25,7 +24,7 @@ rule prodigal_gv:
         mkdir -p {prodigalgv_dir}/{wildcards.sample}
 
         prodigal-gv \
-            -i {input.contigs} \
+            -i {input.scaffold} \
             -a {output.proteins} \
             -d {output.genes} \
             -o {output.gff} \
