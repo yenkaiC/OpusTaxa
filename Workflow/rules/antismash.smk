@@ -82,7 +82,8 @@ rule antismash_contigs:
         get_container("antismash")
     params:
         db_dir = DB_dir + "/antismash",
-        out_dir = antismash_dir + "/{sample}"
+        out_dir = antismash_dir + "/{sample}",
+        taxon = get_param("antismash", "taxon", "bacteria")
     threads: get_threads("antismash")
     resources:
         mem_mb = 32000,
@@ -95,10 +96,10 @@ rule antismash_contigs:
         fi
         
         antismash \
-            --taxon bacteria \
+            --taxon {params.taxon} \
             --output-dir {params.out_dir} \
             --databases {params.db_dir} \
-            --genefinding-tool prodigal-m \
+            --genefinding-tool {params.genefinder} \
             --cpus {threads} \
             {input.fasta} 2> {log}
         """
