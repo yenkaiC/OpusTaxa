@@ -157,7 +157,7 @@ rule contig_annotation_mmseqs_summary:
         tsv=os.path.join(hecatomb_dir, "{sample}.hecatomb.tsv")
     params:
         db = os.path.join(config["hecatomb"]["args"]["database_paths"]["secondaryNT"],"sequenceDB"),
-        inputpath=os.path.join(hecatomb_dir,"{sample}","result"),
+        inputpath=os.path.join(hecatomb_dir,"{sample}","result", "result"),
         respath=os.path.join(hecatomb_dir,"{sample}","result","tophit"),
         header=config["hecatomb"]["immutable"]["contigAnnotHeader"],
         secondaryNtFormat=config["hecatomb"]["immutable"]["secondaryNtFormat"],
