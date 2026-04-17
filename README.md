@@ -248,5 +248,5 @@ snakemake --workflow-profile config/slurm \
 - OpusTaxa currently only accepts paired reads.<br>
 - We've configured HUMAnN to run only on the forward read due to drawbacks of collapsing forward and reverse read together.<br>
 - Databases (for selected tools) are downloaded automatically on first run.
-- Small Datasets are not recommended for Microbial Load Predictor
-- Microbial Load Predictor was trained only with faecal samples, so may not be suitable for saliva, skin, and other sample types. 
+- Small Datasets are not recommended for Microbial Load Predictor (MLP)
+- Microbial Load Predictor was trained only with faecal samples, so may not be suitable for saliva, skin, and other sample types. As the smaples trained were all from adults, there may be uncertainties with children stood samples. 
