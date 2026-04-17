@@ -2,7 +2,6 @@
 
 This guide covers running OpusTaxa on your own laptop or workstation. If you are running on an HPC cluster with SLURM, see [hpc.md](hpc.md) instead.
 
----
 
 ## Prerequisites
 
@@ -10,7 +9,6 @@ This guide covers running OpusTaxa on your own laptop or workstation. If you are
 - At least 16 GB RAM (64+ GB recommended for production runs)
 - At least 100 GB free storage (500 GB recommended)
 
----
 
 ## Installation
 
@@ -29,7 +27,6 @@ snakemake --use-conda --dry-run --cores 1
 
 A dry-run prints every step Snakemake would execute without running anything. If it completes without errors your installation is ready.
 
----
 
 ## Preparing Your Input
 
@@ -68,7 +65,6 @@ Then run with `download_sra=true` (see below).
 
 > **Tip:** Start with 2–3 samples to verify everything works before committing to a full dataset.
 
----
 
 ## Running the Pipeline
 
@@ -97,7 +93,6 @@ snakemake --use-conda --cores 8 --config test_mode=true
 
 Set `--cores` to the number of CPU cores available on your machine.
 
----
 
 ## Available Modules
 
@@ -118,7 +113,16 @@ Set `--cores` to the number of CPU cores available on your machine.
 
 Database sizes (uncompressed): NoHuman ~6 GB · MetaPhlAn ~34 GB · SingleM ~7 GB · Kraken2 ~16 GB · HUMAnN ~52 GB · RGI ~17 GB · antiSMASH ~9 GB
 
----
+### Database Size (Uncompressed)
+- NoHuman: ~5.9 GB (As of February 2026)
+- MetaPhlAn: ~34 GB ([Version 4.2.4 - mpa_vJan25_CHOCOPhlAnSGB_202503](https://github.com/biobakery/MetaPhlAn/wiki/MetaPhlAn-4.2))
+- SingleM: ~7 GB ([Version S5.4.0](https://zenodo.org/records/15232972))
+- HUMAnN: ~52 GB (HUMAnN 3.9)
+- Kraken2: 16 GB ([PlusPF-16](https://benlangmead.github.io/aws-indexes/k2))
+- RGI: ~16.8 GB (As of February 2026 [latest](https://card.mcmaster.ca/download))
+- AntiSMASH: ~ 9.4GB (Version 8.0.4)
+
+Databases are **downloaded automatically** on first run (~140 GB total if all modules enabled).
 
 ## Customising Threads
 
@@ -141,4 +145,3 @@ snakemake --use-conda --cores 16 \
     --config threads='{"metaspades": 12, "metaphlan": 8}'
 ```
 
----

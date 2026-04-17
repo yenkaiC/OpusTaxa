@@ -93,7 +93,7 @@ snakemake --use-conda --cores 16
 snakemake --workflow-profile config/slurm
 ```
 
-## Tutorials
+### Tutorials
 
 For full setup instructions, module flags, and troubleshooting:
 
@@ -146,17 +146,6 @@ OpusTaxa/
 - **CPU:** 8+ cores
 - **RAM:** 40+ GB (100 GB for MetaSPAdes, 64GB for HUMAnN)
 - **Storage:** 500 GB (depends on dataset size)
-
-### Database Size (Uncompressed)
-- NoHuman: ~5.9 GB (As of February 2026)
-- MetaPhlAn: ~34 GB ([Version 4.2.4 - mpa_vJan25_CHOCOPhlAnSGB_202503](https://github.com/biobakery/MetaPhlAn/wiki/MetaPhlAn-4.2))
-- SingleM: ~7 GB ([Version S5.4.0](https://zenodo.org/records/15232972))
-- HUMAnN: ~52 GB (HUMAnN 3.9)
-- Kraken2: 16 GB ([PlusPF-16](https://benlangmead.github.io/aws-indexes/k2))
-- RGI: ~16.8 GB (As of February 2026 [latest](https://card.mcmaster.ca/download))
-- AntiSMASH: ~ 9.4GB (Version 8.0.4)
-
-Databases are **downloaded automatically** on first run (~140 GB total if all modules enabled).
 
 ## Citation
 

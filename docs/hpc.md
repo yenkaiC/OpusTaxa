@@ -2,7 +2,6 @@
 
 This guide covers running OpusTaxa on a SLURM-managed HPC cluster. If you are running on a local workstation or laptop, see [local.md](local.md) instead.
 
----
 
 ## Installation
 
@@ -24,7 +23,6 @@ pip install snakemake-executor-plugin-slurm
 snakemake --workflow-profile config/slurm --dry-run
 ```
 
----
 
 ## Critical: Always Run from the Login Node
 
@@ -48,7 +46,6 @@ snakemake --workflow-profile config/slurm --dry-run
 # Reattach: tmux attach -t opustaxa
 ```
 
----
 
 ## Preparing Your Input
 
@@ -77,7 +74,6 @@ Then run with `download_sra=true` (see below).
 
 > **Tip:** Start with 2–3 samples to verify everything works before committing to a full dataset.
 
----
 
 ## Running the Pipeline
 
@@ -106,8 +102,6 @@ snakemake --workflow-profile config/slurm \
     --config inputFastQDirectory=/scratch/user/myproject/fastq
 ```
 
----
-
 ## Available Modules
 
 | Module | Flag | Default |
@@ -125,7 +119,16 @@ snakemake --workflow-profile config/slurm \
 | Microbial load prediction (MLP) | `mlp=true` | Off |
 | Strain-level analysis (StrainPhlAn) | `strainphlan=true` | Off |
 
----
+### Database Size (Uncompressed)
+- NoHuman: ~5.9 GB (As of February 2026)
+- MetaPhlAn: ~34 GB ([Version 4.2.4 - mpa_vJan25_CHOCOPhlAnSGB_202503](https://github.com/biobakery/MetaPhlAn/wiki/MetaPhlAn-4.2))
+- SingleM: ~7 GB ([Version S5.4.0](https://zenodo.org/records/15232972))
+- HUMAnN: ~52 GB (HUMAnN 3.9)
+- Kraken2: 16 GB ([PlusPF-16](https://benlangmead.github.io/aws-indexes/k2))
+- RGI: ~16.8 GB (As of February 2026 [latest](https://card.mcmaster.ca/download))
+- AntiSMASH: ~ 9.4GB (Version 8.0.4)
+
+Databases are **downloaded automatically** on first run (~140 GB total if all modules enabled).
 
 ## Database Downloads
 
@@ -155,7 +158,6 @@ snakemake --use-conda --cores 1 --until antismash_download_databases
 
 Database sizes (uncompressed): NoHuman ~6 GB · MetaPhlAn ~34 GB · SingleM ~7 GB · Kraken2 ~16 GB · HUMAnN ~52 GB · RGI ~17 GB · antiSMASH ~9 GB
 
----
 
 ## Customising Threads and Memory
 
@@ -178,7 +180,6 @@ snakemake --workflow-profile config/slurm \
     --config threads='{"metaspades": 32, "metaphlan": 16}'
 ```
 
----
 
 ## Monitoring Jobs
 
@@ -190,5 +191,5 @@ squeue -u $(whoami)
 cat .snakemake/slurm_logs/rule_metaphlan/<sample>/12345.log
 ```
 
----
+
 
