@@ -16,8 +16,8 @@ rule prodigal_gv:
         get_container("prodigal_gv")
     threads: get_threads("prodigal_gv")
     resources:
-        mem_mb = 32000,
-        runtime = 600
+        mem_mb = 40000,
+        runtime = 800
     log:
         log_dir + "/prodigal_gv/{sample}.log"
     shell:
