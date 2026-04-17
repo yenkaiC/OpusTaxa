@@ -111,8 +111,6 @@ Set `--cores` to the number of CPU cores available on your machine.
 | Microbial load prediction (MLP) | `mlp=true` | Off |
 | Strain-level analysis (StrainPhlAn) | `strainphlan=true` | Off |
 
-Database sizes (uncompressed): NoHuman ~6 GB · MetaPhlAn ~34 GB · SingleM ~7 GB · Kraken2 ~16 GB · HUMAnN ~52 GB · RGI ~17 GB · antiSMASH ~9 GB
-
 ### Database Size (Uncompressed)
 - NoHuman: ~5.9 GB (As of February 2026)
 - MetaPhlAn: ~34 GB ([Version 4.2.4 - mpa_vJan25_CHOCOPhlAnSGB_202503](https://github.com/biobakery/MetaPhlAn/wiki/MetaPhlAn-4.2))

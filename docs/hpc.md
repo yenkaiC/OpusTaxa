@@ -156,9 +156,6 @@ snakemake --use-conda --cores 1 --until dl_card_DB
 snakemake --use-conda --cores 1 --until antismash_download_databases
 ```
 
-Database sizes (uncompressed): NoHuman ~6 GB · MetaPhlAn ~34 GB · SingleM ~7 GB · Kraken2 ~16 GB · HUMAnN ~52 GB · RGI ~17 GB · antiSMASH ~9 GB
-
-
 ## Customising Threads and Memory
 
 Edit `config/config.yaml` to adjust thread allocations:

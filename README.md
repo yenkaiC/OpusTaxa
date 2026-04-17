@@ -110,6 +110,7 @@ OpusTaxa/
 │   ├── Raw_FastQ/          # Raw reads
 │   ├── FastP/              # Quality-trimmed reads
 │   ├── NoHuman/            # Host-filtered reads
+│   │   ├── Table/          # Host-read percentage   
 │   ├── MetaPhlAn/          
 │   │   ├── Table/          # Relative abundance table
 │   ├── SingleM/            # Microbial Fractions
