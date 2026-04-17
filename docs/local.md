@@ -82,7 +82,7 @@ snakemake --use-conda --cores 16 --config download_sra=true
 
 # Enable additional modules
 snakemake --use-conda --cores 16 \
-    --config kraken2=true humann=true metaspades=true rgi=true antismash=true
+    --config kraken2=true humann=true metaspades=true rgi=true antismash=true prodigal_gv=true
 
 # Disable MetaPhlAn, keep SingleM only
 snakemake --use-conda --cores 16 --config metaphlan=false singlem=true
@@ -105,6 +105,7 @@ Set `--cores` to the number of CPU cores available on your machine.
 | Taxonomic profiling (SingleM) | `singlem=true/false` | On |
 | Taxonomic profiling (Kraken2 + Bracken) | `kraken2=true` | Off |
 | Metagenome assembly (MetaSPAdes) | `metaspades=true` | Off |
+| Prodigal-gv | `prodigal_gv=true` | Off |
 | Functional profiling (HUMAnN 3) | `humann=true` | Off |
 | Resistance genes (RGI / CARD) | `rgi=true` | Off |
 | Biosynthetic gene clusters (antiSMASH) | `antismash=true` | Off |

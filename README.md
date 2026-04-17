@@ -120,6 +120,7 @@ OpusTaxa/
 │   ├── HUMAnN/
 │   │   ├── merged/         # Abundance tables of gene-families and pathways (normalised, stratified and unstratified)
 │   ├── MetaSPAdes/         # Metagenome Assemblies
+│   ├── ProdigalGV/         # Predicted proteins, genes and gene annotations
 │   ├── AntiSMASH/          # Biosynthetic Gene Clusters
 │   │   ├── Table/ 
 │   ├── RGI/                # Antibiotic Resistance Genes
