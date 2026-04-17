@@ -24,14 +24,14 @@ rule prodigal_gv:
         """
         mkdir -p {prodigalgv_dir}/{wildcards.sample}
 
-        parallel-prodigal-gv.py \
-            -t {threads} \
-            -q \
+        prodigal-gv \
             -i {input.contigs} \
             -a {output.proteins} \
             -d {output.genes} \
             -o {output.gff} \
-            -f gff 2> {log}
+            -f gff \
+            -p meta \
+            -q 2> {log}
         """
 
 ## Summarise gene prediction stats across all samples
