@@ -89,12 +89,16 @@ SRR27916047
 > - [Running locally](docs/local.md)
 > - [Running on HPC / SLURM](docs/hpc.md) ← **start here if you are on a cluster**
 
+By default, MetaPhlAn and SingleM are enabled. Use `--config` to toggle modules or change settings:
+
 ```bash
 # Local
 snakemake --use-conda --cores 16
+snakemake --use-conda --cores 16 --config metaphlan=false singlem=false # Example of a run where only QC was runned.
 
 # HPC / SLURM
 snakemake --workflow-profile config/slurm
+snakemake --workflow-profile config/slurm --config metaphlan=false singlem=true # Only run SingleM (and QC).
 ```
 
 ### 3. Access Results

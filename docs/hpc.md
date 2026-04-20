@@ -91,6 +91,7 @@ snakemake --workflow-profile config/slurm --dry-run
 snakemake --workflow-profile config/slurm --config download_sra=true
 
 # Enable additional modules
+# All modules are controlled with `--config`. You can add as many flags as needed to the same command:
 snakemake --workflow-profile config/slurm \
     --config kraken2=true humann=true metaspades=true rgi=true antismash=true prodigal_gv=true
 

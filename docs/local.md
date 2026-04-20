@@ -69,6 +69,8 @@ Then run with `download_sra=true` (see below).
 ## Running the Pipeline
 
 All local runs use `--use-conda`. Snakemake will automatically create isolated software environments for each tool — you do not need to install MetaPhlAn, SingleM, or any other tool yourself.
+All modules are controlled with `--config`. You can add as many flags as needed to the same command:
+Omitting `--config` runs the defaults (MetaPhlAn and SingleM only).
 
 ```bash
 # Default run — MetaPhlAn and SingleM enabled
