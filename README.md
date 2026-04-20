@@ -153,7 +153,7 @@ OpusTaxa/
 
 If you use OpusTaxa, please cite:
 
-> Chen Y-K, Harker CM, Pham CM, Grundy L, Wardill HR, Roach MJ, Ryan FJ. *OpusTaxa: A Unified Workflow for Taxonomic Profiling, Assembly, and Functional Analysis of Shotgun Metagenomes.* 2026. doi: [10.5281/zenodo.19491844](https://doi.org/10.5281/zenodo.19491844)
+> Chen Y-K, Harker CM, Pham CM, Grundy L, Wardill HR, Roach MJ, Ryan FJ. *OpusTaxa: A Unified Workflow for Taxonomic Profiling, Assembly, and Functional Analysis of Shotgun Metagenomes.* bioRxiv 2026. doi: [10.64898/2026.04.15.718825](https://doi.org/10.64898/2026.04.15.718825)
 
 ### Things to note
 - OpusTaxa currently only accepts paired reads.<br>
