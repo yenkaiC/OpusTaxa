@@ -128,26 +128,20 @@ rule singlem_merge_prokaryotic_fraction:
     log:
         log_dir + "/singlem/merge_prokaryotic_fraction.log"
     resources:
-        mem_mb = 8000,
+        mem_mb = 12000,
         time = 60
     threads: 2
-    run:
-        import os
+    shell:
+        """
+        mkdir -p $(dirname {output.merged})
 
-        os.makedirs(os.path.dirname(output.merged), exist_ok=True)
+        head -1 $(echo {input.spf_files} | tr ' ' '\\n' | head -1) > {output.merged}
 
-        header_written = False
-        with open(output.merged, "w") as out_f:
-            for spf_file in input.spf_files:
-                with open(spf_file, "r") as in_f:
-                    lines = in_f.readlines()
-                    if not header_written:
-                        out_f.write(lines[0])  # header
-                        header_written = True
-                    for line in lines[1:]:
-                        if line.strip():
-                            out_f.write(line)
+        for f in {input.spf_files}; do
+            tail -n +2 "$f" >> {output.merged}
+        done
 
-        with open(log[0], "w") as log_f:
-            total = sum(1 for line in open(output.merged)) - 1
-            log_f.write(f"Merged prokaryotic fraction from {len(input.spf_files)} samples ({total} rows)\n")
+        total=$(( $(wc -l < {output.merged}) - 1 ))
+        nfiles=$(echo {input.spf_files} | wc -w)
+        echo "Merged prokaryotic fraction from $nfiles samples ($total rows)" > {log}
+        """

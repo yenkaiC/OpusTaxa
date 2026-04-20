@@ -31,16 +31,17 @@ snakemake --workflow-profile config/slurm --dry-run
 Instead, run Snakemake in a persistent terminal session on the login node using `screen` or `tmux`, or `nohup` so it keeps running if your SSH connection drops.
 ```bash
 cd OpusTaxa
-conda activate snakemake
 
 # Option 1: screen
 screen -S opustaxa
+conda activate snakemake
 snakemake --workflow-profile config/slurm --dry-run
 # Detach:   Ctrl+A, then D
 # Reattach: screen -r opustaxa
 
 # Option 2: tmux
 tmux new -s opustaxa
+conda activate snakemake
 snakemake --workflow-profile config/slurm --dry-run
 # Detach:   Ctrl+B, then D
 # Reattach: tmux attach -t opustaxa

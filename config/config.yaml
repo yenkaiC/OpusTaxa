@@ -104,4 +104,5 @@ containers:
   metaphlan:  "oras://quay.io/yenkai_chen_id/opustaxa_metaphlan:0.0.0"
   kraken2:    "oras://quay.io/yenkai_chen_id/opustaxa_kraken2:0.0.0"
   humann:     "oras://quay.io/yenkai_chen_id/opustaxa_humann:0.0.0"
-
+  prodigal_gv: "/software/projects/<project>/<user>/containers/prodigal-gv.sif"
+  genomad: "/software/projects/<project>/<user>/containers/genomad.sif"

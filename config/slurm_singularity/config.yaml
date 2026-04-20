@@ -18,7 +18,7 @@ singularity-args: "-B /scratch -B /software"
 
 # SLURM defaults
 default-resources:
-  - "slurm_account=env('PAWSEY_PROJECT')"
+  - "slurm_account=your_acc_name_or_project"
   - "slurm_partition=work"
   - "mem_mb=32000"
   - "runtime=480"

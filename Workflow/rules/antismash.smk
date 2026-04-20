@@ -83,7 +83,8 @@ rule antismash_contigs:
     params:
         db_dir = DB_dir + "/antismash",
         out_dir = antismash_dir + "/{sample}",
-        taxon = get_param("antismash", "taxon", "bacteria")
+        taxon = get_param("antismash", "taxon", "bacteria"),
+        genefinder = get_param("antismash", "genefinding_tool", "prodigal-m")
     threads: get_threads("antismash")
     resources:
         mem_mb = 32000,

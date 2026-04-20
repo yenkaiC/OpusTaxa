@@ -146,8 +146,8 @@ rule humann_merge_tables:
         pc_dir = humann_dir + "/pathcoverage",
         merge_dir = humann_dir + "/merged"
     resources:
-        mem_mb = 32000,
-        runtime = 360
+        mem_mb = 64000,
+        runtime = 480
     log:
         log_dir + "/humann/merge_tables.log"
     shell:
