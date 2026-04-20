@@ -133,7 +133,7 @@ Databases are **downloaded automatically** on first run (~140 GB total if all mo
 
 ## Database Downloads
 
-Many HPC compute nodes do not have internet access. Databases **must be downloaded on the login node** before submitting the full pipeline.
+Some HPC compute nodes do not have internet access. Databases **must be downloaded on the login node** before submitting the full pipeline if that's the case for your HPC.
 
 Only download databases for the tools you plan to use:
 
@@ -155,6 +155,33 @@ snakemake --use-conda --cores 1 \
 # Resistome / BGC
 snakemake --use-conda --cores 1 --until dl_card_DB
 snakemake --use-conda --cores 1 --until antismash_download_databases
+```
+
+## Singularity / Apptainer Containers
+
+We understand that each HPC is unique. By default OpusTaxa uses conda to manage software environments. On most HPC clusters this works fine, but some systems — particularly those with high-performance parallel filesystems like Lustre (e.g. Pawsey Setonix, NCI Gadi) — have restrictions that cause conda to fail or perform poorly. Conda creates tens of thousands of small files per environment, which can overwhelm a Lustre metadata server, hit inode quotas, and result in corrupted environments that are difficult to diagnose.
+
+Singularity (also called Apptainer on newer systems) solves this by packaging each tool and all its dependencies into a single portable image file (`.sif`). One tool, one file — no inode issues, faster to load, and fully reproducible.
+
+```bash
+# Clone the repo on your build machine
+git clone https://github.com/yenkaiC/OpusTaxa.git
+cd OpusTaxa
+
+conda activate snakemake
+
+# If Singularity/Apptainer is available as a module on your HPC, load it before running
+module load singularity/4.1.0-nompi # You would need the equivalent for your HPC - module load singularity. 
+
+# Dry-run to verify everything is configured correctly
+snakemake --workflow-profile config/slurm_singularity --dry-run
+
+# Full run
+snakemake --workflow-profile config/slurm_singularity
+
+# Enable additional modules - works the same as config/slurm and local runs
+snakemake --workflow-profile config/slurm_singularity \
+    --config kraken2=true humann=true metaspades=true rgi=true antismash=true prodigal_gv=true
 ```
 
 ## Customising Threads and Memory
