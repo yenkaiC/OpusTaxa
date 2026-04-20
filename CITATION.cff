@@ -1,10 +1,7 @@
-cff-version: 1.0.0
+cff-version: 1.2.0
 message: "If you use OpusTaxa, please cite it using the metadata below."
 title: OpusTaxa
-abstract: "An open-source Snakemake workflow for end-to-end processing of paired-end
-  shotgun metagenomic data. OpusTaxa automates database provisioning, quality control,
-  host read removal, taxonomic profiling, metagenome assembly, and functional analysis,
-  with built-in integration with the Sequence Read Archive."
+abstract: "Shotgun metagenomics has become a cornerstone of microbiome research, yet the complexity of existing workflows remains a major barrier for life scientists without dedicated bioinformatics support. Manual database setup, detailed sample sheet preparation, and management of software dependencies can make routine analysis difficult and time-consuming. Cross-study comparisons are further hampered by inconsistent processing pipelines, database versions, and profiling strategies, limiting reproducibility and the potential for large-scale meta-analyses. We present OpusTaxa, an open-source Snakemake workflow that provides end-to-end processing of short paired-end shotgun metagenomic data with minimal configuration. Users provide either FASTQ files or Sequence Read Archive accessions; OpusTaxa automatically downloads required databases, performs quality control, removes host reads, and executes taxonomic profiling, metagenome assembly, and functional analysis. All analysis modules can be independently toggled, and per-sample outputs are automatically merged into harmonised, cross-sample tables ready for downstream exploration. Across two public datasets, we demonstrate how OpusTaxa can be used to compare consistency across complementary taxonomic profilers and to estimate microbial load in addition to standard metagenomic workflows."
 authors:
   - family-names: Chen
     given-names: Yen-Kai
@@ -17,7 +14,7 @@ authors:
     given-names: Hannah R
     affiliation: "School of Pharmacy and Biomedical Science, Adelaide University"
   - family-names: Roach
-    given-names: Michael
+    given-names: Michael J
     affiliation: "Flinders Health and Medical Research Institute, Flinders University"
   - family-names: Ryan
     given-names: Feargal J
@@ -38,3 +35,35 @@ keywords:
   - taxonomic profiling
   - workflow
 doi: 10.5281/zenodo.19491844
+preferred-citation:
+  type: article
+  title: "OpusTaxa: A Unified Workflow for Taxonomic Profiling, Assembly, and Functional Analysis of Shotgun Metagenomes"
+  authors:
+    - family-names: Chen
+      given-names: Yen-Kai
+      affiliation: "Flinders Health and Medical Research Institute, Flinders University"
+      orcid: "https://orcid.org/0009-0009-1510-5482"
+    - family-names: Harker
+      given-names: Clarice M
+      affiliation: "Flinders Health and Medical Research Institute, Flinders University"
+    - family-names: Pham
+      given-names: Cong M
+      affiliation: "Flinders Health and Medical Research Institute, Flinders University"
+    - family-names: Grundy
+      given-names: Luke
+      affiliation: "Flinders Health and Medical Research Institute, Flinders University"
+    - family-names: Wardill
+      given-names: Hannah R
+      affiliation: "School of Pharmacy and Biomedical Science, Adelaide University"
+    - family-names: Roach
+      given-names: Michael J
+      affiliation: "Flinders Health and Medical Research Institute, Flinders University"
+    - family-names: Ryan
+      given-names: Feargal J
+      affiliation: "Flinders Health and Medical Research Institute, Flinders University"
+      orcid: "https://orcid.org/0000-0003-4054-0438"
+  doi: "10.64898/2026.04.15.718825"
+  url: "https://www.biorxiv.org/content/10.64898/2026.04.15.718825v1"
+  journal: "bioRxiv"
+  year: 2026
+  month: 4
