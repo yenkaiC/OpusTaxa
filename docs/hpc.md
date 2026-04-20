@@ -179,9 +179,26 @@ snakemake --workflow-profile config/slurm_singularity --dry-run
 # Full run
 snakemake --workflow-profile config/slurm_singularity
 
-# Enable additional modules - works the same as config/slurm and local runs
+# Enable additional modules - flags work the same as standard runs
 snakemake --workflow-profile config/slurm_singularity \
     --config kraken2=true humann=true metaspades=true rgi=true antismash=true prodigal_gv=true
+```
+
+> **Note:** Use `--workflow-profile config/slurm_singularity` instead of `config/slurm` when running with containers. Do not mix the two profiles.
+
+### Bind mounts
+
+Singularity containers run in an isolated environment and can only access filesystem paths that are explicitly mounted. If OpusTaxa cannot find your data or databases, you may need to add bind mounts. Check your HPC's documentation for which paths need to be mounted — for example on Pawsey Setonix:
+
+```bash
+snakemake --workflow-profile config/slurm_singularity \
+    --singularity-args "-B /scratch -B /software"
+```
+
+Add any additional paths where your data or databases live:
+
+```bash
+--singularity-args "-B /scratch -B /software -B /data/myproject"
 ```
 
 ## Customising Threads and Memory
