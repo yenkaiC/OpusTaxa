@@ -85,6 +85,10 @@ SRR27916047
 
 ### 2. Run the Pipeline
 
+> **New to OpusTaxa or running on a cluster?** Read the full tutorial before running:
+> - [Running locally](docs/local.md)
+> - [Running on HPC / SLURM](docs/hpc.md) ← **start here if you are on a cluster**
+
 ```bash
 # Local
 snakemake --use-conda --cores 16
@@ -92,13 +96,6 @@ snakemake --use-conda --cores 16
 # HPC / SLURM
 snakemake --workflow-profile config/slurm
 ```
-
-### Tutorials
-
-For full setup instructions, module flags, and troubleshooting:
-
-- [Running locally](docs/local.md)
-- [Running on HPC / SLURM](docs/hpc.md) — read this if you are on a cluster
 
 ### 3. Access Results
 
