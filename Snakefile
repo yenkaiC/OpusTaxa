@@ -1,4 +1,3 @@
-
 configfile: os.path.join("config","config.yaml")
 configfile: os.path.join("config","hecatomb","config.yaml")
 
@@ -83,6 +82,11 @@ rule all:
         humann_dir + "/merged/pathabundance_cpm_unstratified.tsv" if run_humann else [],
         humann_dir + "/merged/pathcoverage_joined_unstratified.tsv" if run_humann else [],
 
+        # RGI - Resistome analysis
+        DB_dir + "/card/.download_complete" if run_rgi else [],
+        expand(rgi_dir + "/{sample}/contigs/{sample}_rgi.txt", sample=SAMPLES) if run_rgi else [],
+        expand(rgi_dir + "/{sample}/contigs/{sample}_rgi.json", sample=SAMPLES) if run_rgi else [],
+        rgi_dir + "/table/rgi_merged.tsv" if run_rgi else [],
 
         # AntiSMASH - Biosynthetic gene clusters (requires metaspades)
         expand(antismash_dir + "/{sample}/.antismash_complete", sample=SAMPLES) if run_antismash else [],
@@ -116,4 +120,5 @@ print(f"  MLP: {run_mlp}")
 print(f"  RGI: {run_rgi}")
 print(f"  AntiSMASH: {run_antismash}")
 print(f"  Prodigal-GV: {run_prodigalgv}")
+print(f"  geNomad: {hecatomb}")
 print(f"  geNomad: {run_genomad}")

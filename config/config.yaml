@@ -22,10 +22,10 @@ prodigalGVDirectory: "Data/ProdigalGV"
 genomadDirectory: "Data/geNomad"
 
 # Flags
-test_mode: true
+test_mode: false
 download_sra: false
-metaphlan: false
-singlem: false
+metaphlan: true
+singlem: true
 kraken2: false
 metaspades: false
 mlp: false
