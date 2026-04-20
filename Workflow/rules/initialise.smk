@@ -52,7 +52,7 @@ run_mlp = str(config.get("mlp", False)).lower() not in ("false", "0", "no")
 run_humann = str(config.get("humann", False)).lower() not in ("false", "0", "no")
 run_rgi = str(config.get("rgi", True)).lower() not in ("false", "0", "no")
 
-run_hecatomb = str(config.get("hecatomb", True)).lower() not in ("false", "0", "no")
+run_hecatomb = str(config.get("hecatomb_run", False)).lower() not in ("false", "0", "no")
 
 run_prodigalgv = str(config.get("prodigal_gv", False)).lower() not in ("false", "0", "no")
 run_genomad = str(config.get("genomad", False)).lower() not in ("false", "0", "no")

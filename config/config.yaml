@@ -34,7 +34,7 @@ rgi: false
 antismash: false
 strainphlan: false
 strainphlan_species: []
-hecatomb: false
+hecatomb_run: false
 
 prodigal_gv: false
 genomad: false
