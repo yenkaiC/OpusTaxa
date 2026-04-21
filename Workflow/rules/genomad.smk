@@ -48,11 +48,11 @@ rule genomad:
     container:
         get_container("genomad")
     params:
-        db_dir  = DB_dir + "/genomad/genomad_db",
-        out_dir = genomad_dir + "/{sample}",
-        splits  = get_param("genomad", "splits", 8),
-        min_score   = get_param("genomad", "min_score", 0.7),
-        min_seq_size = get_param("genomad", "min_seq_size", 1000)
+        db_dir   = DB_dir + "/genomad/genomad_db",
+        out_dir  = genomad_dir + "/{sample}",
+        splits   = get_param("genomad", "splits", 8),
+        min_score     = get_param("genomad", "min_score", 0.7),
+        min_num_genes = get_param("genomad", "min_number_genes", 1)
     threads: get_threads("genomad")
     resources:
         mem_mb  = 32000,
