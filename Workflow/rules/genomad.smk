@@ -77,9 +77,10 @@ rule genomad:
             {params.db_dir} 2> {log}
 
         # Rename outputs from contigs_* to {sample}_* for clarity
+        SAMPLE="{wildcards.sample}"
         cd {params.out_dir}/contigs_summary
         for f in contigs_*; do
-            mv "$f" "{wildcards.sample}_${{f#contigs_}}" 2>> {log} || true
+            mv "$f" "${{SAMPLE}}_${{f#contigs_}}" 2>> {log} || true
         done
         """
 
