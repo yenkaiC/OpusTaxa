@@ -77,7 +77,7 @@ rule genomad:
         SAMPLE="{wildcards.sample}"
         cd {params.out_dir}/contigs_summary
         for f in contigs_*; do
-            mv "$f" "${{SAMPLE}}_${{f#contigs_}}" 2>> {log} || true
+            mv "$f" "${{SAMPLE}}_${{f#contigs_}}" 2>> {log}
         done
         """
 
