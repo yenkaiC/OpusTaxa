@@ -39,8 +39,11 @@ enable. Key licenses to be aware of:
   - FastQC            https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
   - fastp             https://github.com/OpenGene/fastp/blob/master/LICENSE
   - MultiQC           https://github.com/MultiQC/MultiQC/blob/main/LICENSE
+  - Prodigal-GV       https://github.com/apcamargo/prodigal-gv/blob/master/LICENSE 
+  - Hecatomb          https://github.com/shandley/hecatomb/blob/main/LICENSE
+  - geNomad           https://github.com/apcamargo/genomad/blob/main/LICENSE
 
 Notable restrictions:
-  antiSMASH and CARD/RGI impose non-commercial or academic-use restrictions
+  antiSMASH, geNomad and CARD/RGI impose non-commercial or academic-use restrictions
   on their databases and software. Commercial users must consult those licenses
   before use.
