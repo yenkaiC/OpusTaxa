@@ -76,11 +76,11 @@ rule genomad:
             {params.out_dir} \
             {params.db_dir} 2> {log}
 
-        # Rename outputs from contigs_* to {sample}_* for clarity
+        # Rename outputs from contigs_* to <sample>_* for clarity
         SAMPLE="{wildcards.sample}"
         cd {params.out_dir}/contigs_summary
         for f in contigs_*; do
-            mv "$f" "${{SAMPLE}}_${{f#contigs_}}" 2>> {log} || true
+            mv "$f" "${{SAMPLE}}_${{f#contigs_}}" 2>> {log}
         done
         """
 
@@ -93,43 +93,47 @@ rule genomad_summary_table:
         virus_merged   = genomad_dir + "/table/genomad_virus_summary.tsv"
     params:
         genomad_dir = genomad_dir,
-        samples     = SAMPLES
+        samples     = " ".join(SAMPLES)
     log:
         log_dir + "/genomad/summary_table.log"
     resources:
-        mem_mb  = 8000,
-        runtime = 30
-    threads: 1
-    run:
-        import os
-        import csv
+        mem_mb  = 20000,
+        runtime = 45
+    threads: 2
+    shell:
+        """
+        mkdir -p {params.genomad_dir}/table
 
-        os.makedirs(os.path.join(params.genomad_dir, "table"), exist_ok=True)
+        for element_type in plasmid virus; do
 
-        for element_type, outfile in [("plasmid", output.plasmid_merged),
-                                       ("virus",   output.virus_merged)]:
-            header_written = False
-            with open(outfile, "w", newline="") as out_f:
-                writer = None
-                for sample in params.samples:
-                    tsv = os.path.join(
-                        params.genomad_dir, sample,
-                        "contigs_summary",
-                        f"{sample}_{element_type}_summary.tsv"
-                    )
-                    if not os.path.exists(tsv):
-                        print(f"WARNING: {tsv} not found, skipping", file=open(log[0], "a"))
-                        continue
-                    with open(tsv) as in_f:
-                        reader = csv.DictReader(in_f, delimiter="\t")
-                        if not header_written:
-                            fieldnames = ["sample"] + reader.fieldnames
-                            writer = csv.DictWriter(out_f, fieldnames=fieldnames, delimiter="\t")
-                            writer.writeheader()
-                            header_written = True
-                        for row in reader:
-                            row["sample"] = sample
-                            writer.writerow(row)
+            if [ "$element_type" = "plasmid" ]; then
+                outfile="{output.plasmid_merged}"
+            else
+                outfile="{output.virus_merged}"
+            fi
 
-        with open(log[0], "a") as log_f:
-            log_f.write(f"Merged geNomad summaries for {len(params.samples)} samples\n")
+            header_written=0
+            > "$outfile"
+
+            for sample in {params.samples}; do
+                tsv="{params.genomad_dir}/${{sample}}/contigs_summary/${{sample}}_${{element_type}}_summary.tsv"
+
+                if [ ! -f "$tsv" ]; then
+                    echo "WARNING: $tsv not found, skipping" >> {log}
+                    continue
+                fi
+
+                if [ "$header_written" -eq 0 ]; then
+                    # Print header with sample column prepended
+                    head -1 "$tsv" | awk '{{print "sample\t" $0}}' >> "$outfile"
+                    header_written=1
+                fi
+
+                # Print data rows with sample name prepended, skipping header
+                tail -n +2 "$tsv" | awk -v s="$sample" '{{print s"\t"$0}}' >> "$outfile"
+            done
+
+        done
+
+        echo "Merged geNomad summaries for $(echo {params.samples} | wc -w) samples" > {log}
+        """
