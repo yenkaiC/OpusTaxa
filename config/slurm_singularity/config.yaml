@@ -7,7 +7,7 @@
 # ============================================================================
 
 executor: slurm
-jobs: 50
+jobs: 100
 use-singularity: true
 use-conda: false
 latency-wait: 120
@@ -23,3 +23,18 @@ default-resources:
   - "mem_mb=32000"
   - "runtime=480"
   - "disk_mb=0"
+
+# Limit heavy jobs
+set-resources:
+  - "remove_human_reads:jobs=95"
+  #- "metaphlan:jobs=30"
+  #- "singlem:jobs=30"
+  #- "metaspades:jobs=15"
+  #- "metaspades:runtime=2880"           # 48 hours - adjust as required
+  #- "metaspades:slurm_partition=long"   # Use long partition for assembly - adjust partition as requried
+  #- "humann:jobs=20"
+  #- "antismash_contigs:jobs=15"
+  #- "antismash_contigs:runtime=2800"    # reduce runtime or change partition
+  #- "antismash_contigs:slurm_partition=long"
+  #- "rgi:jobs=15"
+  #- "rgi:slurm_partition=long"
