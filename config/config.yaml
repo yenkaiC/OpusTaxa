@@ -74,7 +74,7 @@ params:
   genomad:
     splits: 8                  # --splits, number of splits for database search
     min_score: 0.7             # --min-score, minimum confidence score (0-1)
-    min_seq_size: 1000         # --min-seq-size, minimum sequence length (bp)s
+    min_number_genes: 1        # --min-number-genes, minimum genes to classify as plasmid/virus
 
   # ============================================================================
 # Container Configuration for Singularity (E.g. Pawsey Setonix)

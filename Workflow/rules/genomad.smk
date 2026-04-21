@@ -63,12 +63,11 @@ rule genomad:
         """
         mkdir -p {params.out_dir}
 
-        # Rename outputs to include sample name (geNomad uses input filename as prefix)
         genomad end-to-end \
             --cleanup \
             --splits {params.splits} \
             --min-score {params.min_score} \
-            --min-seq-size {params.min_seq_size} \
+            --min-number-genes {params.min_num_genes} \
             --threads {threads} \
             {input.contigs} \
             {params.out_dir} \
