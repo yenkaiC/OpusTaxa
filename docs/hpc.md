@@ -172,7 +172,11 @@ cd OpusTaxa
 conda activate snakemake
 
 # If Singularity/Apptainer is available as a module on your HPC, load it before running
-module load singularity/4.1.0-nompi # You would need the equivalent for your HPC - module load singularity. 
+# You would need the equivalent for your HPC, e.g. module load singularity/4.1.0-nompi.
+# You can check whether your HPC has it with the following commands:
+# module avail 2>&1 | grep -i singularity
+# module avail 2>&1 | grep -i apptainer
+module load singularity 
 
 # Dry-run to verify everything is configured correctly
 snakemake --workflow-profile config/slurm_singularity --dry-run
