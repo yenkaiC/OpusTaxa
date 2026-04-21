@@ -51,9 +51,8 @@ rule genomad:
         db_dir  = DB_dir + "/genomad/genomad_db",
         out_dir = genomad_dir + "/{sample}",
         splits  = get_param("genomad", "splits", 8),
-        min_score        = get_param("genomad", "min_score", 0.7),
-        min_plasmid_size = get_param("genomad", "min_plasmid_size", 1000),
-        min_virus_size   = get_param("genomad", "min_virus_size", 1000)
+        min_score   = get_param("genomad", "min_score", 0.7),
+        min_seq_size = get_param("genomad", "min_seq_size", 1000)
     threads: get_threads("genomad")
     resources:
         mem_mb  = 32000,
@@ -69,8 +68,7 @@ rule genomad:
             --cleanup \
             --splits {params.splits} \
             --min-score {params.min_score} \
-            --min-plasmid-size {params.min_plasmid_size} \
-            --min-virus-size {params.min_virus_size} \
+            --min-seq-size {params.min_seq_size} \
             --threads {threads} \
             {input.contigs} \
             {params.out_dir} \
@@ -80,7 +78,7 @@ rule genomad:
         SAMPLE="{wildcards.sample}"
         cd {params.out_dir}/contigs_summary
         for f in contigs_*; do
-            mv "$f" "${{SAMPLE}}_${{f#contigs_}}" 2>> {log}
+            mv "$f" "${{SAMPLE}}_${{f#contigs_}}" 2>> {log} || true
         done
         """
 

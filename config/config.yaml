@@ -72,10 +72,9 @@ params:
     include_loose: false       # --include_loose
 
   genomad:
-    splits: 8           # split MMseqs2 search to reduce memory usage
-    min_score: 0.7      # minimum classification confidence score (0–1)
-    min_plasmid_size: 1000  # minimum plasmid contig length (bp)
-    min_virus_size: 1000    # minimum virus contig length (bp)
+    splits: 8                  # --splits, number of splits for database search
+    min_score: 0.7             # --min-score, minimum confidence score (0-1)
+    min_seq_size: 1000         # --min-seq-size, minimum sequence length (bp)s
 
   # ============================================================================
 # Container Configuration for Singularity (E.g. Pawsey Setonix)
