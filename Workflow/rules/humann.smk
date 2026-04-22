@@ -1,4 +1,12 @@
-## Download HUMAnN databases using checkpoint files
+## Download HUMAnN databases
+# The huttenhower.sph.harvard.edu server redirects to Globus, which may be blocked on some HPCs.
+# Each rule tries humann_databases first, then falls back to direct Globus wget.
+# If both fail, the rule exits with a clear error and manual instructions.
+# Manual download instructions (run on a machine with internet access, then transfer to HPC):
+#   wget https://g-227ca.190ebd.75bc.data.globus.org/humann_data/chocophlan/full_chocophlan.v201901_v31.tar.gz
+#   wget https://g-227ca.190ebd.75bc.data.globus.org/humann_data/uniprot/uniref_annotated/uniref90_annotated_v201901b_full.tar.gz
+#   wget https://g-227ca.190ebd.75bc.data.globus.org/humann_data/full_mapping_v201901b.tar.gz
+
 rule dl_humann_chocophlan:
     output:
         checkpoint = humannDB_dir + "/chocophlan/.download_complete"
@@ -7,8 +15,8 @@ rule dl_humann_chocophlan:
     container:
         get_container("humann")
     params:
-        db_dir    = humannDB_dir + "/chocophlan",
-        parent_dir = humannDB_dir
+        db_dir      = humannDB_dir + "/chocophlan",
+        globus_url  = "https://g-227ca.190ebd.75bc.data.globus.org/humann_data/chocophlan/full_chocophlan.v201901_v31.tar.gz"
     resources:
         mem_mb = 20000,
         runtime = 480
@@ -18,8 +26,25 @@ rule dl_humann_chocophlan:
     shell:
         """
         mkdir -p {params.db_dir}
-        if [ ! -d "{params.db_dir}/chocophlan" ]; then
-            humann_databases --download chocophlan full {params.parent_dir} 2> {log}
+        if [ ! "$(ls -A {params.db_dir})" ]; then
+            echo "Attempting humann_databases download..." > {log}
+            if humann_databases --download chocophlan full {params.db_dir} 2>> {log}; then
+                echo "humann_databases download succeeded" >> {log}
+            else
+                echo "humann_databases failed, trying direct Globus wget..." >> {log}
+                if wget -q -O {params.db_dir}/chocophlan.tar.gz {params.globus_url} 2>> {log}; then
+                    tar -xzf {params.db_dir}/chocophlan.tar.gz -C {params.db_dir} 2>> {log}
+                    rm {params.db_dir}/chocophlan.tar.gz
+                    humann_config --update database_folders nucleotide {params.db_dir} 2>> {log}
+                    echo "Globus download succeeded" >> {log}
+                else
+                    echo "ERROR: Both download methods failed for ChocoPhlAn." >> {log}
+                    echo "Please download manually and place files in {params.db_dir}:" >> {log}
+                    echo "  wget {params.globus_url}" >> {log}
+                    echo "  tar -xzf full_chocophlan.v201901_v31.tar.gz -C {params.db_dir}" >> {log}
+                    exit 1
+                fi
+            fi
         else
             echo "ChocoPhlAn database already exists, skipping download" > {log}
         fi
@@ -34,8 +59,8 @@ rule dl_humann_uniref:
     container:
         get_container("humann")
     params:
-        db_dir     = humannDB_dir + "/uniref",
-        parent_dir = humannDB_dir
+        db_dir      = humannDB_dir + "/uniref",
+        globus_url  = "https://g-227ca.190ebd.75bc.data.globus.org/humann_data/uniprot/uniref_annotated/uniref90_annotated_v201901b_full.tar.gz"
     resources:
         mem_mb = 20000,
         runtime = 480
@@ -45,8 +70,25 @@ rule dl_humann_uniref:
     shell:
         """
         mkdir -p {params.db_dir}
-        if [ ! -d "{params.db_dir}/uniref" ]; then
-            humann_databases --download uniref uniref90_diamond {params.parent_dir} 2> {log}
+        if [ ! "$(ls -A {params.db_dir})" ]; then
+            echo "Attempting humann_databases download..." > {log}
+            if humann_databases --download uniref uniref90_diamond {params.db_dir} 2>> {log}; then
+                echo "humann_databases download succeeded" >> {log}
+            else
+                echo "humann_databases failed, trying direct Globus wget..." >> {log}
+                if wget -q -O {params.db_dir}/uniref.tar.gz {params.globus_url} 2>> {log}; then
+                    tar -xzf {params.db_dir}/uniref.tar.gz -C {params.db_dir} 2>> {log}
+                    rm {params.db_dir}/uniref.tar.gz
+                    humann_config --update database_folders protein {params.db_dir} 2>> {log}
+                    echo "Globus download succeeded" >> {log}
+                else
+                    echo "ERROR: Both download methods failed for UniRef90." >> {log}
+                    echo "Please download manually and place files in {params.db_dir}:" >> {log}
+                    echo "  wget {params.globus_url}" >> {log}
+                    echo "  tar -xzf uniref90_annotated_v201901b_full.tar.gz -C {params.db_dir}" >> {log}
+                    exit 1
+                fi
+            fi
         else
             echo "UniRef database already exists, skipping download" > {log}
         fi
@@ -61,8 +103,8 @@ rule dl_humann_utility:
     container:
         get_container("humann")
     params:
-        db_dir     = humannDB_dir + "/utility_mapping",
-        parent_dir = humannDB_dir
+        db_dir      = humannDB_dir + "/utility_mapping",
+        globus_url  = "https://g-227ca.190ebd.75bc.data.globus.org/humann_data/full_mapping_v201901b.tar.gz"
     resources:
         mem_mb = 6000,
         runtime = 240
@@ -72,8 +114,25 @@ rule dl_humann_utility:
     shell:
         """
         mkdir -p {params.db_dir}
-        if [ ! -d "{params.db_dir}/utility_mapping" ]; then
-            humann_databases --download utility_mapping full {params.parent_dir} 2> {log}
+        if [ ! "$(ls -A {params.db_dir})" ]; then
+            echo "Attempting humann_databases download..." > {log}
+            if humann_databases --download utility_mapping full {params.db_dir} 2>> {log}; then
+                echo "humann_databases download succeeded" >> {log}
+            else
+                echo "humann_databases failed, trying direct Globus wget..." >> {log}
+                if wget -q -O {params.db_dir}/utility.tar.gz {params.globus_url} 2>> {log}; then
+                    tar -xzf {params.db_dir}/utility.tar.gz -C {params.db_dir} 2>> {log}
+                    rm {params.db_dir}/utility.tar.gz
+                    humann_config --update database_folders utility_mapping {params.db_dir} 2>> {log}
+                    echo "Globus download succeeded" >> {log}
+                else
+                    echo "ERROR: Both download methods failed for utility_mapping." >> {log}
+                    echo "Please download manually and place files in {params.db_dir}:" >> {log}
+                    echo "  wget {params.globus_url}" >> {log}
+                    echo "  tar -xzf full_mapping_v201901b.tar.gz -C {params.db_dir}" >> {log}
+                    exit 1
+                fi
+            fi
         else
             echo "Utility mapping database already exists, skipping download" > {log}
         fi
