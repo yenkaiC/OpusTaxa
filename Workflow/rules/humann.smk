@@ -157,7 +157,7 @@ rule humann:
         get_container("humann")
     params:
         outdir  = humann_dir + "/temp/{sample}",
-        protdb  = humannDB_dir + "/uniref/uniref",
+        protdb  = humannDB_dir + "/uniref",
         gf_dir  = humann_dir + "/genefamilies",
         pa_dir  = humann_dir + "/pathabundance",
         pc_dir  = humann_dir + "/pathcoverage"
