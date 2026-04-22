@@ -144,9 +144,9 @@ rule humann:
     input:
         r1           = nohuman_dir + "/{sample}_R1_001.fastq.gz",
         profile      = metaphlan_dir + "/{sample}_profile.txt",
-        chocophlan   = humannDB_dir + "/chocophlan/.download_complete",
-        uniref       = humannDB_dir + "/uniref/.download_complete",
-        utility      = humannDB_dir + "/utility_mapping/.download_complete"
+        chocophlan   = humannDB_dir + "/.chocophlan_download_complete",
+        uniref       = humannDB_dir + "/.uniref_download_complete",
+        utility      = humannDB_dir + "/.utility_mapping_download_complete"
     output:
         genefamilies  = humann_dir + "/genefamilies/{sample}_genefamilies.tsv",
         pathabundance = humann_dir + "/pathabundance/{sample}_pathabundance.tsv",
@@ -211,8 +211,8 @@ rule humann_merge_tables:
         pc_dir = humann_dir + "/pathcoverage",
         merge_dir = humann_dir + "/merged"
     resources:
-        mem_mb = 64000,
-        runtime = 480
+        mem_mb = 32000,
+        runtime = 360
     log:
         log_dir + "/humann/merge_tables.log"
     shell:
