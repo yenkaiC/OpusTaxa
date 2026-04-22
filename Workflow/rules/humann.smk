@@ -7,7 +7,8 @@ rule dl_humann_chocophlan:
     container:
         get_container("humann")
     params:
-        db_dir = humannDB_dir + "/chocophlan"
+        db_dir    = humannDB_dir + "/chocophlan",
+        parent_dir = humannDB_dir
     resources:
         mem_mb = 20000,
         runtime = 480
@@ -16,8 +17,9 @@ rule dl_humann_chocophlan:
         log_dir + "/humann/chocophlan_dl.log"
     shell:
         """
+        mkdir -p {params.db_dir}
         if [ ! -d "{params.db_dir}/chocophlan" ]; then
-            humann_databases --download chocophlan full {params.db_dir} 2> {log}
+            humann_databases --download chocophlan full {params.parent_dir} 2> {log}
         else
             echo "ChocoPhlAn database already exists, skipping download" > {log}
         fi
@@ -32,7 +34,8 @@ rule dl_humann_uniref:
     container:
         get_container("humann")
     params:
-        db_dir = humannDB_dir + "/uniref"
+        db_dir     = humannDB_dir + "/uniref",
+        parent_dir = humannDB_dir
     resources:
         mem_mb = 20000,
         runtime = 480
@@ -41,8 +44,9 @@ rule dl_humann_uniref:
         log_dir + "/humann/uniref_dl.log"
     shell:
         """
+        mkdir -p {params.db_dir}
         if [ ! -d "{params.db_dir}/uniref" ]; then
-            humann_databases --download uniref uniref90_diamond {params.db_dir} 2> {log}
+            humann_databases --download uniref uniref90_diamond {params.parent_dir} 2> {log}
         else
             echo "UniRef database already exists, skipping download" > {log}
         fi
@@ -57,7 +61,8 @@ rule dl_humann_utility:
     container:
         get_container("humann")
     params:
-        db_dir = humannDB_dir + "/utility_mapping"
+        db_dir     = humannDB_dir + "/utility_mapping",
+        parent_dir = humannDB_dir
     resources:
         mem_mb = 6000,
         runtime = 240
@@ -66,8 +71,9 @@ rule dl_humann_utility:
         log_dir + "/humann/utility_dl.log"
     shell:
         """
+        mkdir -p {params.db_dir}
         if [ ! -d "{params.db_dir}/utility_mapping" ]; then
-            humann_databases --download utility_mapping full {params.db_dir} 2> {log}
+            humann_databases --download utility_mapping full {params.parent_dir} 2> {log}
         else
             echo "Utility mapping database already exists, skipping download" > {log}
         fi
