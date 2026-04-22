@@ -9,7 +9,7 @@
 
 rule dl_humann_chocophlan:
     output:
-        checkpoint = humannDB_dir + "/chocophlan/.download_complete"
+        checkpoint = humannDB_dir + "/.chocophlan_download_complete"
     conda:
         workflow.basedir + '/Workflow/envs/humann.yaml'
     container:
@@ -53,7 +53,7 @@ rule dl_humann_chocophlan:
 
 rule dl_humann_uniref:
     output:
-        checkpoint = humannDB_dir + "/uniref/.download_complete"
+        checkpoint = humannDB_dir + "/.uniref_download_complete"
     conda:
         workflow.basedir + '/Workflow/envs/humann.yaml'
     container:
@@ -97,7 +97,7 @@ rule dl_humann_uniref:
 
 rule dl_humann_utility:
     output:
-        checkpoint = humannDB_dir + "/utility_mapping/.download_complete"
+        checkpoint = humannDB_dir + "/.utility_mapping_download_complete"
     conda:
         workflow.basedir + '/Workflow/envs/humann.yaml'
     container:
