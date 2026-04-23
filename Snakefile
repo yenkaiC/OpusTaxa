@@ -26,8 +26,6 @@ include: workflow.basedir + "/Workflow/rules/hecatomb.smk"
 rule all:
     input:
         # Data processing and QC
-        expand(clean_dir + "/{sample}_R1_001.fastq.gz", sample=SAMPLES),
-        expand(clean_dir + "/{sample}_R2_001.fastq.gz", sample=SAMPLES),
         expand(nohuman_dir + "/{sample}_R1_001.fastq.gz", sample=SAMPLES),
         expand(nohuman_dir + "/{sample}_R2_001.fastq.gz", sample=SAMPLES),
         expand(raw_qc_dir + "/{sample}_R1_001_fastqc.html", sample=SAMPLES),

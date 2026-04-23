@@ -4,8 +4,8 @@ rule fastp_trim:
         r1 = input_dir + "/{sample}_R1_001.fastq.gz",
         r2 = input_dir + "/{sample}_R2_001.fastq.gz"
     output: 
-        r1 = clean_dir + "/{sample}_R1_001.fastq.gz",
-        r2 = clean_dir + "/{sample}_R2_001.fastq.gz"
+        r1 = temp(clean_dir + "/{sample}_R1_001.fastq.gz"),
+        r2 = temp(clean_dir + "/{sample}_R2_001.fastq.gz")
     conda: 
         '../envs/fastp.yaml'
     container:
