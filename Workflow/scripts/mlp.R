@@ -22,7 +22,9 @@ cat("Input data dimensions:", nrow(input), "samples x", ncol(input), "species\n"
 # Predict microbial load using the MLP function
 # Correct arguments based on documentation:
 # - profiler: "metaphlan4.mpa_vJan25_CHOCOPhlAnSGB_202503" (note the dot after metaphlan4)
-# - training_data: "metacardis" (default, but galaxy is also available)
+# - training_data: "galaxy" (default, but "metacardis" is also available)
+# Based on our experience with antibiotic samples, galaxy works better
+# But if one is working on the effects of drugs, metacardis may work better in such circumstance
 # - output: "load" or "qmp"
 
 # Try with galaxy training data first (since that's what the models are named)
