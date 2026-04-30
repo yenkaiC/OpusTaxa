@@ -152,6 +152,7 @@ snakemake --use-conda --cores 1 --until dl_kraken2_DB      # Kraken2
 # Functional profiling
 snakemake --use-conda --cores 1 \
     --until dl_humann_chocophlan dl_humann_uniref dl_humann_utility
+# humann downloads from globus, if it's still not downloading, please contact your hpc technicians as your hpc may have blocked downloading from this server
 
 # Resistome / BGC
 snakemake --use-conda --cores 1 --until dl_card_DB
@@ -238,5 +239,52 @@ squeue -u $(whoami)
 cat .snakemake/slurm_logs/rule_metaphlan/<sample>/12345.log
 ```
 
+## Adjusting Containers for your hpc
 
+OpusTaxa can run tools using either **Singularity/Apptainer containers** or **conda environments**. Which you use depends on your HPC.
+
+The SLURM profile (`config/slurm/config.yaml`) includes a specific bind mount argument:
+
+```yaml
+singularity-args: "-B /scratch -B /software"
+```
+
+This binds `/scratch` (where your data lives) and `/software` (where Apptainer caches pulled containers) into the container. These paths are specific to certain HPCs — users on other clusters will need to adjust this.
+
+### Using containers on another HPC
+
+If your HPC requires containers, two things need to be updated:
+
+**1. Update the bind mounts in `config/slurm/config.yaml`**
+
+The `-B` flags tell Singularity/Apptainer which directories on the host to make visible inside the container. Replace the Pawsey-specific paths with the paths relevant to your system:
+
+```yaml
+# Pawsey Setonix (default)
+singularity-args: "-B /scratch -B /software"
+
+# Example for a generic HPC — bind your scratch and data directories
+singularity-args: "-B /scratch/yourproject -B /home/yourusername"
+```
+
+At minimum you need to bind whichever directory contains your input data and databases. If unsure, check with your HPC support team.
+
+**2. Building your own containers**
+
+*Build your own `.sif` files*
+
+Container definition files (`.def`) for every tool are available in the [OpusTaxa Containers repository](https://github.com/yenkaiC/OpusTaxa_Containers). Build them on a machine where you have sudo or fakeroot access (not on the HPC login node):
+
+```bash
+git clone https://github.com/yenkaiC/OpusTaxa_Containers.git
+cd OpusTaxa_Containers
+
+# Build with sudo
+sudo apptainer build fastp.sif containers/fastp.def
+
+# Or with fakeroot if sudo is unavailable
+apptainer build --fakeroot fastp.sif containers/fastp.def
+```
+
+Then copy the `.sif` files to your HPC and update `config/config.yaml` with their paths as shown above.
 
