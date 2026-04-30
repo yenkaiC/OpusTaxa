@@ -173,7 +173,7 @@ cd OpusTaxa
 conda activate snakemake
 
 # If Singularity/Apptainer is available as a module on your HPC, load it before running
-# You would need the equivalent for your HPC, e.g. module load singularity/4.1.0-nompi.
+# You would need the equivalent for your HPC, e.g. module load singularity/4.1.0-slurm.
 # You can check whether your HPC has it with the following commands:
 # module avail 2>&1 | grep -i singularity
 # module avail 2>&1 | grep -i apptainer
@@ -196,7 +196,7 @@ snakemake --workflow-profile config/slurm_singularity \
 
 OpusTaxa can run tools using either **Singularity/Apptainer containers** or **conda environments**. Which you use depends on your HPC.
 
-The SLURM profile (`config/slurm/config.yaml`) includes a specific bind mount argument:
+The SLURM profile (`config/slurm_singularity/config.yaml`) includes a specific bind mount argument:
 
 ```yaml
 # Default
