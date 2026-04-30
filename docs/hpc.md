@@ -187,25 +187,65 @@ snakemake --workflow-profile config/slurm_singularity
 
 # Enable additional modules - flags work the same as standard runs
 snakemake --workflow-profile config/slurm_singularity \
-    --config kraken2=true humann=true metaspades=true rgi=true antismash=true prodigal_gv=true
+    --config download_sra=true kraken2=true humann=true metaspades=true rgi=true antismash=true
 ```
 
 > **Note:** Use `--workflow-profile config/slurm_singularity` instead of `config/slurm` when running with containers. Do not mix the two profiles.
 
-### Bind mounts
+## Adjusting Containers for your hpc
 
-Singularity containers run in an isolated environment and can only access filesystem paths that are explicitly mounted. If OpusTaxa cannot find your data or databases, you may need to add bind mounts. Check your HPC's documentation for which paths need to be mounted — for example on Pawsey Setonix:
+OpusTaxa can run tools using either **Singularity/Apptainer containers** or **conda environments**. Which you use depends on your HPC.
 
+The SLURM profile (`config/slurm/config.yaml`) includes a specific bind mount argument:
+
+```yaml
+singularity-args: "-B /scratch -B /software"
+```
+
+This binds `/scratch` (where your data lives) and `/software` (where Apptainer caches pulled containers) into the container. These paths are specific to certain HPCs — users on other clusters will need to adjust this.
+
+### Using containers on another HPC
+
+If your HPC requires containers, two things need to be updated:
+
+**1. Update the bind mounts in `config/slurm/config.yaml`**
+
+The `-B` flags tell Singularity/Apptainer which directories on the host to make visible inside the container. Replace the Pawsey-specific paths with the paths relevant to your system:
+
+```yaml
+# Pawsey Setonix (default)
+singularity-args: "-B /scratch -B /software"
+
+# Example for a generic HPC — bind your scratch and data directories
+singularity-args: "-B /scratch/yourproject -B /home/yourusername"
+```
+
+Enforcing bindmounds via the command line:
 ```bash
 snakemake --workflow-profile config/slurm_singularity \
     --singularity-args "-B /scratch -B /software"
 ```
 
-Add any additional paths where your data or databases live:
+At minimum you need to bind whichever directory contains your input data and databases. If unsure, check with your HPC support team.
+
+**2. Building your own containers**
+
+*Build your own `.sif` files*
+
+Container definition files (`.def`) for every tool are available in the [OpusTaxa Containers repository](https://github.com/yenkaiC/OpusTaxa_Containers). Build them on a machine where you have sudo or fakeroot access (not on the HPC login node):
 
 ```bash
---singularity-args "-B /scratch -B /software -B /data/myproject"
+git clone https://github.com/yenkaiC/OpusTaxa_Containers.git
+cd OpusTaxa_Containers
+
+# Build with sudo
+sudo apptainer build fastp.sif containers/fastp.def
+
+# Or with fakeroot if sudo is unavailable
+apptainer build --fakeroot fastp.sif containers/fastp.def
 ```
+
+Then copy the `.sif` files to your HPC and update `config/config.yaml` with their paths as shown above.
 
 ## Customising Threads and Memory
 
@@ -238,53 +278,4 @@ squeue -u $(whoami)
 # Check a specific job log
 cat .snakemake/slurm_logs/rule_metaphlan/<sample>/12345.log
 ```
-
-## Adjusting Containers for your hpc
-
-OpusTaxa can run tools using either **Singularity/Apptainer containers** or **conda environments**. Which you use depends on your HPC.
-
-The SLURM profile (`config/slurm/config.yaml`) includes a specific bind mount argument:
-
-```yaml
-singularity-args: "-B /scratch -B /software"
-```
-
-This binds `/scratch` (where your data lives) and `/software` (where Apptainer caches pulled containers) into the container. These paths are specific to certain HPCs — users on other clusters will need to adjust this.
-
-### Using containers on another HPC
-
-If your HPC requires containers, two things need to be updated:
-
-**1. Update the bind mounts in `config/slurm/config.yaml`**
-
-The `-B` flags tell Singularity/Apptainer which directories on the host to make visible inside the container. Replace the Pawsey-specific paths with the paths relevant to your system:
-
-```yaml
-# Pawsey Setonix (default)
-singularity-args: "-B /scratch -B /software"
-
-# Example for a generic HPC — bind your scratch and data directories
-singularity-args: "-B /scratch/yourproject -B /home/yourusername"
-```
-
-At minimum you need to bind whichever directory contains your input data and databases. If unsure, check with your HPC support team.
-
-**2. Building your own containers**
-
-*Build your own `.sif` files*
-
-Container definition files (`.def`) for every tool are available in the [OpusTaxa Containers repository](https://github.com/yenkaiC/OpusTaxa_Containers). Build them on a machine where you have sudo or fakeroot access (not on the HPC login node):
-
-```bash
-git clone https://github.com/yenkaiC/OpusTaxa_Containers.git
-cd OpusTaxa_Containers
-
-# Build with sudo
-sudo apptainer build fastp.sif containers/fastp.def
-
-# Or with fakeroot if sudo is unavailable
-apptainer build --fakeroot fastp.sif containers/fastp.def
-```
-
-Then copy the `.sif` files to your HPC and update `config/config.yaml` with their paths as shown above.
 
