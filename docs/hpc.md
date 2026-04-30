@@ -199,28 +199,22 @@ OpusTaxa can run tools using either **Singularity/Apptainer containers** or **co
 The SLURM profile (`config/slurm/config.yaml`) includes a specific bind mount argument:
 
 ```yaml
+# Default
 singularity-args: "-B /scratch -B /software"
 ```
 
 This binds `/scratch` (where your data lives) and `/software` (where Apptainer caches pulled containers) into the container. These paths are specific to certain HPCs — users on other clusters will need to adjust this.
 
-### Using containers on another HPC
-
-If your HPC requires containers, two things need to be updated:
-
 **1. Update the bind mounts in `config/slurm/config.yaml`**
 
-The `-B` flags tell Singularity/Apptainer which directories on the host to make visible inside the container. Replace the Pawsey-specific paths with the paths relevant to your system:
+The `-B` flags tell Singularity/Apptainer which directories on the host to make visible inside the container. Replace the these paths with the paths relevant to your system:
 
 ```yaml
-# Pawsey Setonix (default)
-singularity-args: "-B /scratch -B /software"
-
 # Example for a generic HPC — bind your scratch and data directories
 singularity-args: "-B /scratch/yourproject -B /home/yourusername"
 ```
 
-Enforcing bindmounds via the command line:
+Enforcing bindmounts via the command line:
 ```bash
 snakemake --workflow-profile config/slurm_singularity \
     --singularity-args "-B /scratch -B /software"
