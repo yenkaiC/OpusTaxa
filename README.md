@@ -158,6 +158,7 @@ If you use OpusTaxa, please cite:
 
 ### Things to note
 - OpusTaxa currently only accepts paired reads.<br>
+- OpusTaxa should be only fed with Illumina or MGI based sequences. Please do not supply long reads or old read tech like 454 sequencing
 - We've configured HUMAnN to run only on the forward read due to drawbacks of collapsing forward and reverse read together.<br>
 - Databases (for selected tools) are downloaded automatically on first run.
 - Small Datasets are not recommended for Microbial Load Predictor (MLP)
