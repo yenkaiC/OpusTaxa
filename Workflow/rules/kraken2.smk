@@ -34,10 +34,10 @@ rule kraken2:
     input:
         r1 = nohuman_dir + "/{sample}_R1_001.fastq.gz",
         r2 = nohuman_dir + "/{sample}_R2_001.fastq.gz",
-        output = temp(kraken2_dir + "/{sample}_output.txt")
+        db = kraken2DB_dir + "/.download_complete"
     output:
         report = kraken2_dir + "/{sample}_report.txt",
-        output = kraken2_dir + "/{sample}_output.txt"
+        output = temp(kraken2_dir + "/{sample}_output.txt")
     conda:
         workflow.basedir + "/Workflow/envs/kraken2.yaml"
     container:
