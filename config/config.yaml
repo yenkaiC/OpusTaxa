@@ -24,8 +24,8 @@ genomadDirectory: "Data/geNomad"
 # Flags
 test_mode: false
 download_sra: false
-metaphlan: true
-singlem: true
+metaphlan: false
+singlem: false
 kraken2: false
 metaspades: false
 mlp: false

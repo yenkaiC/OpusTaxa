@@ -107,8 +107,8 @@ Run Snakemake from the login node inside a `screen` or `tmux` session so it keep
 | Quality control | fastp | On |
 | Host read removal | NoHuman | On |
 | QC reports | FastQC + MultiQC | On |
-| Taxonomic profiling | MetaPhlAn 4 | On |
-| Taxonomic profiling | SingleM | On |
+| Taxonomic profiling | MetaPhlAn 4 | Off |
+| Taxonomic profiling | SingleM | Off |
 | Taxonomic profiling | Kraken2 + Bracken | Off |
 | Metagenome assembly | MetaSPAdes | Off |
 | Functional profiling | HUMAnN 3 | Off |

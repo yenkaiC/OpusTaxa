@@ -111,8 +111,8 @@ snakemake --workflow-profile config/slurm \
 | Quality control (fastp) | always on | On |
 | Host read removal (NoHuman) | always on | On |
 | QC reports (FastQC + MultiQC) | always on | On |
-| Taxonomic profiling (MetaPhlAn 4) | `metaphlan=true/false` | On |
-| Taxonomic profiling (SingleM) | `singlem=true/false` | On |
+| Taxonomic profiling (MetaPhlAn 4) | `metaphlan=true/false` | Off |
+| Taxonomic profiling (SingleM) | `singlem=true/false` | Off |
 | Taxonomic profiling (Kraken2 + Bracken) | `kraken2=true` | Off |
 | Metagenome assembly (MetaSPAdes) | `metaspades=true` | Off |
 | Prodigal-gv | `prodigal_gv=true` | Off |
