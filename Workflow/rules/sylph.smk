@@ -26,8 +26,8 @@ rule dl_sylph_DB:
         db_dir = sylphDB_dir,
         url = SYLPH_DB_URL
     resources:
-        mem_mb = 8000,
-        runtime = 240
+        mem_mb = 12000,
+        runtime = 360
     threads: 2
     log:
         log_dir + "/sylph/database_dl.log"
@@ -54,9 +54,9 @@ rule dl_sylph_tax:
     params:
         tax_dir = sylphDB_dir + "/sylph-tax"
     resources:
-        mem_mb = 4000,
+        mem_mb = 6000,
         runtime = 120
-    threads: 1
+    threads: 2
     log:
         log_dir + "/sylph/sylph_tax_dl.log"
     shell:
@@ -84,8 +84,8 @@ rule sylph_sketch:
         outdir = sylph_dir + "/sketches"
     threads: get_threads("sylph")
     resources:
-        mem_mb = 16000,
-        runtime = 120
+        mem_mb = 24000,
+        runtime = 240
     log:
         log_dir + "/sylph/{sample}_sketch.log"
     shell:
@@ -113,8 +113,8 @@ rule sylph_profile:
         get_container("sylph")
     threads: get_threads("sylph")
     resources:
-        mem_mb = 24000,
-        runtime = 120
+        mem_mb = 28000,
+        runtime = 360
     log:
         log_dir + "/sylph/{sample}_profile.log"
     shell:
@@ -144,9 +144,9 @@ rule sylph_taxprof:
         tax_name = SYLPH_TAX_NAME,
         prefix = sylph_dir + "/{sample}_taxprof"
     resources:
-        mem_mb = 8000,
-        runtime = 60
-    threads: 1
+        mem_mb = 12000,
+        runtime = 120
+    threads: 2
     log:
         log_dir + "/sylph/{sample}_taxprof.log"
     shell:
@@ -177,9 +177,9 @@ rule sylph_merge:
     container:
         get_container("sylph")
     resources:
-        mem_mb = 8000,
+        mem_mb = 20000,
         runtime = 60
-    threads: 1
+    threads: 2
     log:
         log_dir + "/sylph/merge.log"
     shell:
