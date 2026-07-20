@@ -38,7 +38,8 @@ strainphlan_species: []
 hecatomb_run: false
 prodigal_gv: false
 genomad: false
-sylph: false 
+sylph: false
+sylph_viral: false
 
 # Thread allocations for each tool (users can customize these)
 threads:
@@ -79,9 +80,13 @@ params:
     min_score: 0.7             # --min-score, minimum confidence score (0-1)
     min_number_genes: 1        # --min-number-genes, minimum genes to classify as plasmid/virus
 
-sylph_db_name: "gtdb-r220-c200-dbv1.syldb"
-sylph_db_url: "http://faust.compbio.cs.cmu.edu/sylph-stuff/gtdb-r220-c200-dbv1.syldb"
-sylph_tax_name: "GTDB_r220"
+sylph_db_name: "gtdb-r232-c200-dbv1.syldb"
+sylph_db_url: "http://faust.compbio.cs.cmu.edu/sylph-stuff/gtdb-r232-c200-dbv1.syldb"
+sylph_tax_name: "GTDB_r232"
+sylph_viral_db_name: "uhgv_c100_dbv1.syldb"
+sylph_viral_db_url: "http://faust.compbio.cs.cmu.edu/sylph-stuff/uhgv_c100_dbv1.syldb"
+sylph_viral_c: 100
+sylph_viral_tax_name: "UHGV"
   # ============================================================================
 # Container Configuration for Singularity (E.g. Pawsey Setonix)
 # ============================================================================

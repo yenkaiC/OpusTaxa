@@ -57,6 +57,7 @@ run_hecatomb = str(config.get("hecatomb_run", False)).lower() not in ("false", "
 run_prodigalgv = str(config.get("prodigal_gv", False)).lower() not in ("false", "0", "no")
 run_genomad = str(config.get("genomad", False)).lower() not in ("false", "0", "no")
 run_sylph = str(config.get("sylph", False)).lower() not in ("false", "0", "no")
+run_sylph_viral = str(config.get("sylph_viral", False)).lower() not in ("false", "0", "no")
 
 def get_param(tool, key, default=None):
     """Safely fetch a nested param from config with fallback."""

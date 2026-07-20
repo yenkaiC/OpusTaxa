@@ -106,6 +106,9 @@ rule all:
         # Sylph taxonomic profiling
         expand(sylph_dir + "/{sample}_taxprof.tsv", sample=SAMPLES) if run_sylph else [],
         sylph_dir + "/table/sylph_merged_abundance.tsv" if run_sylph else [],
+        # Sylph viral profiling
+        expand(sylph_dir + "/viral/{sample}_viral_taxprof.tsv", sample=SAMPLES) if run_sylph_viral else [],
+        sylph_dir + "/table/sylph_viral_merged_abundance.tsv" if run_sylph_viral else [],
         
 
 
@@ -125,3 +128,4 @@ print(f"  Prodigal-GV: {run_prodigalgv}")
 print(f"  Hecatomb: {run_hecatomb}")
 print(f"  geNomad: {run_genomad}")
 print(f"  Sylph: {run_sylph}")
+print(f"  Sylph viral: {run_sylph_viral}")

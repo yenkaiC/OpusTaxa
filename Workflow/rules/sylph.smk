@@ -26,8 +26,8 @@ rule dl_sylph_DB:
         db_dir = sylphDB_dir,
         url = SYLPH_DB_URL
     resources:
-        mem_mb = 12000,
-        runtime = 360
+        mem_mb = 30000,
+        runtime = 480
     threads: 2
     log:
         log_dir + "/sylph/database_dl.log"
@@ -54,8 +54,8 @@ rule dl_sylph_tax:
     params:
         tax_dir = sylphDB_dir + "/sylph-tax"
     resources:
-        mem_mb = 6000,
-        runtime = 120
+        mem_mb = 10000,
+        runtime = 200
     threads: 2
     log:
         log_dir + "/sylph/sylph_tax_dl.log"
@@ -84,8 +84,8 @@ rule sylph_sketch:
         outdir = sylph_dir + "/sketches"
     threads: get_threads("sylph")
     resources:
-        mem_mb = 24000,
-        runtime = 240
+        mem_mb = 33000,
+        runtime = 300
     log:
         log_dir + "/sylph/{sample}_sketch.log"
     shell:
@@ -113,7 +113,7 @@ rule sylph_profile:
         get_container("sylph")
     threads: get_threads("sylph")
     resources:
-        mem_mb = 28000,
+        mem_mb = 33000,
         runtime = 360
     log:
         log_dir + "/sylph/{sample}_profile.log"
@@ -182,6 +182,135 @@ rule sylph_merge:
     threads: 2
     log:
         log_dir + "/sylph/merge.log"
+    shell:
+        """
+        mkdir -p $(dirname {output.merged})
+        mkdir -p $(dirname {log})
+        sylph-tax merge {input.taxprofs} -o {output.merged} 2> {log}
+        """
+
+## Viral Sylph
+
+SYLPH_VIRAL_DB_NAME = config.get("sylph_viral_db_name", "uhgv_c100_dbv1.syldb")
+SYLPH_VIRAL_DB_URL  = config.get("sylph_viral_db_url",
+                                 "http://faust.compbio.cs.cmu.edu/sylph-stuff/uhgv_c100_dbv1.syldb")
+SYLPH_VIRAL_C       = config.get("sylph_viral_c", 100)
+SYLPH_VIRAL_TAX_NAME = config.get("sylph_viral_tax_name", "UHGV")
+
+
+## Download the UHGV viral database
+rule dl_sylph_viral_DB:
+    output:
+        db = sylphDB_dir + "/" + SYLPH_VIRAL_DB_NAME
+    conda:
+        workflow.basedir + "/Workflow/envs/sylph.yaml"
+    container:
+        get_container("sylph")
+    params:
+        db_dir = sylphDB_dir,
+        url = SYLPH_VIRAL_DB_URL
+    resources:
+        mem_mb = 4000,
+        runtime = 120
+    threads: 2
+    log:
+        log_dir + "/sylph/viral_database_dl.log"
+    shell:
+        """
+        mkdir -p {params.db_dir}
+        mkdir -p $(dirname {log})
+        if [ ! -f "{output.db}" ]; then
+            wget -O {output.db} {params.url} 2> {log}
+        else
+            echo "Sylph viral database already exists, skipping download" > {log}
+        fi
+        """
+
+
+## Profile against the viral database (note the -c flag must match the db)
+rule sylph_profile_viral:
+    input:
+        sketch = sylph_dir + "/sketches/{sample}.paired.sylsp",
+        db = sylphDB_dir + "/" + SYLPH_VIRAL_DB_NAME
+    output:
+        profile = sylph_dir + "/viral/{sample}_viral_profile.tsv"
+    conda:
+        workflow.basedir + "/Workflow/envs/sylph.yaml"
+    container:
+        get_container("sylph")
+    params:
+        c = SYLPH_VIRAL_C
+    threads: get_threads("sylph")
+    resources:
+        mem_mb = 16000,
+        runtime = 120
+    log:
+        log_dir + "/sylph/{sample}_viral_profile.log"
+    shell:
+        """
+        mkdir -p $(dirname {output.profile})
+        mkdir -p $(dirname {log})
+        sylph profile \
+            {input.db} \
+            {input.sketch} \
+            -c {params.c} \
+            -t {threads} \
+            -o {output.profile} 2> {log}
+        """
+
+
+## Add taxonomic labels to the viral profile
+rule sylph_taxprof_viral:
+    input:
+        profile = sylph_dir + "/viral/{sample}_viral_profile.tsv",
+        tax = sylphDB_dir + "/.sylph_tax_downloaded"
+    output:
+        taxprof = sylph_dir + "/viral/{sample}_viral_taxprof.tsv"
+    conda:
+        workflow.basedir + "/Workflow/envs/sylph.yaml"
+    container:
+        get_container("sylph")
+    params:
+        tax_name = SYLPH_VIRAL_TAX_NAME,
+        prefix = sylph_dir + "/viral/{sample}_viral_taxprof"
+    resources:
+        mem_mb = 8000,
+        runtime = 60
+    threads: 1
+    log:
+        log_dir + "/sylph/{sample}_viral_taxprof.log"
+    shell:
+        """
+        mkdir -p $(dirname {output.taxprof})
+        mkdir -p $(dirname {log})
+        sylph-tax taxprof \
+            {input.profile} \
+            -t {params.tax_name} \
+            -o {params.prefix} 2> {log}
+
+        if [ ! -f "{output.taxprof}" ]; then
+            produced=$(ls {params.prefix}* 2>/dev/null | head -1)
+            if [ -n "$produced" ]; then mv "$produced" {output.taxprof}; fi
+        fi
+        """
+
+
+## Merge all viral profiles into one table
+rule sylph_merge_viral:
+    input:
+        taxprofs = expand(sylph_dir + "/viral/{sample}_viral_taxprof.tsv", sample=SAMPLES)
+    output:
+        merged = sylph_dir + "/table/sylph_viral_merged_abundance.tsv"
+    conda:
+        workflow.basedir + "/Workflow/envs/sylph.yaml"
+    container:
+        get_container("sylph")
+    resources:
+        mem_mb = 8000,
+        runtime = 60
+    threads: 1
+    log:
+        log_dir + "/sylph/viral_merge.log"
     shell:
         """
         mkdir -p $(dirname {output.merged})
