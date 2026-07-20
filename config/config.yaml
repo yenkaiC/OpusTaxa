@@ -79,6 +79,9 @@ params:
     min_score: 0.7             # --min-score, minimum confidence score (0-1)
     min_number_genes: 1        # --min-number-genes, minimum genes to classify as plasmid/virus
 
+sylph_db_name: "gtdb-r220-c200-dbv1.syldb"
+sylph_db_url: "http://faust.compbio.cs.cmu.edu/sylph-stuff/gtdb-r220-c200-dbv1.syldb"
+sylph_tax_name: "GTDB_r220"
   # ============================================================================
 # Container Configuration for Singularity (E.g. Pawsey Setonix)
 # ============================================================================
