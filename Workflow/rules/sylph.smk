@@ -107,6 +107,8 @@ rule sylph_profile:
         db = sylphDB_dir + "/" + SYLPH_DB_NAME
     output:
         profile = sylph_dir + "/{sample}_profile.tsv"
+    wildcard_constraints:
+        sample = r"[^/]+"          # no slashes — prevents matching viral/... paths
     conda:
         workflow.basedir + "/Workflow/envs/sylph.yaml"
     container:
@@ -136,6 +138,8 @@ rule sylph_taxprof:
         tax = sylphDB_dir + "/.sylph_tax_downloaded"
     output:
         taxprof = sylph_dir + "/{sample}_taxprof.tsv"
+    wildcard_constraints:
+        sample = r"[^/]+"          # no slashes — prevents matching viral/... paths
     conda:
         workflow.basedir + "/Workflow/envs/sylph.yaml"
     container:
