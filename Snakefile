@@ -20,6 +20,7 @@ include: workflow.basedir + "/Workflow/rules/strainphlan.smk"
 include: workflow.basedir + "/Workflow/rules/prodigal_gv.smk"
 include: workflow.basedir + "/Workflow/rules/genomad.smk"
 include: workflow.basedir + "/Workflow/rules/hecatomb.smk"
+include: workflow.basedir + "/Workflow/rules/sylph.smk"
 
 
 ## Define Outputs
@@ -101,6 +102,10 @@ rule all:
         
         # Hecatomb
         expand(os.path.join(hecatomb_dir, "{sample}.hecatomb.tsv"), sample=SAMPLES) if run_hecatomb else [],
+
+        # Sylph taxonomic profiling
+        expand(sylph_dir + "/{sample}_taxprof.tsv", sample=SAMPLES) if run_sylph else [],
+        sylph_dir + "/table/sylph_merged_abundance.tsv" if run_sylph else [],
         
 
 
@@ -109,7 +114,6 @@ print("Config values:")
 print(f"  Test files: {run_test}")
 print(f"  SRA download: {download_sra}")
 print(f"  MetaPhlAn: {run_metaphlan}")
-print(f"  StrainPhlAn: {run_strainphlan}")
 print(f"  SingleM: {run_singlem}")
 print(f"  Kraken2: {run_kraken2}")
 print(f"  HUMAnN: {run_humann}")
@@ -120,3 +124,4 @@ print(f"  AntiSMASH: {run_antismash}")
 print(f"  Prodigal-GV: {run_prodigalgv}")
 print(f"  Hecatomb: {run_hecatomb}")
 print(f"  geNomad: {run_genomad}")
+print(f"  Sylph: {run_sylph}")

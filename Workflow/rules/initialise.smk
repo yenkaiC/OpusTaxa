@@ -7,6 +7,7 @@ singlemDB_dir = DB_dir + "/singlem"
 humannDB_dir = DB_dir + "/humann"
 kraken2DB_dir = DB_dir + "/kraken2"
 cardDB_dir = DB_dir + "/card"
+sylphDB_dir = DB_dir + "/sylph"
 # File locations
 input_dir = config.get('inputFastQDirectory', config['rawFastQDirectory']) # Use inputFastQDirectory if provided, otherwise fall back to rawFastQDirectory
 clean_dir = config['trimmedFastQDirectory']
@@ -26,6 +27,7 @@ hecatomb_dir = config["hecatombDirectory"]
 
 prodigalgv_dir = config.get('prodigalGVDirectory', 'Data/ProdigalGV')
 genomad_dir = config.get('genomadDirectory', 'Data/geNomad')
+sylph_dir = config.get('sylphDirectory', 'Data/Sylph')
 
 
 # Quality Control
@@ -54,6 +56,7 @@ run_rgi = str(config.get("rgi", True)).lower() not in ("false", "0", "no")
 run_hecatomb = str(config.get("hecatomb_run", False)).lower() not in ("false", "0", "no")
 run_prodigalgv = str(config.get("prodigal_gv", False)).lower() not in ("false", "0", "no")
 run_genomad = str(config.get("genomad", False)).lower() not in ("false", "0", "no")
+run_sylph = str(config.get("sylph", False)).lower() not in ("false", "0", "no")
 
 def get_param(tool, key, default=None):
     """Safely fetch a nested param from config with fallback."""

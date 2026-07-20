@@ -20,6 +20,7 @@ slurmLogDirectory: logs/slurm
 strainphlanDirectory: "Data/StrainPhlAn"
 prodigalGVDirectory: "Data/ProdigalGV"
 genomadDirectory: "Data/geNomad"
+sylphDirectory: "Data/Sylph"
 
 # Flags
 test_mode: false
@@ -37,6 +38,7 @@ strainphlan_species: []
 hecatomb_run: false
 prodigal_gv: false
 genomad: false
+sylph: false 
 
 # Thread allocations for each tool (users can customize these)
 threads:
@@ -51,6 +53,7 @@ threads:
   rgi: 10
   antismash: 16
   genomad: 8
+  "sylph": 10
 
 # ==============================================================================
 # Tool parameters — edit these to customise tool behaviour
