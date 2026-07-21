@@ -208,7 +208,7 @@ rule sylph_merge_ani:
     resources:
         mem_mb = 20000,
         runtime = 60
-    threads: 1
+    threads: 4
     log:
         log_dir + "/sylph/merge_ani.log"
     shell:
@@ -239,9 +239,9 @@ rule dl_sylph_viral_DB:
         db_dir = sylphDB_dir,
         url = SYLPH_VIRAL_DB_URL
     resources:
-        mem_mb = 4000,
-        runtime = 120
-    threads: 2
+        mem_mb = 6000,
+        runtime = 200
+    threads: 4
     log:
         log_dir + "/sylph/viral_database_dl.log"
     shell:
@@ -271,8 +271,8 @@ rule sylph_profile_viral:
         c = SYLPH_VIRAL_C
     threads: get_threads("sylph")
     resources:
-        mem_mb = 16000,
-        runtime = 120
+        mem_mb = 22000,
+        runtime = 240
     log:
         log_dir + "/sylph/{sample}_viral_profile.log"
     shell:
@@ -303,9 +303,9 @@ rule sylph_taxprof_viral:
         tax_name = SYLPH_VIRAL_TAX_NAME,
         prefix = sylph_dir + "/viral/{sample}_viral_taxprof"
     resources:
-        mem_mb = 8000,
+        mem_mb = 12000,
         runtime = 60
-    threads: 1
+    threads: 4
     log:
         log_dir + "/sylph/{sample}_viral_taxprof.log"
     shell:
@@ -335,9 +335,9 @@ rule sylph_merge_viral:
     container:
         get_container("sylph")
     resources:
-        mem_mb = 8000,
-        runtime = 60
-    threads: 1
+        mem_mb = 20000,
+        runtime = 80
+    threads: 4
     log:
         log_dir + "/sylph/viral_merge.log"
     shell:
