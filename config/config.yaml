@@ -86,7 +86,7 @@ sylph_tax_name: "GTDB_r232"
 sylph_viral_db_name: "uhgv_c100_dbv1.syldb"
 sylph_viral_db_url: "http://faust.compbio.cs.cmu.edu/sylph-stuff/uhgv_c100_dbv1.syldb"
 sylph_viral_c: 100
-sylph_viral_tax_name: "UHGV-default"
+sylph_viral_tax_name: "UHGV_default"
   # ============================================================================
 # Container Configuration for Singularity (E.g. Pawsey Setonix)
 # ============================================================================
