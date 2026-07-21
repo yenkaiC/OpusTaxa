@@ -190,7 +190,32 @@ rule sylph_merge:
         """
         mkdir -p $(dirname {output.merged})
         mkdir -p $(dirname {log})
-        sylph-tax merge {input.taxprofs} -o {output.merged} 2> {log}
+        sylph-tax merge {input.taxprofs} --column relative_abundance -o {output.merged} 2> {log}
+        """
+
+## Merge all taxonomic profiles into an ANI table
+rule sylph_merge_ani:
+    input:
+        taxprofs = expand(sylph_dir + "/{sample}_taxprof.tsv", sample=SAMPLES)
+    output:
+        merged = sylph_dir + "/table/sylph_merged_ani.tsv"
+    conda:
+        workflow.basedir + "/Workflow/envs/sylph.yaml"
+    container:
+        get_container("sylph")
+    wildcard_constraints:
+        sample = r"[^/]+"
+    resources:
+        mem_mb = 20000,
+        runtime = 60
+    threads: 1
+    log:
+        log_dir + "/sylph/merge_ani.log"
+    shell:
+        """
+        mkdir -p $(dirname {output.merged})
+        mkdir -p $(dirname {log})
+        sylph-tax merge {input.taxprofs} --column ANI -o {output.merged} 2> {log}
         """
 
 ## Viral Sylph
@@ -319,5 +344,5 @@ rule sylph_merge_viral:
         """
         mkdir -p $(dirname {output.merged})
         mkdir -p $(dirname {log})
-        sylph-tax merge {input.taxprofs} -o {output.merged} 2> {log}
+        sylph-tax merge {input.taxprofs} --column relative_abundance -o {output.merged} 2> {log}
         """
