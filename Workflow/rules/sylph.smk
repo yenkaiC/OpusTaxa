@@ -27,8 +27,8 @@ rule dl_sylph_DB:
         url = SYLPH_DB_URL
     resources:
         mem_mb = 30000,
-        runtime = 480
-    threads: 2
+        runtime = 880
+    threads: 4
     log:
         log_dir + "/sylph/database_dl.log"
     shell:
