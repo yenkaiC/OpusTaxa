@@ -315,11 +315,17 @@ rule sylph_taxprof_viral:
         sylph-tax taxprof \
             {input.profile} \
             -t {params.tax_name} \
+            -a \
             -o {params.prefix} 2> {log}
 
-        if [ ! -f "{output.taxprof}" ]; then
-            produced=$(ls {params.prefix}* 2>/dev/null | head -1)
-            if [ -n "$produced" ]; then mv "$produced" {output.taxprof}; fi
+        # sylph-tax writes '<prefix><sample>.sylphmpa'; find it and normalise the name
+        produced=$(ls {params.prefix}*.sylphmpa 2>/dev/null | head -1 || true)
+        if [ -n "$produced" ]; then
+            mv "$produced" {output.taxprof}
+        else
+            # No viral taxa annotated (e.g. empty/low-content profile) — write empty output
+            echo "# No viral taxa annotated for this sample" > {output.taxprof}
+            echo "sylph-tax produced no .sylphmpa output; wrote placeholder" >> {log}
         fi
         """
 
