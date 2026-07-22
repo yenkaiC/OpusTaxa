@@ -350,5 +350,19 @@ rule sylph_merge_viral:
         """
         mkdir -p $(dirname {output.merged})
         mkdir -p $(dirname {log})
-        sylph-tax merge {input.taxprofs} --column relative_abundance -o {output.merged} 2> {log}
+
+        # Keep only real taxprof files (skip empty placeholders that start with '#')
+        real_files=""
+        for f in {input.taxprofs}; do
+            if [ -s "$f" ] && ! head -1 "$f" | grep -q '^#'; then
+                real_files="$real_files $f"
+            fi
+        done
+
+        if [ -n "$real_files" ]; then
+            sylph-tax merge $real_files --column relative_abundance -o {output.merged} 2> {log}
+        else
+            echo "# No viral taxa across any sample — nothing to merge" > {output.merged}
+            echo "All viral taxprof files were empty placeholders" > {log}
+        fi
         """
