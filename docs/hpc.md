@@ -1,5 +1,7 @@
 # Running OpusTaxa on an HPC (SLURM)
 
+> **On Pawsey / Setonix?** See the beginner-friendly [Pawsey (Setonix) guide](pawsey.md) for a step-by-step walkthrough.
+
 This guide covers running OpusTaxa on a SLURM-managed HPC cluster. If you are running on a local workstation or laptop, see [local.md](local.md) instead.
 
 
