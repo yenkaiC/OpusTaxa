@@ -1,10 +1,10 @@
 # Running OpusTaxa on Pawsey (Setonix) — A Beginner's Guide
 
-This is a step-by-step, "for dummies" walkthrough for running OpusTaxa on **Pawsey's Setonix** supercomputer. It assumes you have a Pawsey account and can log in via SSH, but assumes **no prior Snakemake, SLURM, or HPC experience**.
+This is a step-by-step walkthrough for running OpusTaxa on **Pawsey's Setonix** supercomputer. It assumes you have a Pawsey account and can log in via SSH, but assumes **no prior Snakemake, SLURM, or HPC experience**.
 
 For the general (non-Pawsey) SLURM guide, see [hpc.md](hpc.md).
 
-> **Setonix in one paragraph:** Setonix is a SLURM-managed cluster with a Lustre parallel filesystem. It has three important storage locations — `$HOME` (tiny, for config files only), `$MYSOFTWARE` (for software you install), and `$MYSCRATCH` (large, temporary, auto-purged after 30 days of inactivity). Setonix strongly prefers **Singularity/Apptainer containers** over conda because conda creates tens of thousands of small files that overwhelm Lustre. This guide uses containers as the default path.
+> **Setonix in one paragraph:** Setonix is a SLURM-managed cluster with a Lustre parallel filesystem. It has three important storage locations — `$HOME` (tiny, for config files only), `$MYSOFTWARE` (for software you install), and `$MYSCRATCH` (large, temporary, auto-purged after 21 days of inactivity). Setonix strongly prefers **Singularity/Apptainer containers** over conda because conda creates tens of thousands of small files that overwhelm Lustre. This guide uses containers as the default path.
 
 ---
 
@@ -14,7 +14,7 @@ For the general (non-Pawsey) SLURM guide, see [hpc.md](hpc.md).
 |----------|----------|-----------|-----------------------|
 | Home | `$HOME` | SSH keys, small config files | Anything large — the quota is very small |
 | Software | `$MYSOFTWARE` | Miniconda **only** | Raw sequencing data, the OpusTaxa repo |
-| Scratch | `$MYSCRATCH` | The OpusTaxa repo, input FASTQ, databases, all pipeline output | Long-term storage — files are **auto-deleted** after 30 days |
+| Scratch | `$MYSCRATCH` | The OpusTaxa repo, input FASTQ, databases, all pipeline output | Long-term storage — files are **auto-deleted** after 21 days |
 
 Two rules to remember: install **conda into `$MYSOFTWARE`** (installing into `$HOME` hits the quota — the number-one Setonix mistake), and **clone OpusTaxa and keep all your data on `$MYSCRATCH`**.
 
@@ -27,13 +27,11 @@ Two rules to remember: install **conda into `$MYSOFTWARE`** (installing into `$H
 ssh yourusername@setonix.pawsey.org.au
 ```
 
-You'll install conda into `$MYSOFTWARE` (Step 2) but clone OpusTaxa and run everything from `$MYSCRATCH` (Step 3 onward).
-
 ---
 
 ## Step 2 — Install conda (into `$MYSOFTWARE`)
 
-Setonix does not provide conda as a module, so you install your own Miniconda. **This must go in `$MYSOFTWARE`, not `$HOME`** — your home quota is too small to hold a conda installation.
+**Conda must go in `$MYSOFTWARE`, not `$HOME`** — your home quota is too small to hold a conda installation.
 
 ```bash
 cd $MYSOFTWARE
@@ -55,10 +53,10 @@ conda init
 
 ---
 
-## Step 3 — Standard installation (clone, environment, executor plugin)
+## Step 3 — Standard installation of OpusTaxa
 
 ```bash
-# Clone into scratch, NOT $MYSOFTWARE
+# Clone into scratch, NOT $MYSOFTWARE (you can create your folders/directories here)
 cd $MYSCRATCH
 
 # 1. Clone the OpusTaxa repository
@@ -87,7 +85,7 @@ screen -S opustaxa
 # Inside the session, re-activate your environment
 conda activate snakemake
 
-# Detach at any time: press Ctrl+A, then D
+# Detach at any time: press Ctrl+A, then D <-- Remember!
 # Reattach later:     screen -r opustaxa
 ```
 
@@ -141,6 +139,8 @@ snakemake --workflow-profile config/slurm_singularity \
 # Point at input FASTQ living on scratch
 snakemake --workflow-profile config/slurm_singularity \
     --config inputFastQDirectory=$MYSCRATCH/myproject/fastq
+
+# remember that /scratch has a 21 day deletion policy
 ```
 
 ### Common toggles
