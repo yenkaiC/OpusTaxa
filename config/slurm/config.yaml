@@ -1,6 +1,6 @@
 # Executor settings
 executor: slurm
-jobs: 50
+jobs: 5 # Edit to adjust number of maximum jobs
 
 # Default resources for all jobs
 default-resources:

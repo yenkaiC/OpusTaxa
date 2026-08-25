@@ -14,7 +14,7 @@ latency-wait: 120
 restart-times: 1
 
 # Bind-mount /scratch and /software so containers can see data and databases
-singularity-args: "-B /scratch -B /software"
+singularity-args: "-B /scratch -B /software --pwd $(pwd)"
 
 # SLURM defaults
 default-resources:
