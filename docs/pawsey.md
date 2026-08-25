@@ -73,8 +73,32 @@ pip install snakemake-executor-plugin-slurm
 ```
 
 ---
+## Step 4 — Specify your Pawsey project
 
-## Step 4 — Start a persistent `screen` session
+Every SLURM job must be charged to a project allocation. Setonix won't run your jobs until you tell it which project code to bill. Your project code looks like `pawseyXXXX` (e.g. `pawsey1234`) — it's the same code that appears in your `$MYSCRATCH` path (`/scratch/pawseyXXXX/yourusername`).
+
+Open the SLURM profile config and set your account:
+
+```bash
+nano config/slurm_singularity/config.yaml
+```
+
+Find the `slurm_account` line under `default-resources` and replace the placeholder with your project code:
+
+```yaml
+default-resources:
+  - "slurm_account=pawseyXXXX"     # <-- change to YOUR project code
+  - "slurm_partition=work"
+  ...
+```
+
+> **How to find your project code** if you're unsure: run `echo $MYSCRATCH` — the `pawseyXXXX` part of the path is your project. Or run `sacctmgr show assoc user=$(whoami) format=account%20` to list the projects you can charge to.
+
+> **Why this matters:** if the account is wrong or left as someone else's code, your jobs will either be rejected at submission or silently charged to the wrong allocation.
+
+---
+
+## Step 5 — Start a persistent `screen` session
 
 Snakemake must keep running on the **login node** for the whole job — it submits and monitors SLURM jobs on your behalf. If your SSH connection drops, Snakemake dies with it. A `screen` session keeps it alive.
 
@@ -88,12 +112,13 @@ conda activate snakemake
 # Detach at any time: press Ctrl+A, then D <-- Remember!
 # Reattach later:     screen -r opustaxa
 ```
+> **Create the session once, then reattach — don't re-create it.** Run `screen -S opustaxa` only the *first* time. To get back into it later, always use `screen -r opustaxa`. If you run `screen -S opustaxa` again, you'll start a **second, empty** session instead of returning to your running pipeline, and `screen -r` will then complain there are multiple sessions to choose from. If you're ever unsure whether you already have one, run `screen -ls` to list your sessions before creating a new one.
 
 > **Never** submit Snakemake itself as an `sbatch` job. It is the orchestrator — it needs to stay on the login node.
 
 ---
 
-## Step 5 — Load the Singularity module
+## Step 6 — Load the Singularity module
 
 Setonix provides Singularity as a module. Load the SLURM-aware build:
 
@@ -106,7 +131,7 @@ module load singularity/4.1.0-slurm
 
 ---
 
-## Step 6 — Dry-run with the singularity profile
+## Step 7 — Dry-run with the singularity profile
 
 A dry-run shows you every step Snakemake *would* run, without actually running anything. Always do this first to confirm your setup is correct.
 
@@ -120,17 +145,16 @@ If this prints a list of jobs and ends without errors, you are ready to run.
 
 ---
 
-## Step 7 — Full run with module toggles
+## Step 8 — Full run with module toggles
 
 Once the dry-run looks good, drop the `--dry-run` flag to launch for real. All optional modules are switched on/off with `--config` flags — add as many as you need to the same command.
 
 ```bash
-# Simplest full run (fastp, NoHuman, QC always on; MetaPhlAn + SingleM by default)
+# Simplest full run (fastp, NoHuman, QC only)
 snakemake --workflow-profile config/slurm_singularity
 
 # Download SRA accessions listed in sra_id.txt, then run
-snakemake --workflow-profile config/slurm_singularity \
-    --config download_sra=true
+snakemake --workflow-profile config/slurm_singularity --config download_sra=true
 
 # Turn on additional modules
 snakemake --workflow-profile config/slurm_singularity \
@@ -153,13 +177,13 @@ snakemake --workflow-profile config/slurm_singularity \
 | HUMAnN functional profiling | `humann=true` |
 | Resistance genes (RGI/CARD) | `rgi=true` |
 | antiSMASH | `antismash=true` |
-| Turn MetaPhlAn off | `metaphlan=false` |
+| Turn MetaPhlAn on | `metaphlan=true` |
 
 > **Bind mounts:** `config/slurm_singularity/config.yaml` binds `/scratch` and `/software` into each container. On Setonix these map to your `$MYSCRATCH` and `$MYSOFTWARE` — the defaults should work, but if a job can't see your data, check the `singularity-args` bind paths (see [hpc.md](hpc.md#adjusting-containers-for-your-hpc)).
 
 ---
 
-## Step 8 — Detach and let it run
+## Step 9 — Detach and let it run
 
 With everything launched inside `screen`, detach and log off safely:
 
@@ -183,7 +207,7 @@ ssh yourusername@setonix.pawsey.org.au
 source $MYSOFTWARE/miniconda3/etc/profile.d/conda.sh   # if not auto-loaded
 cd $MYSCRATCH/OpusTaxa
 
-screen -S opustaxa
+screen -S opustaxa        # FIRST time only — afterwards use: screen -r opustaxa
 conda activate snakemake
 module load singularity/4.1.0-slurm
 
