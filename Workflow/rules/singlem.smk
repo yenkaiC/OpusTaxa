@@ -1,9 +1,12 @@
+## SingleM metapackage version — update this single line when SingleM releases a new metapackage
+SINGLEM_METAPACKAGE = "S6.5.0.GTDB_r232.metapackage_20260319.smpkg.zb"
+
 ## Download SingleM Database
 rule dl_singlem_DB:
     params:
         db_dir = singlemDB_dir
     output:
-        directory(singlemDB_dir + "/S6.5.0.GTDB_r232.metapackage_20260319.smpkg.zb")
+        directory(singlemDB_dir + "/" + SINGLEM_METAPACKAGE)
     conda: 
         workflow.basedir + '/Workflow/envs/singlem.yaml'
     container:
@@ -23,7 +26,7 @@ rule singlem_profile:
     input:
         r1 = nohuman_dir + "/{sample}_R1_001.fastq.gz",
         r2 = nohuman_dir + "/{sample}_R2_001.fastq.gz",
-        db = singlemDB_dir + "/S6.5.0.GTDB_r232.metapackage_20260319.smpkg.zb"
+        db = singlemDB_dir + "/" + SINGLEM_METAPACKAGE
     output:
         profile = singlem_dir + "/{sample}_profile.tsv",
         otu_table = singlem_dir + "/{sample}_otu-table.tsv"
@@ -55,7 +58,7 @@ rule singlem_extra:
     input:
         r1 = nohuman_dir + "/{sample}_R1_001.fastq.gz",
         r2 = nohuman_dir + "/{sample}_R2_001.fastq.gz",
-        db = singlemDB_dir + "/S6.5.0.GTDB_r232.metapackage_20260319.smpkg.zb",
+        db = singlemDB_dir + "/" + SINGLEM_METAPACKAGE,
         profile = singlem_dir + "/{sample}_profile.tsv"
     output:
         species_by_site = singlem_dir + "/{sample}_species_by_site.tsv",
