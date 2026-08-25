@@ -103,7 +103,7 @@ containers:
   fastp:      "oras://quay.io/yenkai_chen_id/opustaxa_fastp:0.0.0"
   fastqc:     "oras://quay.io/yenkai_chen_id/opustaxa_fastqc:0.0.0"
   multiqc:    "oras://quay.io/yenkai_chen_id/opustaxa_multiqc:0.0.0"
-  singlem:    "oras://quay.io/yenkai_chen_id/opustaxa_singlem:0.0.0"
+  singlem:    "oras://quay.io/yenkai_chen_id/opustaxa_singlem:0.0.1"
   sra:        "oras://quay.io/yenkai_chen_id/opustaxa_sra:0.0.0"
   metaspades: "oras://quay.io/yenkai_chen_id/opustaxa_metaspades:0.0.0"
   rgi:        "oras://quay.io/yenkai_chen_id/opustaxa_rgi:0.0.0"
