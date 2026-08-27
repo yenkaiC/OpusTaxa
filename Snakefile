@@ -7,6 +7,7 @@ include: workflow.basedir + "/Workflow/rules/initialise.smk"
 include: workflow.basedir + "/Workflow/rules/sra.smk"
 include: workflow.basedir + "/Workflow/rules/fastp.smk"
 include: workflow.basedir + "/Workflow/rules/nohuman.smk"
+include: workflow.basedir + "/Workflow/rules/nonpareil.smk"
 include: workflow.basedir + "/Workflow/rules/metaphlan.smk"
 include: workflow.basedir + "/Workflow/rules/singlem.smk"
 include: workflow.basedir + "/Workflow/rules/kraken2.smk"
@@ -41,6 +42,11 @@ rule all:
         multiqc_dir + "/raw_multiqc_report.html",
         multiqc_dir + "/fastp_multiqc_report.html",
         multiqc_dir + "/nohuman_multiqc_report.html",
+
+        # Nonpareil coverage estimation
+        expand(nonpareil_dir + "/{sample}.npo", sample=SAMPLES) if run_nonpareil else [],
+        nonpareil_dir + "/table/nonpareil_summary.tsv" if run_nonpareil else [],
+        nonpareil_dir + "/table/nonpareil_curves.pdf" if run_nonpareil else [],
         
         ## Runs below can be conditional
         # SingleM
@@ -117,6 +123,7 @@ rule all:
 print("Config values:")
 print(f"  Test files: {run_test}")
 print(f"  SRA download: {download_sra}")
+print(f"  Nonpareil: {run_nonpareil}")
 print(f"  MetaPhlAn: {run_metaphlan}")
 print(f"  SingleM: {run_singlem}")
 print(f"  Kraken2: {run_kraken2}")

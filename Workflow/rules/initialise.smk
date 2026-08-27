@@ -89,16 +89,17 @@ def get_container(tool_name):
 # Thread configuration
 DEFAULT_THREADS = {
     "fastp": 10,
-    "nohuman": 8,
+    "nohuman": 9,
+    "nonpareil": 8,
     "fastqc": 4,
-    "metaphlan": 8,
-    "singlem": 10,
-    "kraken2": 8,
-    "humann": 10,
-    "metaspades": 12,
-    "rgi": 10,
+    "metaphlan": 10,
+    "singlem": 12,
+    "kraken2": 10,
+    "humann": 12,
+    "metaspades": 14,
+    "rgi": 14,
     "antismash": 16,
-    "prodigal_gv": 8,
+    "prodigal_gv": 12,
     "genomad": 8
 }
 
