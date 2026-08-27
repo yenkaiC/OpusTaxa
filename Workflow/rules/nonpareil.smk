@@ -8,6 +8,7 @@
 ## with near-identical coverage/diversity estimates (Rodriguez-R et al. 2018).
 
 nonpareil_dir = config.get('nonpareilDirectory', 'Data/Nonpareil')
+nonpareil_report_dir = config.get('nonpareilReportDirectory', 'Report/Nonpareil')
 run_nonpareil = str(config.get("nonpareil", False)).lower() not in ("false", "0", "no")
 
 # Kernel: "kmer" (recommended, fast) or "alignment". fastq is recommended for kmer.
@@ -60,8 +61,8 @@ rule nonpareil_report:
     input:
         npo = expand(nonpareil_dir + "/{sample}.npo", sample=SAMPLES)
     output:
-        table = nonpareil_dir + "/table/nonpareil_summary.tsv",
-        plot  = nonpareil_dir + "/table/nonpareil_curves.pdf"
+        table = nonpareil_report_dir + "/table/nonpareil_summary.tsv",
+        plot  = nonpareil_report_dir + "/table/nonpareil_curves.pdf"
     conda:
         workflow.basedir + "/Workflow/envs/nonpareil.yaml"
     container:

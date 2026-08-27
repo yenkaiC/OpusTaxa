@@ -45,8 +45,8 @@ rule all:
 
         # Nonpareil coverage estimation
         expand(nonpareil_dir + "/{sample}.npo", sample=SAMPLES) if run_nonpareil else [],
-        nonpareil_dir + "/table/nonpareil_summary.tsv" if run_nonpareil else [],
-        nonpareil_dir + "/table/nonpareil_curves.pdf" if run_nonpareil else [],
+        nonpareil_report_dir + "/table/nonpareil_summary.tsv" if run_nonpareil else [],
+        nonpareil_report_dir + "/table/nonpareil_curves.pdf" if run_nonpareil else [],
         
         ## Runs below can be conditional
         # SingleM
