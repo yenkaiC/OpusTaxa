@@ -8,7 +8,7 @@
 ## with near-identical coverage/diversity estimates (Rodriguez-R et al. 2018).
 
 nonpareil_dir = config.get('nonpareilDirectory', 'Data/Nonpareil')
-nonpareil_report_dir = config.get('nonpareilReportDirectory', 'Report/Nonpareil')
+nonpareil_report_dir = config.get('nonpareilReportDirectory', 'Reports/Nonpareil')
 run_nonpareil = str(config.get("nonpareil", False)).lower() not in ("false", "0", "no")
 
 # Kernel: "kmer" (recommended, fast) or "alignment". fastq is recommended for kmer.
