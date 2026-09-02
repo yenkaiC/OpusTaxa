@@ -7,7 +7,7 @@
 ## The k-mer kernel is used by default: ~300x faster than the alignment kernel
 ## with near-identical coverage/diversity estimates (Rodriguez-R et al. 2018).
 
-nonpareil_dir = config.get('nonpareilDirectory', 'Data/Nonpareil')
+nonpareil_dir = config.get('nonpareilDirectory', 'Reports/Nonpareil/npo')
 nonpareil_report_dir = config.get('nonpareilReportDirectory', 'Reports/Nonpareil')
 run_nonpareil = str(config.get("nonpareil", False)).lower() not in ("false", "0", "no")
 
