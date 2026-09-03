@@ -80,6 +80,10 @@ params:
     min_score: 0.7             # --min-score, minimum confidence score (0-1)
     min_number_genes: 1        # --min-number-genes, minimum genes to classify as plasmid/virus
 
+
+## Utilise customised database
+metaphlan_index: "mpa_vJan25_CHOCOPhlAnSGB_202503"   # override with your DB's basename
+
 sylph_db_name: "gtdb-r232-c200-dbv1.syldb"
 sylph_db_url: "http://faust.compbio.cs.cmu.edu/sylph-stuff/gtdb-r232-c200-dbv1.syldb"
 sylph_tax_name: "GTDB_r232"

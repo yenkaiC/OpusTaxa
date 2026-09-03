@@ -1,3 +1,5 @@
+METAPHLAN_INDEX = config.get("metaphlan_index", "mpa_vJan25_CHOCOPhlAnSGB_202503")
+
 ## Download metaphylan Database
 rule dl_metaphlan_DB:
     output: 
@@ -47,7 +49,7 @@ rule metaphlan:
         metaphlan {input.r1},{input.r2} \
             --input_type fastq \
             --nproc {threads} \
-            --index "mpa_vJan25_CHOCOPhlAnSGB_202503" \
+            --index "{METAPHLAN_INDEX}" \
             --db_dir {params.db_dir} \
             --mapout {output.bowtie} \
             -o {output.profile} \
