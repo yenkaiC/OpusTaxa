@@ -128,7 +128,7 @@ snakemake --workflow-profile config/slurm \
 ### Database Size (Uncompressed)
 - NoHuman: ~5.9 GB (As of February 2026)
 - MetaPhlAn: ~34 GB ([Version 4.2.4 - mpa_vJan25_CHOCOPhlAnSGB_202503](https://github.com/biobakery/MetaPhlAn/wiki/MetaPhlAn-4.2))
-- SingleM: ~9.7 GB ([Version S5.4.0](https://zenodo.org/records/15232972))
+- SingleM: ~9.7 GB ([Version S6.5.0](https://zenodo.org/records/20150069))
 - HUMAnN: ~52 GB (HUMAnN 3.9)
 - Kraken2: 16 GB ([PlusPF-16](https://benlangmead.github.io/aws-indexes/k2))
 - RGI: ~16.8 GB (As of February 2026 [latest](https://card.mcmaster.ca/download))
