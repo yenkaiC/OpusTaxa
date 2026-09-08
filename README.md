@@ -3,7 +3,7 @@ OpusTaxa is an easy‑to‑use pipeline that helps you process shotgun metagenom
 
 OpusTaxa has built‑in integration with the Sequence Read Archive (SRA) API, which makes it straightforward to reanalyse published datasets alongside your own.
 
-<img src="/Misc/OpusTaxa_subway 23Feb2026.png" alt="OpusTaxa Subway Plot" title="OpusTaxa Subway Plot">
+<img src="/Misc/OpusTaxa_subway_31Aug2026.png" alt="OpusTaxa Subway Plot" title="OpusTaxa Subway Plot">
 
 ## Summary of pipeline
 1. **Public Dataset Downloading** with [SRA Toolkit](https://github.com/ncbi/sra-tools)
@@ -16,16 +16,20 @@ OpusTaxa has built‑in integration with the Sequence Read Archive (SRA) API, wh
 4. **Quality Reports** with [FastQC](https://github.com/s-andrews/FastQC)
     - Quality control reports at each step (raw, trimmed and filter)
     - Aggregates FastQC reports with [MultiQC](https://github.com/MultiQC/MultiQC)
+    - Coverage/redundancy estimation with [Nonpareil](https://github.com/lmrodriguezr/nonpareil)
 5. **Taxonomic Profiling** with
     - [Metaphylan](https://github.com/biobakery/MetaPhlAn)
     - [SingleM](https://wwood.github.io/singlem/)
     - [Kraken2](https://github.com/DerrickWood/kraken2) and [Bracken](https://github.com/jenniferlu717/Bracken)
+    - [Sylph](https://sylph-docs.github.io/) Also with **Average Nucleotide Identity (ANI)** and **sylph viral**(ideally prepped for viral capture)
 6. **Metagenomic Assembly** with [MetaSPAdes](https://github.com/ablab/spades)
-7. **Functional Profiling** with
+7. **Gene Prediction** with [Prodigal-GV](https://github.com/apcamargo/prodigal-gv)
+    - Gene/protein prediction on assembled contigs
+8. **Functional Profiling** with
     - [HUMAnN 3.9](https://huttenhower.sph.harvard.edu/humannn)
     - [RGI (Resistance Gene Identifier)](https://github.com/arpcard/rgi/tree/master)
     - [antiSMASH](https://github.com/antismash/antismash)
-8. **Inference Analysis** with [Microbial Load Predictor](https://github.com/grp-bork/microbial_load_predictor)
+9. **Inference Analysis** with [Microbial Load Predictor](https://github.com/grp-bork/microbial_load_predictor)
 
 ## Quick Start
 ```bash
@@ -89,16 +93,16 @@ SRR27916047
 > - [Running locally](docs/local.md)
 > - [Running on HPC / SLURM](docs/hpc.md) ← **start here if you are on a cluster**
 
-By default, MetaPhlAn and SingleM are enabled. Use `--config` to toggle modules or change settings:
+Use `--config` to toggle modules or change settings:
 
 ```bash
 # Local
 snakemake --use-conda --cores 16
-snakemake --use-conda --cores 16 --config metaphlan=false singlem=false # Example of a run where only QC was runned.
+snakemake --use-conda --cores 16 --config metaphlan=true # Example of a run where Metaphlan and QC was runned.
 
 # HPC / SLURM
 snakemake --workflow-profile config/slurm
-snakemake --workflow-profile config/slurm --config metaphlan=false singlem=true # Only run SingleM (and QC).
+snakemake --workflow-profile config/slurm --config singlem=true # Only run SingleM (and QC).
 ```
 
 ### 3. Access Results
@@ -118,6 +122,8 @@ OpusTaxa/
 │   │   ├── Table/          # Profile tables in different taxonomic orders
 │   ├── Kraken2/            
 │   │   ├── Table/          # Bracken table (relative-abundance)
+│   ├── Sylph/              
+│   │   ├── Table/          # # Sylph Average Nucleotide, taxonomic profiles
 │   ├── HUMAnN/
 │   │   ├── merged/         # Abundance tables of gene-families and pathways (normalised, stratified and unstratified)
 │   ├── MetaSPAdes/         # Metagenome Assemblies
@@ -132,10 +138,12 @@ OpusTaxa/
     │   ├── Step_1_Raw/
     │   ├── Step_2_FastP/
     │   └── Step_3_NoHuman/
-    └── MultiQC/            # Aggregated reports
-        ├── raw_multiqc_report.html
-        ├── fastp_multiqc_report.html
-        └── nohuman_multiqc_report.html
+    ├── MultiQC/            # Aggregated reports
+    │   ├── raw_multiqc_report.html
+    │   ├── fastp_multiqc_report.html
+    │   └── nohuman_multiqc_report.html
+    └── Nonpareil/
+        └── table/          # Coverage/redundancy tables and curves
 ```
 
 ## Resource Requirements

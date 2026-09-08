@@ -84,7 +84,7 @@ snakemake --use-conda --cores 16 --config download_sra=true
 
 # Enable additional modules
 snakemake --use-conda --cores 16 \
-    --config kraken2=true humann=true metaspades=true rgi=true antismash=true prodigal_gv=true
+    --config kraken2=true humann=true metaspades=true rgi=true antismash=true prodigal_gv=true nonpareil=true sylph=true sylph_viral=true
 
 # Disable MetaPhlAn, keep SingleM only
 snakemake --use-conda --cores 16 --config metaphlan=false singlem=true
@@ -103,9 +103,11 @@ Set `--cores` to the number of CPU cores available on your machine.
 | Quality control (fastp) | always on | On |
 | Host read removal (NoHuman) | always on | On |
 | QC reports (FastQC + MultiQC) | always on | On |
+| Sequence depth report (Nonpareil) | `nonpareil=false` | off |
 | Taxonomic profiling (MetaPhlAn 4) | `metaphlan=true/false` | Off |
 | Taxonomic profiling (SingleM) | `singlem=true/false` | Off |
 | Taxonomic profiling (Kraken2 + Bracken) | `kraken2=true` | Off |
+| Taxonomic profiling and ANI (Sylph) | `sylph=true` or `sylph_viral` | off|
 | Metagenome assembly (MetaSPAdes) | `metaspades=true` | Off |
 | Prodigal-gv | `prodigal_gv=true` | Off |
 | Functional profiling (HUMAnN 3) | `humann=true` | Off |
@@ -116,11 +118,12 @@ Set `--cores` to the number of CPU cores available on your machine.
 ### Database Size (Uncompressed)
 - NoHuman: ~5.9 GB (As of February 2026)
 - MetaPhlAn: ~34 GB ([Version 4.2.4 - mpa_vJan25_CHOCOPhlAnSGB_202503](https://github.com/biobakery/MetaPhlAn/wiki/MetaPhlAn-4.2))
-- SingleM: ~7 GB ([Version S5.4.0](https://zenodo.org/records/15232972))
+- SingleM: ~9.7 GB ([Version S6.5.0](https://zenodo.org/records/20150069))
 - HUMAnN: ~52 GB (HUMAnN 3.9)
 - Kraken2: 16 GB ([PlusPF-16](https://benlangmead.github.io/aws-indexes/k2))
 - RGI: ~16.8 GB (As of February 2026 [latest](https://card.mcmaster.ca/download))
 - AntiSMASH: ~ 9.4GB (Version 8.0.4)
+- Sylph: ~24.1 GB (GTDB r232), UHGV (0.4GB) [latest](https://sylph-docs.github.io/pre%E2%80%90built-databases/)
 
 Databases are **downloaded automatically** on first run (~140 GB total if all modules enabled).
 
