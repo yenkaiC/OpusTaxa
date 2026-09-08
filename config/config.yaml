@@ -119,4 +119,5 @@ containers:
   humann:     "oras://quay.io/yenkai_chen_id/opustaxa_humann:0.0.0"
   prodigal_gv: "oras://quay.io/yenkai_chen_id/opustaxa_prodigal_gv:0.0.0"
   nonpareil: "oras://quay.io/yenkai_chen_id/opustaxa_nonpareil:0.0.2"
+  sylph: "oras://quay.io/yenkai_chen_id/opustaxa_sylph:0.0.2"
   genomad: "/software/projects/<project>/<user>/containers/genomad.sif"

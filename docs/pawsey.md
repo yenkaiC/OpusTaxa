@@ -158,7 +158,7 @@ snakemake --workflow-profile config/slurm_singularity --config download_sra=true
 
 # Turn on additional modules
 snakemake --workflow-profile config/slurm_singularity \
-    --config kraken2=true humann=true metaspades=true rgi=true antismash=true prodigal_gv=true nonpareil=true
+    --config metaphlan=true kraken2=true humann=true metaspades=true rgi=true antismash=true prodigal_gv=true nonpareil=true sylph=true sylph_viral=true
 
 # Point at input FASTQ living on scratch
 snakemake --workflow-profile config/slurm_singularity \
