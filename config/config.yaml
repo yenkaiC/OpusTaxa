@@ -50,7 +50,7 @@ threads:
   singlem: 10
   kraken2: 8
   humann: 10
-  metaspades: 20
+  metaspades: 20        # metaspades speed peaks at 32 
   rgi: 10
   antismash: 16
   genomad: 8
