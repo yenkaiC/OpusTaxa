@@ -15,8 +15,8 @@ rule metaspades:
         mem_gb = lambda wildcards, resources: int(resources.mem_mb / 1000)
     threads: get_threads("metaspades")
     resources:
-        mem_mb = 100000,  # 100GB
-        runtime = 2880       # 48 hours
+        mem_mb = 200000,  # 100GB
+        runtime = 1439       # 48 hours
     log:
         log_dir + "/metaspades/{sample}.log"
     shell:
@@ -26,5 +26,6 @@ rule metaspades:
             "-t {threads} "
             "-m {params.mem_gb} "
             "-o {params.outdir} 2> {log}; "
+        "cp {params.outdir}/spades.log " + log_dir + "/metaspades/{wildcards.sample}_spades.log; "
         "cd {params.outdir}; "
         r"ls | grep -v -E '^(contigs\.fasta|scaffolds\.fasta)$' | xargs rm -rf; "
