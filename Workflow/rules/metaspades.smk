@@ -20,12 +20,27 @@ rule metaspades:
     log:
         log_dir + "/metaspades/{sample}.log"
     shell:
-        "spades.py --meta "
-            "-1 {input.r1} "
-            "-2 {input.r2} "
-            "-t {threads} "
-            "-m {params.mem_gb} "
-            "-o {params.outdir} 2> {log}; "
-        "cp {params.outdir}/spades.log " + log_dir + "/metaspades/{wildcards.sample}_spades.log; "
-        "cd {params.outdir}; "
-        r"ls | grep -v -E '^(contigs\.fasta|scaffolds\.fasta)$' | xargs rm -rf; "
+        """
+        set -euo pipefail
+
+        mkdir -p {params.outdir} $(dirname {log})
+
+        spades.py --meta \
+            -1 {input.r1} \
+            -2 {input.r2} \
+            -t {threads} \
+            -m {params.mem_gb} \
+            -o {params.outdir} 2> {log}
+
+        # Preserve the SPAdes internal log before cleanup
+        if [ -f "{params.outdir}/spades.log" ]; then
+            cp "{params.outdir}/spades.log" "$(dirname {log})/{wildcards.sample}_spades.log"
+        fi
+
+        # Cleanup scoped explicitly to {params.outdir} via find (no `cd`),
+        # so a failed path can never delete files in the working directory
+        find {params.outdir} -mindepth 1 -maxdepth 1 \
+            ! -name 'contigs.fasta' \
+            ! -name 'scaffolds.fasta' \
+            -exec rm -rf {{}} +
+        """
