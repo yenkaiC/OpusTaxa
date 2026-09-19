@@ -68,7 +68,7 @@ rule filter_contigs:
 rule antismash_contigs:
     input:
         fasta = metaspades_dir + "/{sample}/contigs_filtered.fasta",
-        db = "Database/antismash/.databases_downloaded"
+        db = DB_dir + "/antismash/.databases_downloaded"
     output:
         html = antismash_dir + "/{sample}/index.html",
         gbk = antismash_dir + "/{sample}/contigs_filtered.gbk",
@@ -88,7 +88,7 @@ rule antismash_contigs:
     threads: get_threads("antismash")
     resources:
         mem_mb = 32000,
-        runtime = 2880
+        runtime = 1439
     shell:
         """
         # Remove partial output from previous failed runs
@@ -117,8 +117,8 @@ rule antismash_summary_table:
     log:
         log_dir + "/antismash/summary_table.log"
     resources:
-        mem_mb = 8000,
+        mem_mb = 12000,
         runtime = 30
-    threads: 1
+    threads: 2
     script:
         workflow.basedir + "/Workflow/scripts/antismash_summary.py"
