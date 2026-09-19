@@ -111,7 +111,7 @@ containers:
   sra:        "oras://quay.io/yenkai_chen_id/opustaxa_sra:0.0.0"
   metaspades: "oras://quay.io/yenkai_chen_id/opustaxa_metaspades:0.0.0"
   rgi:        "oras://quay.io/yenkai_chen_id/opustaxa_rgi:0.0.0"
-  antismash:  "oras://quay.io/yenkai_chen_id/opustaxa_antismash:0.0.3"
+  antismash:  "oras://quay.io/yenkai_chen_id/opustaxa_antismash:0.0.4"
   mlp:        "oras://quay.io/yenkai_chen_id/opustaxa_mlp:0.0.0"
   nohuman:    "oras://quay.io/yenkai_chen_id/opustaxa_nohuman:0.0.0"
   metaphlan:  "oras://quay.io/yenkai_chen_id/opustaxa_metaphlan:0.0.0"
