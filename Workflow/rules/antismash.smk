@@ -95,6 +95,16 @@ rule antismash_contigs:
         if [ -d "{params.out_dir}" ]; then
             rm -rf {params.out_dir}
         fi
+
+        # Skip Negative controls / low-biomass samples as they have no contigs
+        if ! grep -q "^>" {input.fasta}; then
+            mkdir -p {params.out_dir}
+            echo "No contigs in {input.fasta} after length filtering; antiSMASH skipped" > {log}
+            echo '{{"records": []}}' > {output.json}
+            : > {output.gbk}
+            echo "<html><body>No contigs passed filtering; antiSMASH was not run.</body></html>" > {output.html}
+            exit 0
+        fi
         
         antismash \
             --taxon {params.taxon} \
