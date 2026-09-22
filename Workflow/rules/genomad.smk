@@ -48,7 +48,7 @@ rule genomad:
     container:
         get_container("genomad")
     params:
-        db_dir   = DB_dir + "/genomad/genomad_db",
+        db_dir   = ancient(DB_dir + "/genomad/.download_complete"),
         out_dir  = genomad_dir + "/{sample}",
         splits   = get_param("genomad", "splits", 8),
         min_score     = get_param("genomad", "min_score", 0.7),

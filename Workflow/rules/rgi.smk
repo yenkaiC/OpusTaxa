@@ -70,7 +70,7 @@ rule dl_card_DB:
 rule rgi_contigs:
     input:
         fasta = metaspades_dir + "/{sample}/contigs.fasta",
-        db = DB_dir + "/card/.download_complete"
+        db = ancient(DB_dir + "/card/.download_complete")
     output:
         txt = rgi_dir + "/{sample}/contigs/{sample}_rgi.txt",
         json = rgi_dir + "/{sample}/contigs/{sample}_rgi.json"

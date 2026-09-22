@@ -72,7 +72,7 @@ rule strainphlan:
             sample=SAMPLES
         ),
         db_markers = strainphlan_dir + "/db_markers/{species}.fna",
-        db         = metaphlanDB_dir + "/.download_complete"
+        db         = ancient(metaphlanDB_dir + "/.download_complete")
     output:
         tree = strainphlan_dir + "/output/{species}/RAxML_bestTree.{species}.StrainPhlAn4.tre"
     conda:

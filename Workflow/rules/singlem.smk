@@ -26,7 +26,7 @@ rule singlem_profile:
     input:
         r1 = nohuman_dir + "/{sample}_R1_001.fastq.gz",
         r2 = nohuman_dir + "/{sample}_R2_001.fastq.gz",
-        db = singlemDB_dir + "/" + SINGLEM_METAPACKAGE
+        db = ancient(singlemDB_dir + "/" + SINGLEM_METAPACKAGE)
     output:
         profile = singlem_dir + "/{sample}_profile.tsv",
         otu_table = singlem_dir + "/{sample}_otu-table.tsv"
@@ -58,7 +58,7 @@ rule singlem_extra:
     input:
         r1 = nohuman_dir + "/{sample}_R1_001.fastq.gz",
         r2 = nohuman_dir + "/{sample}_R2_001.fastq.gz",
-        db = singlemDB_dir + "/" + SINGLEM_METAPACKAGE,
+        db = ancient(singlemDB_dir + "/" + SINGLEM_METAPACKAGE),
         profile = singlem_dir + "/{sample}_profile.tsv"
     output:
         species_by_site = singlem_dir + "/{sample}_species_by_site.tsv",

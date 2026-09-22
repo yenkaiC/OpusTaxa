@@ -104,7 +104,7 @@ rule sylph_sketch:
 rule sylph_profile:
     input:
         sketch = sylph_dir + "/sketches/{sample}.paired.sylsp",
-        db = sylphDB_dir + "/" + SYLPH_DB_NAME
+        db = ancient(sylphDB_dir + "/" + SYLPH_DB_NAME)
     output:
         profile = sylph_dir + "/{sample}_profile.tsv"
     wildcard_constraints:
@@ -135,7 +135,7 @@ rule sylph_profile:
 rule sylph_taxprof:
     input:
         profile = sylph_dir + "/{sample}_profile.tsv",
-        tax = sylphDB_dir + "/.sylph_tax_downloaded"
+        tax = ancient(sylphDB_dir + "/.sylph_tax_downloaded")
     output:
         taxprof = sylph_dir + "/{sample}_taxprof.tsv"
     wildcard_constraints:
@@ -260,7 +260,7 @@ rule dl_sylph_viral_DB:
 rule sylph_profile_viral:
     input:
         sketch = sylph_dir + "/sketches/{sample}.paired.sylsp",
-        db = sylphDB_dir + "/" + SYLPH_VIRAL_DB_NAME
+        db = ancient(sylphDB_dir + "/" + SYLPH_VIRAL_DB_NAME)
     output:
         profile = sylph_dir + "/viral/{sample}_viral_profile.tsv"
     conda:
@@ -292,7 +292,7 @@ rule sylph_profile_viral:
 rule sylph_taxprof_viral:
     input:
         profile = sylph_dir + "/viral/{sample}_viral_profile.tsv",
-        tax = sylphDB_dir + "/.sylph_tax_downloaded"
+        tax = ancient(sylphDB_dir + "/.sylph_tax_downloaded")
     output:
         taxprof = sylph_dir + "/viral/{sample}_viral_taxprof.tsv"
     conda:

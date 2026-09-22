@@ -68,7 +68,7 @@ rule filter_contigs:
 rule antismash_contigs:
     input:
         fasta = metaspades_dir + "/{sample}/contigs_filtered.fasta",
-        db = DB_dir + "/antismash/.databases_downloaded"
+        db = ancient(DB_dir + "/antismash/.databases_downloaded")
     output:
         html = antismash_dir + "/{sample}/index.html",
         gbk = antismash_dir + "/{sample}/contigs_filtered.gbk",

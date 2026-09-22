@@ -147,9 +147,9 @@ rule humann:
     input:
         r1           = nohuman_dir + "/{sample}_R1_001.fastq.gz",
         profile      = metaphlan_dir + "/{sample}_profile.txt",
-        chocophlan   = humannDB_dir + "/.chocophlan_download_complete",
-        uniref       = humannDB_dir + "/.uniref_download_complete",
-        utility      = humannDB_dir + "/.utility_mapping_download_complete"
+        chocophlan   = ancient(humannDB_dir + "/.chocophlan_download_complete"),
+        uniref       = ancient(humannDB_dir + "/.uniref_download_complete"),
+        utility      = ancient(humannDB_dir + "/.utility_mapping_download_complete")
     output:
         genefamilies  = humann_dir + "/genefamilies/{sample}_genefamilies.tsv",
         pathabundance = humann_dir + "/pathabundance/{sample}_pathabundance.tsv",

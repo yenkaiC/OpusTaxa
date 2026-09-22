@@ -28,7 +28,7 @@ rule metaphlan:
     input:
         r1 = nohuman_dir + "/{sample}_R1_001.fastq.gz",
         r2 = nohuman_dir + "/{sample}_R2_001.fastq.gz",
-        db = metaphlanDB_dir + "/.download_complete"
+        db = ancient(metaphlanDB_dir + "/.download_complete")
     output:
         profile = metaphlan_dir + "/{sample}_profile.txt",
         bowtie = metaphlan_dir + "/{sample}_bowtie.bz2"

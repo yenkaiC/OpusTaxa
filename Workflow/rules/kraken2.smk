@@ -34,7 +34,7 @@ rule kraken2:
     input:
         r1 = nohuman_dir + "/{sample}_R1_001.fastq.gz",
         r2 = nohuman_dir + "/{sample}_R2_001.fastq.gz",
-        db = kraken2DB_dir + "/.download_complete"
+        db = ancient(kraken2DB_dir + "/.download_complete")
     output:
         report = kraken2_dir + "/{sample}_report.txt",
         output = temp(kraken2_dir + "/{sample}_output.txt")
@@ -65,7 +65,7 @@ rule kraken2:
 rule bracken:
     input:
         report = kraken2_dir + "/{sample}_report.txt",
-        db = kraken2DB_dir + "/.download_complete"
+        db = ancient(kraken2DB_dir + "/.download_complete")
     output:
         bracken_out = kraken2_dir + "/{sample}_bracken.txt",
         bracken_report = kraken2_dir + "/{sample}_bracken_report.txt"
