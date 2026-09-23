@@ -75,6 +75,10 @@ params:
     alignment_tool: "DIAMOND"  # DIAMOND or BLAST
     include_loose: false       # --include_loose
 
+  # NoHuman
+  nohuman:
+    confidence: 0.0            # -C/--conf, Kraken2 minimum confidence score (0-1)
+
   genomad:
     splits: 8                  # --splits, number of splits for database search
     min_score: 0.7             # --min-score, minimum confidence score (0-1)

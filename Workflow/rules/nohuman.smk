@@ -45,12 +45,14 @@ rule remove_human_reads:
     log:
         log_dir + "/nohuman/{sample}.log"
     params:
-        db_dir = nohumanDB_dir
+        db_dir = nohumanDB_dir,
+        confidence = get_param("nohuman", "confidence", 0.0)
     resources:
         mem_mb = 32000, #32GB
         runtime = 480
     shell:
-        "nohuman --db {params.db_dir} -t {threads} --out1 {output.r1} --out2 {output.r2} {input.r1} {input.r2} 2> {log}"
+        #"nohuman --db {params.db_dir} -t {threads} --out1 {output.r1} --out2 {output.r2} {input.r1} {input.r2} 2> {log}"
+        "nohuman --db {params.db_dir} --conf {params.confidence} -t {threads} --out1 {output.r1} --out2 {output.r2} {input.r1} {input.r2} 2> {log}"
 
 ## Summarise human read removal stats from NoHuman logs
 rule nohuman_summary:
