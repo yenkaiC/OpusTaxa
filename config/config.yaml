@@ -30,7 +30,7 @@ singlem: false
 kraken2: false
 metaspades: false
 mlp: false
-humann: false 
+humann: false
 rgi: false
 antismash: false
 strainphlan: false

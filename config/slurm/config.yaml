@@ -29,7 +29,10 @@ resources:
   - "db_download=2"
 
 # Job naming
-#jobname: "OpusTaxa.{rulename}.{jobid}" # currently not supported
+# The SLURM plugin names every job after the run ID (it uses that name to track status).
+# The rule and sample are in the job comment: squeue --me -o "%.10i %.45j %.55k %.8T %.10M"
+#slurm-jobname-prefix: "OpusTaxa"
+slurm-logdir: "logs/slurm"
 
 # Workflow settings
 rerun-incomplete: true

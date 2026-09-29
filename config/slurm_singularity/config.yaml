@@ -43,3 +43,8 @@ set-resources:
   #- "antismash_contigs:slurm_partition=long"
   #- "rgi:jobs=15"
   #- "rgi:slurm_partition=long"
+
+# The SLURM plugin names every job after the run ID (it uses that name to track status).
+# The rule and sample are in the job comment: squeue --me -o "%.10i %.45j %.55k %.8T %.10M"
+#slurm-jobname-prefix: "OpusTaxa"
+slurm-logdir: "logs/slurm"
