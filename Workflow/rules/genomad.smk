@@ -15,7 +15,8 @@ rule dl_genomad_db:
         db_dir = DB_dir + "/genomad"
     resources:
         mem_mb = 16000,
-        runtime = 480
+        runtime = 480,
+        db_download = 1
     threads: 2
     log:
         log_dir + "/genomad/database_dl.log"

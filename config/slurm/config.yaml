@@ -23,6 +23,11 @@ set-resources:
   #- "antismash_contigs:slurm_partition=long"
   #- "rgi:jobs=15"
 
+# Throttle analysis-database downloads independently of `jobs`
+# (NoHuman DB is exempt so preprocessing is never blocked)
+resources:
+  - "db_download=2"
+
 # Job naming
 #jobname: "OpusTaxa.{rulename}.{jobid}" # currently not supported
 

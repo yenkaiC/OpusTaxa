@@ -10,7 +10,8 @@ rule dl_kraken2_DB:
         db_dir = kraken2DB_dir
     resources:
         mem_mb = 20000,
-        runtime = 480
+        runtime = 480,
+        db_download = 1
     threads: 4
     log:
         log_dir + "/kraken2/database_dl.log"

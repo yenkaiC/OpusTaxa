@@ -14,6 +14,7 @@ rule dl_noHuman_DB:
         mem_mb = 10000,
         runtime = 480
     threads: 2
+    priority: 100
     log:
         log_dir + "/nohuman/databaseDL.log"
     shell:

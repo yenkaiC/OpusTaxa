@@ -27,7 +27,8 @@ rule dl_sylph_DB:
         url = SYLPH_DB_URL
     resources:
         mem_mb = 30000,
-        runtime = 880
+        runtime = 880,
+        db_download = 1
     threads: 4
     log:
         log_dir + "/sylph/database_dl.log"
@@ -55,7 +56,8 @@ rule dl_sylph_tax:
         tax_dir = sylphDB_dir + "/sylph-tax"
     resources:
         mem_mb = 10000,
-        runtime = 200
+        runtime = 200,
+        db_download = 1
     threads: 2
     log:
         log_dir + "/sylph/sylph_tax_dl.log"
@@ -240,7 +242,8 @@ rule dl_sylph_viral_DB:
         url = SYLPH_VIRAL_DB_URL
     resources:
         mem_mb = 6000,
-        runtime = 200
+        runtime = 200,
+        db_download = 1
     threads: 4
     log:
         log_dir + "/sylph/viral_database_dl.log"

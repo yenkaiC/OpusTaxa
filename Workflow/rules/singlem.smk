@@ -13,7 +13,8 @@ rule dl_singlem_DB:
         get_container("singlem")
     resources:
         mem_mb = 10000,
-        runtime = 480
+        runtime = 480,
+        db_download = 1
     threads: 2
     log:
         log_dir + "/singlem/databaseDL.log"

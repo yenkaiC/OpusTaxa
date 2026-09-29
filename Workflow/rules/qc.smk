@@ -15,6 +15,7 @@ rule raw_qc:
     resources:
         mem_mb = 12000,
         runtime = 80
+    priority: 50
     shell:
         "fastqc --outdir {params} {input}"
 
@@ -35,6 +36,7 @@ rule fastp_qc:
     resources:
         mem_mb = 12000,
         runtime = 60
+    priority: 50
     shell:
         "fastqc --outdir {params} {input}"
 
@@ -52,6 +54,7 @@ rule nohuman_qc:
     container:
         get_container("fastqc")
     threads: get_threads("fastqc")
+    priority: 50
     resources:
         mem_mb = 12000,
         runtime = 80

@@ -10,7 +10,8 @@ rule dl_metaphlan_DB:
         get_container("metaphlan")
     resources:
         mem_mb = 24000,
-        runtime = 1440
+        runtime = 1440,
+        db_download = 1
     threads: 2
     params:
         db_dir = metaphlanDB_dir

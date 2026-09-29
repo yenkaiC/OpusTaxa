@@ -16,7 +16,8 @@ rule antismash_download_databases:
         db_dir = DB_dir + "/antismash"
     resources:
         mem_mb = 16000,
-        runtime = 480
+        runtime = 480,
+        db_download = 1
     threads: 2
     shell:
         """

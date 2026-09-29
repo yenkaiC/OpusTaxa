@@ -24,6 +24,11 @@ default-resources:
   - "runtime=480"
   - "disk_mb=0"
 
+# Throttle analysis-database downloads independently of `jobs`
+# (NoHuman DB is exempt so preprocessing is never blocked)
+resources:
+  - "db_download=2"
+
 # Limit heavy jobs
 set-resources:
   - "remove_human_reads:jobs=95"

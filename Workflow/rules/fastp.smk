@@ -14,6 +14,7 @@ rule fastp_trim:
     resources:
         mem_mb = 32000, #32GB
         runtime = 480 # 8 hours
+    priority: 50
     log:
         log_dir + "/fastp/{sample}.log"
     shell:

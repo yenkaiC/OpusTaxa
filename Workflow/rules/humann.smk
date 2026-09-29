@@ -20,7 +20,8 @@ rule dl_humann_chocophlan:
         globus_url = "https://g-227ca.190ebd.75bc.data.globus.org/humann_data/chocophlan/full_chocophlan.v201901_v31.tar.gz"
     resources:
         mem_mb = 20000,
-        runtime = 480
+        runtime = 480,
+        db_download = 1
     threads: 2
     log:
         log_dir + "/humann/chocophlan_dl.log"
@@ -65,7 +66,8 @@ rule dl_humann_uniref:
         globus_url = "https://g-227ca.190ebd.75bc.data.globus.org/humann_data/uniprot/uniref_annotated/uniref90_annotated_v201901b_full.tar.gz"
     resources:
         mem_mb = 20000,
-        runtime = 480
+        runtime = 480,
+        db_download = 1
     threads: 2
     log:
         log_dir + "/humann/uniref_dl.log"
@@ -110,7 +112,8 @@ rule dl_humann_utility:
         globus_url = "https://g-227ca.190ebd.75bc.data.globus.org/humann_data/full_mapping_v201901b.tar.gz"
     resources:
         mem_mb = 6000,
-        runtime = 240
+        runtime = 240,
+        db_download = 1
     threads: 2
     log:
         log_dir + "/humann/utility_dl.log"
