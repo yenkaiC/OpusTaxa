@@ -43,6 +43,9 @@ conda activate snakemake
 
 # 3. Test with dry-run (does not download, only checks whether the operation will run correctly)
 snakemake --use-conda --dry-run --cores 1
+
+# 4. (Optional) Real test run on the bundled mini dataset (2 samples, 100k reads each, in Misc/Test/Raw_FastQ). Checks that containers, dependencies and core steps execute. Note: the first run also downloads the NoHuman database.
+snakemake --use-conda --cores 4 --config test_mode=true
 ```
 
 ## Usage

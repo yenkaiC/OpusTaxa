@@ -89,6 +89,9 @@ snakemake --workflow-profile config/slurm
 # Dry-run first (recommended)
 snakemake --workflow-profile config/slurm --dry-run
 
+# Quick installation/HPC check using the bundled mini test dataset
+snakemake --workflow-profile config/slurm --config test_mode=true
+
 # Download SRA data and run
 snakemake --workflow-profile config/slurm --config download_sra=true
 
