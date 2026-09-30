@@ -101,9 +101,6 @@ sylph_viral_tax_name: "UHGV_default"
 # ============================================================================
 #
 # Set use_containers: true to use Singularity containers instead of conda.
-# Point each tool to the .sif file on /software/.
-#
-# Replace <project> and <user> with your actual project ID and username (if applicable).
 # ============================================================================
 
 use_containers: true

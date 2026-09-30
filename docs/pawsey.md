@@ -164,6 +164,10 @@ snakemake --workflow-profile config/slurm_singularity \
 snakemake --workflow-profile config/slurm_singularity \
     --config inputFastQDirectory=$MYSCRATCH/myproject/fastq
 
+# Specify database location
+snakemake --workflow-profile config/slurm \
+    --config databaseDirectory=/scratch/user/your/database/directory
+
 # remember that /scratch has a 21 day deletion policy
 ```
 

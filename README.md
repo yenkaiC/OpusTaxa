@@ -95,6 +95,7 @@ SRR27916047
 > **New to OpusTaxa or running on a cluster?** Read the full tutorial before running:
 > - [Running locally](docs/local.md)
 > - [Running on HPC / SLURM](docs/hpc.md) ← **start here if you are on a cluster**
+> - [Configuring OpusTaxa](docs/configuration.md)
 
 Use `--config` to toggle modules or change settings:
 

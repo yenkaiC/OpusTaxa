@@ -160,6 +160,7 @@ Reports/
 Database sizes (uncompressed): NoHuman ~6 GB · MetaPhlAn ~34 GB · SingleM ~7 GB · Kraken2 ~16 GB · HUMAnN ~52 GB
 
 All databases are downloaded automatically on first run.
+Location is configurable and can be shared: [Configuring OpusTaxa](docs/configuration.md)
 
 ---
 

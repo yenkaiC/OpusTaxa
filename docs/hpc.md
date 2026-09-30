@@ -107,6 +107,10 @@ snakemake --workflow-profile config/slurm \
 # Specify a custom input directory
 snakemake --workflow-profile config/slurm \
     --config inputFastQDirectory=/scratch/user/myproject/fastq
+
+# Specify database location
+snakemake --workflow-profile config/slurm \
+    --config databaseDirectory=/scratch/user/your/database/directory
 ```
 
 ## Available Modules

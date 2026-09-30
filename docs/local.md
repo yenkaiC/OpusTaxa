@@ -91,6 +91,10 @@ snakemake --use-conda --cores 16 --config metaphlan=false singlem=true
 
 # Run with built-in test files
 snakemake --use-conda --cores 8 --config test_mode=true
+
+# Specify database location
+snakemake --workflow-profile config/slurm \
+    --config databaseDirectory=/scratch/user/your/database/directory
 ```
 
 Set `--cores` to the number of CPU cores available on your machine.
