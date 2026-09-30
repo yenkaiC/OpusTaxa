@@ -93,7 +93,7 @@ snakemake --use-conda --cores 16 --config metaphlan=false singlem=true
 snakemake --use-conda --cores 8 --config test_mode=true
 
 # Specify database location
-snakemake --workflow-profile config/slurm \
+snakemake --use-conda --cores 8 \
     --config databaseDirectory=/scratch/user/your/database/directory
 ```
 
