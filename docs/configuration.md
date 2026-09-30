@@ -155,39 +155,6 @@ threads:
   sylph: 10
 ```
 
-### On the command line
-
-Use Snakemake's own `--set-threads`, which takes **rule** names rather than tool names:
-
-```bash
-snakemake --use-conda --cores 16 --set-threads metaspades=12 metaphlan=8
-```
-
-| Tool | Rule name to use with `--set-threads` |
-|------|----------------------------------------|
-| fastp | `fastp_trim` |
-| NoHuman | `remove_human_reads` |
-| FastQC | `raw_qc`, `fastp_qc`, `nohuman_qc` |
-| MetaPhlAn | `metaphlan` |
-| StrainPhlAn | `strainphlan`, `strainphlan_sample2markers` |
-| SingleM | `singlem_profile`, `singlem_extra` |
-| Kraken2 | `kraken2` |
-| Sylph | `sylph_sketch`, `sylph_profile`, `sylph_profile_viral` |
-| MetaSPAdes | `metaspades` |
-| HUMAnN | `humann` |
-| RGI | `rgi_contigs` |
-| antiSMASH | `antismash_contigs` |
-| Prodigal-gv | `prodigal_gv` |
-| geNomad | `genomad` |
-| Nonpareil | `nonpareil_run` |
-
-> **Do not use `--config threads='{"metaspades": 12}'`.** Snakemake reads nested command-line values as text, so the thread count arrives as the string `"12"` and the run fails with a `ResourceConstraintError`. Use `--set-threads`, or edit `config/config.yaml`.
-
-Two things that trip people up:
-
-- **`--cores` is a ceiling.** With `--cores 8`, a rule asking for 16 threads gets 8.
-- **More threads is not always faster.** MetaSPAdes gains little past ~32 threads, and giving one tool everything just stops other samples running in parallel.
-
 Changing threads does not invalidate finished results, so you can tune this between runs freely.
 
 
@@ -218,24 +185,6 @@ params:
     min_number_genes: 1
 ```
 
-Any value not listed falls back to a built-in default, so you can delete a line rather than guessing at a value.
-
-To override one for a single run, pass the nested mapping as YAML:
-
-```bash
-snakemake --use-conda --cores 16 \
-    --config 'params={"nohuman": {"confidence": 0.1}}'
-```
-
-Only the key you name changes — the rest of `params:` from the config file stays in place.
-
-**Changing a parameter re-runs the affected samples.** Snakemake tracks parameter values, so editing `nohuman: confidence` re-runs host removal for every sample and everything downstream of it. That is the correct behaviour, but on a full dataset it is a big job. Check the scale with a dry-run first:
-
-```bash
-snakemake --use-conda --dry-run --cores 1 --config 'params={"nohuman": {"confidence": 0.1}}'
-```
-
-
 ## Other directories
 
 Input and output locations follow the same pattern. The most commonly changed one is the input folder:
@@ -253,7 +202,7 @@ A lab shares one database folder, runs on SLURM, wants Kraken2 and assembly, and
 
 ```yaml
 # config/config.yaml
-databaseDirectory: /software/projects/mydirectory/OpusTaxa_DB
+databaseDirectory: /scratch/projects/mydirectory/OpusTaxa_DB
 
 kraken2: true
 metaspades: true
@@ -276,8 +225,8 @@ Someone doing a one-off run on a different input set, without touching the share
 
 ```bash
 snakemake --workflow-profile config/slurm \
-    --config inputFastQDirectory=/scratch/pawsey1244/me/new_run/fastq \
-             databaseDirectory=/software/projects/pawsey1244/OpusTaxa_DB \
+    --config inputFastQDirectory=/scratch/projects/secret_data/fastq \
+             databaseDirectory=/scratch/projects/secret_database/OpusTaxa_DB \
              metaphlan=true
 ```
 
