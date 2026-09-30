@@ -19,7 +19,8 @@ conda create -n snakemake -c conda-forge -c bioconda snakemake
 conda activate snakemake
 
 # 3. Install the SLURM executor plugin
-pip install snakemake-executor-plugin-slurm
+pip install 'snakemake-executor-plugin-slurm==2.8.0' \
+            'snakemake-executor-plugin-slurm-jobstep==0.6.0'
 
 # 4. Verify the setup with a dry-run
 snakemake --workflow-profile config/slurm --dry-run

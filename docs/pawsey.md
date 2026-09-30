@@ -69,7 +69,8 @@ conda activate snakemake
 
 # 3. Install the SLURM executor plugin
 #    (this is what lets Snakemake submit jobs to SLURM for you)
-pip install snakemake-executor-plugin-slurm
+pip install 'snakemake-executor-plugin-slurm==2.8.0' \
+            'snakemake-executor-plugin-slurm-jobstep==0.6.0'
 ```
 
 ---

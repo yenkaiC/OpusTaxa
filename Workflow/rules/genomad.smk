@@ -24,7 +24,7 @@ rule dl_genomad_db:
         """
         mkdir -p {params.db_dir}
         if [ ! -d "{params.db_dir}/genomad_db" ]; then
-            genomad download-database {params.db_dir} 2> {log}
+            genomad download-database {params.db_dir} > {log} 2>&1
         else
             echo "geNomad database already exists, skipping download" > {log}
         fi
