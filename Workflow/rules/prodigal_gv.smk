@@ -42,9 +42,9 @@ rule prodigal_gv_summary:
     log:
         log_dir + "/prodigal_gv/summary.log"
     resources:
-        mem_mb = 10000,
+        mem_mb = 16000,
         runtime = 30
-    threads: 1
+    threads: 2
     shell:
         """
         mkdir -p $(dirname {output.summary})

@@ -53,6 +53,7 @@ threads:
   metaspades: 20        # metaspades speed peaks at 32 
   rgi: 10
   antismash: 16
+  prodigal_gv: 16
   genomad: 8
   sylph: 10
 
