@@ -112,6 +112,7 @@ rule antismash_contigs:
             --output-dir {params.out_dir} \
             --databases {params.db_dir} \
             --genefinding-tool {params.genefinder} \
+            --cb-knownclusters \
             --cpus {threads} \
             {input.fasta} 2> {log}
         """

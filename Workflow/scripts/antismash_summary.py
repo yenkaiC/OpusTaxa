@@ -46,8 +46,16 @@ def parse_antismash_json(json_path, sample_id=None):
     
     for record in data.get("records", []):
         record_id = record.get("id", "unknown")
-        
-        for area in record.get("areas", []):
+
+        # KnownClusterBlast results live under the clusterblast module, keyed by
+        # region number (1-based, in the same order as the areas below).
+        clusterblast = record.get("modules", {}).get("antismash.modules.clusterblast", {})
+        known_by_region = {
+            result.get("region_number"): result
+            for result in clusterblast.get("knowncluster", {}).get("results", [])
+        }
+
+        for region_number, area in enumerate(record.get("areas", []), start=1):
             region_start = area.get("start", "")
             region_end = area.get("end", "")
             products = area.get("products", [])
@@ -69,18 +77,16 @@ def parse_antismash_json(json_path, sample_id=None):
             except (ValueError, TypeError):
                 contig_edge = "unknown"
             
-            # Extract knownclusterblast hits if available
+            # Extract the top KnownClusterBlast hit for this region, if any.
+            # ranking entries are [reference_cluster, scoring]; the cluster dict
+            # holds the MIBiG accession and description.
             most_similar = ""
-            for module_name, module_data in record.get("modules", {}).items():
-                if "knowncluster" in module_name.lower():
-                    region_results = module_data.get("region_results", {})
-                    for region_key, region_data in region_results.items():
-                        hits = region_data.get("ranking", [])
-                        for hit in hits[:1]:  # Top hit only
-                            if isinstance(hit, list) and len(hit) >= 2:
-                                hit_info = hit[0]
-                                if isinstance(hit_info, dict):
-                                    most_similar = hit_info.get("description", "")
+            known_accession = ""
+            ranking = (known_by_region.get(region_number) or {}).get("ranking") or []
+            if ranking and isinstance(ranking[0], (list, tuple)) and isinstance(ranking[0][0], dict):
+                top_hit = ranking[0][0]
+                most_similar = top_hit.get("description", "")
+                known_accession = top_hit.get("accession", "")
             
             regions.append({
                 "sample": sample_id,
@@ -91,6 +97,7 @@ def parse_antismash_json(json_path, sample_id=None):
                 "bgc_type": product_str,
                 "contig_edge": contig_edge,
                 "most_similar_known_bgc": most_similar,
+                "known_bgc_accession": known_accession,
             })
     
     return regions
@@ -99,7 +106,7 @@ def parse_antismash_json(json_path, sample_id=None):
 FIELDNAMES = [
     "sample", "contig", "region_start", "region_end",
     "region_length", "bgc_type", "contig_edge",
-    "most_similar_known_bgc"
+    "most_similar_known_bgc", "known_bgc_accession"
 ]
 
 
