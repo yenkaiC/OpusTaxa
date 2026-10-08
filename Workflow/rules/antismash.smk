@@ -22,11 +22,15 @@ rule antismash_download_databases:
     shell:
         """
         mkdir -p {params.db_dir}
-        if [ ! -f "{params.db_dir}/clusterblast/proteins.dmnd" ]; then
+        if [ ! -f "{params.db_dir}/clusterblast/clusters.txt" ] || \
+           [ -z "$(ls {params.db_dir}/knownclusterblast/*/clusters.txt 2>/dev/null)" ]; then
             download-antismash-databases --database-dir {params.db_dir} 2> {log}
         else
             echo "AntiSMASH databases already exist, skipping download" > {log}
         fi
+        # Fail here rather than at the first sample if anything is incomplete
+        antismash --check-prereqs --cb-knownclusters --databases {params.db_dir} >> {log} 2>&1
+        
         touch {output.checkpoint}
         """
 
@@ -88,7 +92,7 @@ rule antismash_contigs:
         genefinder = get_param("antismash", "genefinding_tool", "prodigal-m")
     threads: get_threads("antismash")
     resources:
-        mem_mb = 32000,
+        mem_mb = 33000,
         runtime = 1439
     shell:
         """
