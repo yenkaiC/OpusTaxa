@@ -148,7 +148,8 @@ rule sylph_taxprof:
         get_container("sylph")
     params:
         tax_name = SYLPH_TAX_NAME,
-        prefix = sylph_dir + "/{sample}_taxprof"
+        prefix = sylph_dir + "/{sample}_taxprof",
+        tax_dir = sylphDB_dir + "/sylph-tax"
     resources:
         mem_mb = 12000,
         runtime = 120
@@ -162,7 +163,8 @@ rule sylph_taxprof:
         sylph-tax taxprof \
             {input.profile} \
             -t {params.tax_name} \
-            -o {params.prefix} 2> {log}
+            --taxonomy-dir {params.tax_dir} \
+            -o {params.prefix} > {log} 2>&1
 
         # sylph-tax appends a suffix; normalise to the expected output name
         if [ ! -f "{output.taxprof}" ]; then
