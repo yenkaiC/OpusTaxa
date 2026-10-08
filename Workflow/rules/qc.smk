@@ -91,7 +91,7 @@ rule multi_qc:
         """
         multiqc {raw_qc_dir} -o {params} -n raw_multiqc_report.html --force
         multiqc {fastp_qc_dir} -o {params} -n fastp_multiqc_report.html --force
-        if [ "{params.run_nohuman}" = "True" ]; then
-            multiqc {nohuman_qc_dir} -o {params.outdir} -n nohuman_multiqc_report.html --force
+        if [ "{run_nohuman}" = "True" ]; then
+            multiqc {nohuman_qc_dir} -o {params} -n nohuman_multiqc_report.html --force
         fi
         """
