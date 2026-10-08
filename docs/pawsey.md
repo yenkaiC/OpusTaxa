@@ -183,6 +183,7 @@ snakemake --workflow-profile config/slurm_singularity \
 | Resistance genes (RGI/CARD) | `rgi=true` |
 | antiSMASH | `antismash=true` |
 | Turn MetaPhlAn on | `metaphlan=true` |
+| Environmental samples (skip NoHuman) | environmental=true |
 
 > **Bind mounts:** `config/slurm_singularity/config.yaml` binds `/scratch` and `/software` into each container. On Setonix these map to your `$MYSCRATCH` and `$MYSOFTWARE` — the defaults should work, but if a job can't see your data, check the `singularity-args` bind paths (see [hpc.md](hpc.md#adjusting-containers-for-your-hpc)).
 

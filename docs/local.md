@@ -95,6 +95,9 @@ snakemake --use-conda --cores 8 --config test_mode=true
 # Specify database location
 snakemake --use-conda --cores 8 \
     --config databaseDirectory=/scratch/user/your/database/directory
+
+# Run with Environmental Mode
+snakemake --use-conda --cores 16 --config environmental=true
 ```
 
 Set `--cores` to the number of CPU cores available on your machine.
@@ -105,7 +108,7 @@ Set `--cores` to the number of CPU cores available on your machine.
 | Module | Flag | Default |
 |--------|-------|---------|
 | Quality control (fastp) | always on | On |
-| Host read removal (NoHuman) | always on | On |
+| Host read removal (NoHuman) | `environmental=true` to skip | Off |
 | QC reports (FastQC + MultiQC) | always on | On |
 | Sequence depth report (Nonpareil) | `nonpareil=false` | off |
 | Taxonomic profiling (MetaPhlAn 4) | `metaphlan=true/false` | Off |

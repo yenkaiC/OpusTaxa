@@ -119,7 +119,7 @@ snakemake --workflow-profile config/slurm \
 | Module | Flag | Default |
 |--------|-------|---------|
 | Quality control (fastp) | always on | On |
-| Host read removal (NoHuman) | always on | On |
+| Host read removal (NoHuman) | `environmental=true` to skip | Off |
 | QC reports (FastQC + MultiQC) | always on | On |
 | Sequence depth report (Nonpareil) | `nonpareil=false` | off |
 | Taxonomic profiling (MetaPhlAn 4) | `metaphlan=false` | Off |

@@ -117,6 +117,7 @@ humann: false
 rgi: false
 antismash: false
 sylph: false
+environmental: false
 ```
 
 Change them there for a setting you always want, or pass them per run:
