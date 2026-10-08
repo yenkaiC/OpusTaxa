@@ -74,8 +74,8 @@ rule dl_sylph_tax:
 ## can be re-run against different databases without re-reading FASTQs.
 rule sylph_sketch:
     input:
-        r1 = nohuman_dir + "/{sample}_R1_001.fastq.gz",
-        r2 = nohuman_dir + "/{sample}_R2_001.fastq.gz"
+        r1 = reads_dir + "/{sample}_R1_001.fastq.gz",
+        r2 = reads_dir + "/{sample}_R2_001.fastq.gz"
     output:
         sketch = sylph_dir + "/sketches/{sample}.paired.sylsp"
     conda:

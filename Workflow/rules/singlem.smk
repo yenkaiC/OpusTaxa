@@ -25,8 +25,8 @@ rule dl_singlem_DB:
 # Outputs profile and OTU table
 rule singlem_profile:
     input:
-        r1 = nohuman_dir + "/{sample}_R1_001.fastq.gz",
-        r2 = nohuman_dir + "/{sample}_R2_001.fastq.gz",
+        r1 = reads_dir + "/{sample}_R1_001.fastq.gz",
+        r2 = reads_dir + "/{sample}_R2_001.fastq.gz",
         db = ancient(singlemDB_dir + "/" + SINGLEM_METAPACKAGE)
     output:
         profile = singlem_dir + "/{sample}_profile.tsv",
@@ -57,8 +57,8 @@ rule singlem_profile:
 # Utilise the profile made earlier and outputs species abundance, abundance in longform, and a microbial fraction 
 rule singlem_extra:
     input:
-        r1 = nohuman_dir + "/{sample}_R1_001.fastq.gz",
-        r2 = nohuman_dir + "/{sample}_R2_001.fastq.gz",
+        r1 = reads_dir + "/{sample}_R1_001.fastq.gz",
+        r2 = reads_dir + "/{sample}_R2_001.fastq.gz",
         db = ancient(singlemDB_dir + "/" + SINGLEM_METAPACKAGE),
         profile = singlem_dir + "/{sample}_profile.tsv"
     output:

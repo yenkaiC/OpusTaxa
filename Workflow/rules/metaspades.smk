@@ -1,8 +1,8 @@
 ## Run metaSPAdes for metagenome assembly
 rule metaspades:
     input:
-        r1 = nohuman_dir + "/{sample}_R1_001.fastq.gz",
-        r2 = nohuman_dir + "/{sample}_R2_001.fastq.gz"
+        r1 = reads_dir + "/{sample}_R1_001.fastq.gz",
+        r2 = reads_dir + "/{sample}_R2_001.fastq.gz"
     output:
         contigs = metaspades_dir + "/{sample}/contigs.fasta",       # For RGI
         scaffolds = metaspades_dir + "/{sample}/scaffolds.fasta",   # For Daedalus
@@ -15,7 +15,7 @@ rule metaspades:
         mem_gb = lambda wildcards, resources: int(resources.mem_mb / 1000)
     threads: get_threads("metaspades")
     resources:
-        mem_mb = 200000,  # 200GB
+        mem_mb = 180000,  # 180GB
         runtime = 1439       # 24 hours
     log:
         log_dir + "/metaspades/{sample}.log"

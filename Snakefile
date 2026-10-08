@@ -28,20 +28,20 @@ include: workflow.basedir + "/Workflow/rules/sylph.smk"
 rule all:
     input:
         # Data processing and QC
-        expand(nohuman_dir + "/{sample}_R1_001.fastq.gz", sample=SAMPLES),
-        expand(nohuman_dir + "/{sample}_R2_001.fastq.gz", sample=SAMPLES),
+        expand(reads_dir + "/{sample}_R1_001.fastq.gz", sample=SAMPLES),
+        expand(reads_dir + "/{sample}_R2_001.fastq.gz", sample=SAMPLES),
         expand(raw_qc_dir + "/{sample}_R1_001_fastqc.html", sample=SAMPLES),
         expand(raw_qc_dir + "/{sample}_R2_001_fastqc.html", sample=SAMPLES),
         expand(fastp_qc_dir + "/{sample}_R1_001_fastqc.html", sample=SAMPLES),
         expand(fastp_qc_dir + "/{sample}_R2_001_fastqc.html", sample=SAMPLES),
         
         # NoHuman Human Read Extraction
-        nohuman_dir + "/nohuman_summary.tsv",
+        nohuman_dir + "/nohuman_summary.tsv" if run_nohuman else [],
         
         # MultiQC reports
         multiqc_dir + "/raw_multiqc_report.html",
         multiqc_dir + "/fastp_multiqc_report.html",
-        multiqc_dir + "/nohuman_multiqc_report.html",
+        multiqc_dir + "/nohuman_multiqc_report.html" if run_nohuman else [],
 
         # Nonpareil coverage estimation
         expand(nonpareil_dir + "/{sample}.npo", sample=SAMPLES) if run_nonpareil else [],

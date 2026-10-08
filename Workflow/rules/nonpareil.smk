@@ -1,7 +1,5 @@
 ## Nonpareil - redundancy-based estimation of metagenome coverage and the
 ## sequencing effort required for near-complete coverage.
-## Runs on host-removed reads (requires nohuman).
-##
 ## Nonpareil operates on SINGLE reads, so only R1 is used (standard practice;
 ## the second mate adds correlated redundancy and is not recommended as input).
 ## The k-mer kernel is used by default: ~300x faster than the alignment kernel
@@ -9,7 +7,7 @@
 
 nonpareil_dir = config.get('nonpareilDirectory', 'Reports/Nonpareil/npo')
 nonpareil_report_dir = config.get('nonpareilReportDirectory', 'Reports/Nonpareil')
-run_nonpareil = str(config.get("nonpareil", False)).lower() not in ("false", "0", "no")
+run_nonpareil = str(config.get("nonpareil", True)).lower() not in ("false", "0", "no")
 
 # Kernel: "kmer" (recommended, fast) or "alignment". fastq is recommended for kmer.
 NONPAREIL_KERNEL = config.get("nonpareil_kernel", "kmer")
@@ -20,7 +18,7 @@ NONPAREIL_KERNEL = config.get("nonpareil_kernel", "kmer")
 ## streamed to a temporary uncompressed FASTQ first.
 rule nonpareil_run:
     input:
-        r1 = nohuman_dir + "/{sample}_R1_001.fastq.gz"
+        r1 = reads_dir + "/{sample}_R1_001.fastq.gz"
     output:
         npo = nonpareil_dir + "/{sample}.npo"
     conda:

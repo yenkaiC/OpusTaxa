@@ -27,8 +27,8 @@ rule dl_metaphlan_DB:
 # outputs a bowtie and an abundance profile file
 rule metaphlan:
     input:
-        r1 = nohuman_dir + "/{sample}_R1_001.fastq.gz",
-        r2 = nohuman_dir + "/{sample}_R2_001.fastq.gz",
+        r1 = reads_dir + "/{sample}_R1_001.fastq.gz",
+        r2 = reads_dir + "/{sample}_R2_001.fastq.gz",
         db = ancient(metaphlanDB_dir + "/.download_complete")
     output:
         profile = metaphlan_dir + "/{sample}_profile.txt",

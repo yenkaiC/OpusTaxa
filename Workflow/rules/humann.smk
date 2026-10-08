@@ -148,7 +148,7 @@ rule dl_humann_utility:
 ## Run HUMAnN3 on forward reads only - Output to type-specific directories
 rule humann:
     input:
-        r1           = nohuman_dir + "/{sample}_R1_001.fastq.gz",
+        r1           = reads_dir + "/{sample}_R1_001.fastq.gz",
         profile      = metaphlan_dir + "/{sample}_profile.txt",
         chocophlan   = ancient(humannDB_dir + "/.chocophlan_download_complete"),
         uniref       = ancient(humannDB_dir + "/.uniref_download_complete"),

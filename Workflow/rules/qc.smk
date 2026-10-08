@@ -70,14 +70,15 @@ rule multi_qc:
         fastp_fastqc = expand(fastp_qc_dir + "/{sample}_{read}_001_fastqc.zip", 
                              sample=SAMPLES, read=["R1", "R2"]),
         nohuman_fastqc = expand(nohuman_qc_dir + "/{sample}_{read}_001_fastqc.zip", 
-                             sample=SAMPLES, read=["R1", "R2"])
+                             sample=SAMPLES, read=["R1", "R2"]) if run_nohuman else []
     output: 
         multiqc_dir + "/raw_multiqc_report.html",
         multiqc_dir + "/fastp_multiqc_report.html",
-        multiqc_dir + "/nohuman_multiqc_report.html"
+        multiqc_dir + "/nohuman_multiqc_report.html" if run_nohuman else []
     priority: 45
     params:
-        multiqc_dir
+        outdir = multiqc_dir,
+        run_nohuman = run_nohuman
     conda:
         '../envs/multiqc.yaml'
     container:
@@ -90,5 +91,7 @@ rule multi_qc:
         """
         multiqc {raw_qc_dir} -o {params} -n raw_multiqc_report.html --force
         multiqc {fastp_qc_dir} -o {params} -n fastp_multiqc_report.html --force
-        multiqc {nohuman_qc_dir} -o {params} -n nohuman_multiqc_report.html --force
+        if [ "{params.run_nohuman}" = "True" ]; then
+            multiqc {nohuman_qc_dir} -o {params.outdir} -n nohuman_multiqc_report.html --force
+        fi
         """

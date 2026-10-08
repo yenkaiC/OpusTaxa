@@ -58,6 +58,12 @@ run_prodigalgv = str(config.get("prodigal_gv", False)).lower() not in ("false", 
 run_genomad = str(config.get("genomad", False)).lower() not in ("false", "0", "no")
 run_sylph = str(config.get("sylph", False)).lower() not in ("false", "0", "no")
 run_sylph_viral = str(config.get("sylph_viral", False)).lower() not in ("false", "0", "no")
+# Environmental mode: host-free samples (soil, water, etc.). Host removal is
+# skipped and every downstream rule reads the fastp-trimmed FASTQs instead.
+environmental = str(config.get("environmental", False)).lower() not in ("false", "0", "no")
+run_nohuman = not environmental
+# Analysis-ready reads. All downstream rules take their FASTQs from here, so a new analysis rule needs no knowledge of which preprocessing mode is active.
+reads_dir = clean_dir if environmental else nohuman_dir
 
 def get_param(tool, key, default=None):
     """Safely fetch a nested param from config with fallback."""

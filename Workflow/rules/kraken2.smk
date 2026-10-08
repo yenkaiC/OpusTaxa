@@ -33,8 +33,8 @@ rule dl_kraken2_DB:
 ## Run Kraken2 on paired-end reads
 rule kraken2:
     input:
-        r1 = nohuman_dir + "/{sample}_R1_001.fastq.gz",
-        r2 = nohuman_dir + "/{sample}_R2_001.fastq.gz",
+        r1 = reads_dir + "/{sample}_R1_001.fastq.gz",
+        r2 = reads_dir + "/{sample}_R2_001.fastq.gz",
         db = ancient(kraken2DB_dir + "/.download_complete")
     output:
         report = kraken2_dir + "/{sample}_report.txt",

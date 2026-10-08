@@ -25,11 +25,13 @@ sylphDirectory: "Data/Sylph"
 # Flags
 test_mode: false
 download_sra: false
+environmental: false
 metaphlan: false
 singlem: false
 kraken2: false
 metaspades: false
 mlp: false
+nonpareil: true
 humann: false
 rgi: false
 antismash: false
