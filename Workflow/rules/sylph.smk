@@ -1,17 +1,17 @@
 ## Sylph - ultrafast taxonomic profiling via abundance-corrected minhash
-## Runs on host-removed reads (requires nohuman)
-## Uses the pre-built GTDB-R220 database + sylph-tax for taxonomic labels
+## Runs on analysis-ready reads (NoHuman output, or fastp output in environmental mode)
+## Uses the pre-built GTDB-R232 database + sylph-tax for taxonomic labels
 
 sylph_dir = config.get('sylphDirectory', 'Data/Sylph')
 sylphDB_dir = DB_dir + "/sylph"
 run_sylph = str(config.get("sylph", False)).lower() not in ("false", "0", "no")
 
 # Database filename (GTDB-R220, c200). Override in config if using another db.
-SYLPH_DB_NAME = config.get("sylph_db_name", "gtdb-r220-c200-dbv1.syldb")
+SYLPH_DB_NAME = config.get("sylph_db_name", "gtdb-r232-c200-dbv1.syldb")
 SYLPH_DB_URL  = config.get("sylph_db_url",
-                           "http://faust.compbio.cs.cmu.edu/sylph-stuff/gtdb-r220-c200-dbv1.syldb")
+                           "http://faust.compbio.cs.cmu.edu/sylph-stuff/gtdb-r232-c200-dbv1.syldb")
 # sylph-tax metadata name for taxonomic integration (matches the db above)
-SYLPH_TAX_NAME = config.get("sylph_tax_name", "GTDB_r220")
+SYLPH_TAX_NAME = config.get("sylph_tax_name", "GTDB_r232")
 
 
 ## Download the pre-built sylph database
@@ -65,7 +65,7 @@ rule dl_sylph_tax:
         """
         mkdir -p {params.tax_dir}
         mkdir -p $(dirname {log})
-        sylph-tax download --download-to {params.tax_dir} 2> {log}
+        sylph-tax download --download-to {params.tax_dir} > {log} 2>&1
         touch {output.checkpoint}
         """
 
@@ -160,15 +160,18 @@ rule sylph_taxprof:
         """
         mkdir -p $(dirname {output.taxprof})
         mkdir -p $(dirname {log})
-        sylph-tax taxprof \
+        rm -f {params.prefix}*.sylphmpa
+
+        sylph-tax \
+            --taxonomy-dir {params.tax_dir} \
+            taxprof \
             {input.profile} \
             -t {params.tax_name} \
-            --taxonomy-dir {params.tax_dir} \
             -o {params.prefix} > {log} 2>&1
 
         # sylph-tax appends a suffix; normalise to the expected output name
         if [ ! -f "{output.taxprof}" ]; then
-            produced=$(ls {params.prefix}* 2>/dev/null | head -1)
+            produced=$(ls {params.prefix}*.sylphmpa 2>/dev/null | head -1)
             if [ -n "$produced" ]; then mv "$produced" {output.taxprof}; fi
         fi
         """
@@ -194,7 +197,7 @@ rule sylph_merge:
         """
         mkdir -p $(dirname {output.merged})
         mkdir -p $(dirname {log})
-        sylph-tax merge {input.taxprofs} --column relative_abundance -o {output.merged} 2> {log}
+        sylph-tax merge {input.taxprofs} --column relative_abundance -o {output.merged} > {log} 2>&1
         """
 
 ## Merge all taxonomic profiles into an ANI table
@@ -219,7 +222,7 @@ rule sylph_merge_ani:
         """
         mkdir -p $(dirname {output.merged})
         mkdir -p $(dirname {log})
-        sylph-tax merge {input.taxprofs} --column ANI -o {output.merged} 2> {log}
+        sylph-tax merge {input.taxprofs} --column ANI -o {output.merged} > {log} 2>&1
         """
 
 ## Viral Sylph
@@ -306,7 +309,8 @@ rule sylph_taxprof_viral:
         get_container("sylph")
     params:
         tax_name = SYLPH_VIRAL_TAX_NAME,
-        prefix = sylph_dir + "/viral/{sample}_viral_taxprof"
+        prefix = sylph_dir + "/viral/{sample}_viral_taxprof",
+        tax_dir = sylphDB_dir + "/sylph-tax"
     resources:
         mem_mb = 12000,
         runtime = 60
@@ -317,11 +321,14 @@ rule sylph_taxprof_viral:
         """
         mkdir -p $(dirname {output.taxprof})
         mkdir -p $(dirname {log})
-        sylph-tax taxprof \
+        rm -f {params.prefix}*.sylphmpa
+        sylph-tax \
+            --taxonomy-dir {params.tax_dir} \
+            taxprof \
             {input.profile} \
             -t {params.tax_name} \
             -a \
-            -o {params.prefix} 2> {log}
+            -o {params.prefix} > {log} 2>&1
 
         # sylph-tax writes '<prefix><sample>.sylphmpa'; find it and normalise the name
         produced=$(ls {params.prefix}*.sylphmpa 2>/dev/null | head -1 || true)
@@ -365,7 +372,7 @@ rule sylph_merge_viral:
         done
 
         if [ -n "$real_files" ]; then
-            sylph-tax merge $real_files --column relative_abundance -o {output.merged} 2> {log}
+            sylph-tax merge $real_files --column relative_abundance -o {output.merged} > {log} 2>&1
         else
             echo "# No viral taxa across any sample — nothing to merge" > {output.merged}
             echo "All viral taxprof files were empty placeholders" > {log}
