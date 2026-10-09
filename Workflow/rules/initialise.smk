@@ -120,6 +120,85 @@ if download_sra and os.path.exists("sra_id.txt"):
     with open("sra_id.txt", "r") as f:
         SRA_IDS = [line.strip() for line in f if line.strip()]
 
+# ── SRA accession validation ─────────────────────────────────────────────────
+# Accessions are checked against the ENA portal API before the workflow is built,
+# so that runs that do not exist or are not paired-end are skipped with a report
+# instead of failing the whole pipeline. Lookups are cached between runs.
+# Disable with --config sra_validate=false (every accession is then attempted).
+# ──────────────────────────────────────────────────────────────────────────────
+sra_validate = str(config.get("sra_validate", True)).lower() not in ("false", "0", "no")
+SRA_SKIP_REPORT = log_dir + "/sra/sra_skipped.tsv"
+_SRA_CACHE = log_dir + "/sra/sra_validation.tsv"
+
+def _ena_run_layout(accession, timeout=20):
+    """Look up one run accession at ENA.
+
+    Returns (status, detail) where status is 'paired', 'single', 'missing' or
+    'unknown'. 'unknown' means the lookup itself failed (no network, API change)
+    and the accession is given the benefit of the doubt.
+    """
+    import urllib.request
+    url = ("https://www.ebi.ac.uk/ena/portal/api/filereport"
+           f"?accession={accession}&result=read_run"
+           "&fields=run_accession,library_layout&format=tsv")
+    try:
+        with urllib.request.urlopen(url, timeout=timeout) as handle:
+            rows = [r for r in handle.read().decode().splitlines() if r.strip()]
+    except Exception as err:
+        return "unknown", f"lookup failed: {err}"
+    if len(rows) < 2:
+        return "missing", "no run found in ENA/SRA"
+    fields = rows[1].split("\t")
+    layout = (fields[1] if len(fields) > 1 else "").strip().upper()
+    if layout == "PAIRED":
+        return "paired", "PAIRED"
+    if layout:
+        return "single", f"{layout} (OpusTaxa requires paired-end)"
+    return "unknown", "no library_layout reported"
+
+def validate_sra_ids(accessions):
+    """Return (usable, skipped) accession lists, caching lookups on disk."""
+    os.makedirs(os.path.dirname(_SRA_CACHE), exist_ok=True)
+    cache = {}
+    if os.path.exists(_SRA_CACHE):
+        with open(_SRA_CACHE) as handle:
+            for line in handle:
+                parts = line.rstrip("\n").split("\t")
+                if len(parts) >= 2 and parts[1] in ("paired", "single", "missing"):
+                    cache[parts[0]] = (parts[1], parts[2] if len(parts) > 2 else "")
+
+    usable, skipped, fresh = [], [], []
+    for accession in accessions:
+        status, detail = cache.get(accession, (None, None))
+        if status is None:
+            status, detail = _ena_run_layout(accession)
+            if status != "unknown":          # only cache definite answers
+                fresh.append((accession, status, detail))
+        if status in ("paired", "unknown"):
+            usable.append(accession)
+        else:
+            skipped.append((accession, status, detail))
+
+    if fresh:
+        with open(_SRA_CACHE, "a") as handle:
+            for row in fresh:
+                handle.write("\t".join(row) + "\n")
+
+    with open(SRA_SKIP_REPORT, "w") as handle:
+        handle.write("accession\tstatus\tdetail\n")
+        for row in skipped:
+            handle.write("\t".join(row) + "\n")
+
+    return usable, skipped
+
+if download_sra and SRA_IDS and sra_validate:
+    SRA_IDS, _sra_skipped = validate_sra_ids(SRA_IDS)
+    if _sra_skipped:
+        print(f"WARNING: skipping {len(_sra_skipped)} SRA accession(s) "
+              f"- see {SRA_SKIP_REPORT}")
+        for accession, status, detail in _sra_skipped:
+            print(f"  {accession}: {status} - {detail}")
+
 # ── Flexible FASTQ sample detection ──────────────────────────────────────────
 # Detects paired-end FASTQ files regardless of naming convention and creates
 # symlinks to the internal standard: {sample}_R1_001.fastq.gz / _R2_001.fastq.gz

@@ -25,6 +25,7 @@ sylphDirectory: "Data/Sylph"
 # Flags
 test_mode: false
 download_sra: false
+sra_validate: true
 environmental: false
 metaphlan: false
 singlem: false
