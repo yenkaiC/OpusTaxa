@@ -140,7 +140,7 @@ def _ena_run_layout(accession, timeout=20):
     import urllib.request
     url = ("https://www.ebi.ac.uk/ena/portal/api/filereport"
            f"?accession={accession}&result=read_run"
-           "&fields=run_accession,library_layout&format=tsv")
+           "&fields=run_accession,library_layout,fastq_ftp&format=tsv")
     try:
         with urllib.request.urlopen(url, timeout=timeout) as handle:
             rows = [r for r in handle.read().decode().splitlines() if r.strip()]
@@ -150,6 +150,9 @@ def _ena_run_layout(accession, timeout=20):
         return "missing", "no run found in ENA/SRA"
     fields = rows[1].split("\t")
     layout = (fields[1] if len(fields) > 1 else "").strip().upper()
+    files = [f for f in (fields[2] if len(fields) > 2 else "").split(";") if f.strip()]
+    if layout == "PAIRED" and len(files) > 2:
+        return "single", f"{len(files)} fastq files listed (technical/barcode reads?)"
     if layout == "PAIRED":
         return "paired", "PAIRED"
     if layout:
