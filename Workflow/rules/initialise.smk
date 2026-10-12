@@ -137,13 +137,17 @@ def _ena_run_layout(accession, timeout=20):
     'unknown'. 'unknown' means the lookup itself failed (no network, API change)
     and the accession is given the benefit of the doubt.
     """
-    import urllib.request
+    import urllib.request, urllib.error
     url = ("https://www.ebi.ac.uk/ena/portal/api/filereport"
            f"?accession={accession}&result=read_run"
            "&fields=run_accession,library_layout,fastq_ftp&format=tsv")
     try:
         with urllib.request.urlopen(url, timeout=timeout) as handle:
             rows = [r for r in handle.read().decode().splitlines() if r.strip()]
+    except urllib.error.HTTPError as err:
+        if err.code in (400, 404):
+            return "missing", f"ENA returned HTTP {err.code} (accession not resolvable)"
+        return "unknown", f"lookup failed: HTTP {err.code}"
     except Exception as err:
         return "unknown", f"lookup failed: {err}"
     if len(rows) < 2:
@@ -201,6 +205,9 @@ if download_sra and SRA_IDS and sra_validate:
               f"- see {SRA_SKIP_REPORT}")
         for accession, status, detail in _sra_skipped:
             print(f"  {accession}: {status} - {detail}")
+    if _sra_skipped and not SRA_IDS:
+        print("WARNING: every SRA accession was skipped. If that looks wrong, the "
+              "ENA query may be failing - rerun with --config sra_validate=false")
 
 # ── Flexible FASTQ sample detection ──────────────────────────────────────────
 # Detects paired-end FASTQ files regardless of naming convention and creates
