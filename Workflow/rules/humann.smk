@@ -186,7 +186,7 @@ rule humann:
             --bypass-nucleotide-search \
             --protein-database {params.protdb} \
             --threads {threads} \
-            --memory-use maximum 2> {log}
+            --memory-use maximum > {log} 2>&1
         
         # Move output files to type-specific directories
         mv {params.outdir}/*_genefamilies.tsv {output.genefamilies}
@@ -227,15 +227,15 @@ rule humann_merge_tables:
 
         # Join tables
         humann_join_tables -i {params.gf_dir} -o {params.merge_dir}/genefamilies_joined.tsv --file_name genefamilies 2> {log} 
-        humann_join_tables -i {params.pa_dir} -o {params.merge_dir}/pathabundance_joined.tsv --file_name pathabundance 2>> {log} 
-        humann_join_tables -i {params.pc_dir} -o {params.merge_dir}/pathcoverage_joined.tsv --file_name pathcoverage 2>> {log} 
+        humann_join_tables -i {params.pa_dir} -o {params.merge_dir}/pathabundance_joined.tsv --file_name pathabundance >>  {log} 2>&1 
+        humann_join_tables -i {params.pc_dir} -o {params.merge_dir}/pathcoverage_joined.tsv --file_name pathcoverage >>  {log} 2>&1 
 
         # Normalize to CPM
-        humann_renorm_table -i {params.merge_dir}/genefamilies_joined.tsv -o {params.merge_dir}/genefamilies_cpm.tsv --units cpm 2>> {log} 
-        humann_renorm_table -i {params.merge_dir}/pathabundance_joined.tsv -o {params.merge_dir}/pathabundance_cpm.tsv --units cpm 2>> {log}
+        humann_renorm_table -i {params.merge_dir}/genefamilies_joined.tsv -o {params.merge_dir}/genefamilies_cpm.tsv --units cpm >>  {log} 2>&1
+        humann_renorm_table -i {params.merge_dir}/pathabundance_joined.tsv -o {params.merge_dir}/pathabundance_cpm.tsv --units cpm >>  {log} 2>&1
 
         # Split stratified tables
-        humann_split_stratified_table -i {params.merge_dir}/genefamilies_cpm.tsv -o {params.merge_dir} 2>> {log} 
-        humann_split_stratified_table -i {params.merge_dir}/pathabundance_cpm.tsv -o {params.merge_dir} 2>> {log} 
-        humann_split_stratified_table -i {params.merge_dir}/pathcoverage_joined.tsv -o {params.merge_dir} 2>> {log}
+        humann_split_stratified_table -i {params.merge_dir}/genefamilies_cpm.tsv -o {params.merge_dir} >>  {log} 2>&1
+        humann_split_stratified_table -i {params.merge_dir}/pathabundance_cpm.tsv -o {params.merge_dir} >>  {log} 2>&1
+        humann_split_stratified_table -i {params.merge_dir}/pathcoverage_joined.tsv -o {params.merge_dir} >>  {log} 2>&1
         """

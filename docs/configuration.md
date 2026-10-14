@@ -67,13 +67,6 @@ This is the main reason to move the databases. Databases are large and slow to d
 2. They make it readable for everyone else: `chmod -R g+rX /path/to/OpusTaxa_DB`.
 3. Everyone points `databaseDirectory` at that folder.
 
-OpusTaxa only downloads a database when it is missing, so the second person to run simply skips the download steps. The database inputs are marked `ancient()`, which means a database that is newer than someone's results does not cause their samples to be re-analysed.
-
-Two things to watch:
-
-- **Keep the shared folder off `/scratch` on Pawsey**, where files are purged after 21 days. Use `/software/projects/<project>/` instead.
-- **Read-only is fine, but only for complete databases.** If a module's database is missing, that user's run will try to download it and fail on permissions. Have one person download every database the group uses.
-
 ### Downloading databases ahead of time
 
 Useful on a cluster where downloads and analysis have different time limits, and required when you are populating a shared folder. Each database has its own rule:
