@@ -9,7 +9,7 @@ rule dl_metaphlan_DB:
     container:
         get_container("metaphlan")
     resources:
-        get_mem("dl_metaphlan_DB"),
+        mem_mb = get_mem("dl_metaphlan_DB"),
         runtime = 1440,
         db_download = 1
     threads: 2
@@ -43,7 +43,7 @@ rule metaphlan:
     log:
         log_dir + "/metaphlan/{sample}.log"
     resources:
-        get_mem("metaphlan"),
+        mem_mb = get_mem("metaphlan"),
         runtime = 720
     shell:
         """
@@ -71,7 +71,7 @@ rule metaphlan_abundance_table:
     log:
         log_dir + "/metaphlan/merge_table.log"
     resources:
-        get_mem("metaphlan_abundance_table"),
+        mem_mb = get_mem("metaphlan_abundance_table"),
         runtime = 120
     shell:
         """

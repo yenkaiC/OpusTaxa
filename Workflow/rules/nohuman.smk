@@ -11,7 +11,7 @@ rule dl_noHuman_DB:
     params:
         db_dir = DB_dir + "/nohuman"
     resources:
-        get_mem("dl_noHuman_DB"),
+        mem_mb = get_mem("dl_noHuman_DB"),
         runtime = 480
     threads: 2
     priority: 100
@@ -49,7 +49,7 @@ rule remove_human_reads:
         db_dir = nohumanDB_dir,
         confidence = get_param("nohuman", "confidence", 0.0)
     resources:
-        get_mem("remove_human_reads"), #32GB
+        mem_mb = get_mem("remove_human_reads"), #32GB
         runtime = 480
     shell:
         #"nohuman --db {params.db_dir} -t {threads} --out1 {output.r1} --out2 {output.r2} {input.r1} {input.r2} 2> {log}"
@@ -64,7 +64,7 @@ rule nohuman_summary:
     log:
         log_dir + "/nohuman/summary.log"
     resources:
-        get_mem("nohuman_summary"),
+        mem_mb = get_mem("nohuman_summary"),
         runtime = 30
     threads: 1
     shell:

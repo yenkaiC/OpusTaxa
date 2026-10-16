@@ -15,7 +15,7 @@ rule antismash_download_databases:
     params:
         db_dir = DB_dir + "/antismash"
     resources:
-        get_mem("antismash_download_databases"),
+        mem_mb = get_mem("antismash_download_databases"),
         runtime = 480,
         db_download = 1
     threads: 2
@@ -46,7 +46,7 @@ rule filter_contigs:
         min_len = config.get("min_contig_len", 1000)
     threads: 8
     resources:
-        get_mem("filter_contigs"),
+        mem_mb = get_mem("filter_contigs"),
         runtime = 240
     log:
         log_dir + "/antismash/{sample}_filter.log"
@@ -92,7 +92,7 @@ rule antismash_contigs:
         genefinder = get_param("antismash", "genefinding_tool", "prodigal-m")
     threads: get_threads("antismash")
     resources:
-        get_mem("antismash_contigs"),
+        mem_mb = get_mem("antismash_contigs"),
         runtime = 1439
     shell:
         """
@@ -133,7 +133,7 @@ rule antismash_summary_table:
     log:
         log_dir + "/antismash/summary_table.log"
     resources:
-        get_mem("antismash_summary_table"),
+        mem_mb = get_mem("antismash_summary_table"),
         runtime = 30
     threads: 2
     script:

@@ -14,7 +14,7 @@ rule dl_genomad_db:
     params:
         db_dir = DB_dir + "/genomad"
     resources:
-        get_mem("dl_genomad_db"), #16GB
+        mem_mb = get_mem("dl_genomad_db"), #16GB
         runtime = 480,
         db_download = 1
     threads: 2
@@ -56,7 +56,7 @@ rule genomad:
         min_num_genes = get_param("genomad", "min_number_genes", 1)
     threads: get_threads("genomad")
     resources:
-        get_mem("genomad"),
+        mem_mb = get_mem("genomad"),
         runtime = 720
     log:
         log_dir + "/genomad/{sample}.log"
@@ -95,7 +95,7 @@ rule genomad_summary_table:
     log:
         log_dir + "/genomad/summary_table.log"
     resources:
-        get_mem("genomad_summary_table"),
+        mem_mb = get_mem("genomad_summary_table"),
         runtime = 45
     threads: 2
     shell:

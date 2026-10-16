@@ -428,7 +428,7 @@ rule standardize_filenames:
     wildcard_constraints:
         sample = _symlink_constraint
     resources:
-        get_mem("standardize_filenames"),
+        mem_mb = get_mem("standardize_filenames"),
         runtime = 60
     shell:
         """

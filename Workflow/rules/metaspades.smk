@@ -15,7 +15,7 @@ rule metaspades:
         mem_gb = lambda wildcards, resources: int(resources.mem_mb / 1000)
     threads: get_threads("metaspades", "metaspades")
     resources:
-        get_mem("metaspades"),  # 180GB
+        mem_mb = get_mem("metaspades"),  # 180GB
         runtime = 1439       # 24 hours
     log:
         log_dir + "/metaspades/{sample}.log"

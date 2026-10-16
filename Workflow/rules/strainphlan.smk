@@ -17,7 +17,7 @@ rule strainphlan_sample2markers:
         db_file = metaphlanDB_dir + "/mpa_vJan25_CHOCOPhlAnSGB_202503.pkl"
     threads: get_threads("metaphlan")
     resources:
-        get_mem("strainphlan_sample2markers"),
+        mem_mb = get_mem("strainphlan_sample2markers"),
         runtime = 240
     log:
         log_dir + "/strainphlan/{sample}_sample2markers.log"
@@ -51,7 +51,7 @@ rule strainphlan_extract_markers:
         out_dir    = strainphlan_dir + "/db_markers"
     threads: 1
     resources:
-        get_mem("strainphlan_extract_markers"),
+        mem_mb = get_mem("strainphlan_extract_markers"),
         runtime = 60
     log:
         log_dir + "/strainphlan/extract_markers_{species}.log"
@@ -85,7 +85,7 @@ rule strainphlan:
         out_dir    = strainphlan_dir + "/output/{species}"
     threads: get_threads("metaphlan")
     resources:
-        get_mem("strainphlan"),
+        mem_mb = get_mem("strainphlan"),
         runtime = 480
     log:
         log_dir + "/strainphlan/{species}.log"

@@ -13,7 +13,7 @@ rule dl_card_DB:
     params:
         db_dir = DB_dir + "/card"
     resources:
-        get_mem("dl_card_DB"),
+        mem_mb = get_mem("dl_card_DB"),
         runtime = 120,
         db_download = 1
     threads: 2
@@ -85,7 +85,7 @@ rule rgi_contigs:
         aligner = get_param("rgi", "alignment_tool", "DIAMOND")
     threads: get_threads("rgi")
     resources:
-        get_mem("rgi_contigs"),
+        mem_mb = get_mem("rgi_contigs"),
         runtime = 960
     log:
         log_dir + "/rgi/{sample}_contigs.log"
@@ -122,7 +122,7 @@ rule rgi_merge_tables:
     log:
         log_dir + "/rgi/merge_tables.log"
     resources:
-        get_mem("rgi_merge_tables"),
+        mem_mb = get_mem("rgi_merge_tables"),
         runtime = 60
     threads: 2
     script:

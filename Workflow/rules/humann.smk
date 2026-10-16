@@ -19,7 +19,7 @@ rule dl_humann_chocophlan:
         parent_dir = humannDB_dir,
         globus_url = "https://g-227ca.190ebd.75bc.data.globus.org/humann_data/chocophlan/full_chocophlan.v201901_v31.tar.gz"
     resources:
-        get_mem("dl_humann_chocophlan"),
+        mem_mb = get_mem("dl_humann_chocophlan"),
         runtime = 480,
         db_download = 1
     threads: 2
@@ -65,7 +65,7 @@ rule dl_humann_uniref:
         parent_dir = humannDB_dir,
         globus_url = "https://g-227ca.190ebd.75bc.data.globus.org/humann_data/uniprot/uniref_annotated/uniref90_annotated_v201901b_full.tar.gz"
     resources:
-        get_mem("dl_humann_uniref"),
+        mem_mb = get_mem("dl_humann_uniref"),
         runtime = 480,
         db_download = 1
     threads: 2
@@ -111,7 +111,7 @@ rule dl_humann_utility:
         parent_dir = humannDB_dir,
         globus_url = "https://g-227ca.190ebd.75bc.data.globus.org/humann_data/full_mapping_v201901b.tar.gz"
     resources:
-        get_mem("dl_humann_utility"),
+        mem_mb = get_mem("dl_humann_utility"),
         runtime = 240,
         db_download = 1
     threads: 2
@@ -169,7 +169,7 @@ rule humann:
         pc_dir  = humann_dir + "/pathcoverage"
     threads: get_threads("humann")
     resources:
-        get_mem("humann"), #64G
+        mem_mb = get_mem("humann"), #64G
         runtime = 1400
     log:
         log_dir + "/humann/{sample}.log"
@@ -217,7 +217,7 @@ rule humann_merge_tables:
         pc_dir = humann_dir + "/pathcoverage",
         merge_dir = humann_dir + "/merged"
     resources:
-        get_mem("humann_merge_tables"),
+        mem_mb = get_mem("humann_merge_tables"),
         runtime = 360
     log:
         log_dir + "/humann/merge_tables.log"
