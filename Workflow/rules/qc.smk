@@ -13,7 +13,7 @@ rule raw_qc:
         get_container("fastqc")
     threads: get_threads("fastqc")
     resources:
-        mem_mb = 12000,
+        get_mem("raw_qc"),
         runtime = 80
     priority: 50
     shell:
@@ -34,7 +34,7 @@ rule fastp_qc:
         get_container("fastqc")
     threads: get_threads("fastqc")
     resources:
-        mem_mb = 12000,
+        get_mem("fastp_qc"),
         runtime = 60
     priority: 50
     shell:
@@ -56,7 +56,7 @@ rule nohuman_qc:
     threads: get_threads("fastqc")
     priority: 50
     resources:
-        mem_mb = 12000,
+        get_mem("nohuman_qc"),
         runtime = 80
     shell:
         "fastqc --outdir {params} {input}"
@@ -85,7 +85,7 @@ rule multi_qc:
         get_container("multiqc")
     threads: 4
     resources:
-        mem_mb = 8000,
+        get_mem("multi_qc"),
         runtime = 80
     shell:
         """

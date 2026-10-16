@@ -26,7 +26,7 @@ rule dl_sylph_DB:
         db_dir = sylphDB_dir,
         url = SYLPH_DB_URL
     resources:
-        mem_mb = 30000,
+        get_mem("dl_sylph_DB"),
         runtime = 880,
         db_download = 1
     threads: 4
@@ -55,7 +55,7 @@ rule dl_sylph_tax:
     params:
         tax_dir = sylphDB_dir + "/sylph-tax"
     resources:
-        mem_mb = 10000,
+        get_mem("dl_sylph_tax"),
         runtime = 200,
         db_download = 1
     threads: 2
@@ -86,7 +86,7 @@ rule sylph_sketch:
         outdir = sylph_dir + "/sketches"
     threads: get_threads("sylph")
     resources:
-        mem_mb = 33000,
+        get_mem("sylph_sketch"),
         runtime = 300
     log:
         log_dir + "/sylph/{sample}_sketch.log"
@@ -117,7 +117,7 @@ rule sylph_profile:
         get_container("sylph")
     threads: get_threads("sylph")
     resources:
-        mem_mb = 33000,
+        get_mem("sylph_profile"),
         runtime = 360
     log:
         log_dir + "/sylph/{sample}_profile.log"
@@ -151,7 +151,7 @@ rule sylph_taxprof:
         prefix = sylph_dir + "/{sample}_taxprof",
         tax_dir = sylphDB_dir + "/sylph-tax"
     resources:
-        mem_mb = 12000,
+        get_mem("sylph_taxprof"),
         runtime = 120
     threads: 2
     log:
@@ -188,7 +188,7 @@ rule sylph_merge:
     container:
         get_container("sylph")
     resources:
-        mem_mb = 20000,
+        get_mem("sylph_merge"),
         runtime = 60
     threads: 2
     log:
@@ -213,7 +213,7 @@ rule sylph_merge_ani:
     wildcard_constraints:
         sample = r"[^/]+"
     resources:
-        mem_mb = 20000,
+        get_mem("sylph_merge_ani"),
         runtime = 60
     threads: 4
     log:
@@ -246,7 +246,7 @@ rule dl_sylph_viral_DB:
         db_dir = sylphDB_dir,
         url = SYLPH_VIRAL_DB_URL
     resources:
-        mem_mb = 6000,
+        get_mem("dl_sylph_viral_DB"),
         runtime = 200,
         db_download = 1
     threads: 4
@@ -279,7 +279,7 @@ rule sylph_profile_viral:
         c = SYLPH_VIRAL_C
     threads: get_threads("sylph")
     resources:
-        mem_mb = 22000,
+        get_mem("sylph_profile_viral"),
         runtime = 240
     log:
         log_dir + "/sylph/{sample}_viral_profile.log"
@@ -312,7 +312,7 @@ rule sylph_taxprof_viral:
         prefix = sylph_dir + "/viral/{sample}_viral_taxprof",
         tax_dir = sylphDB_dir + "/sylph-tax"
     resources:
-        mem_mb = 12000,
+        get_mem("sylph_taxprof_viral"),
         runtime = 60
     threads: 4
     log:
@@ -353,7 +353,7 @@ rule sylph_merge_viral:
     container:
         get_container("sylph")
     resources:
-        mem_mb = 20000,
+        get_mem("sylph_merge_viral"),
         runtime = 80
     threads: 4
     log:

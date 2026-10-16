@@ -12,7 +12,7 @@ rule dl_singlem_DB:
     container:
         get_container("singlem")
     resources:
-        mem_mb = 10000,
+        get_mem("dl_singlem_DB"),
         runtime = 480,
         db_download = 1
     threads: 2
@@ -39,7 +39,7 @@ rule singlem_profile:
         db_dir = singlemDB_dir
     threads: get_threads("singlem")
     resources:
-        mem_mb = 40000,
+        get_mem("singlem_profile"),
         runtime = 1400 
     log:
         log_dir + "/singlem/{sample}_profile.log"
@@ -71,7 +71,7 @@ rule singlem_extra:
         get_container("singlem")
     threads: get_threads("singlem")
     resources:
-        mem_mb = 38000,
+        get_mem("singlem_extra"),
         runtime = 480
     log:
         log_dir + "/singlem/{sample}_profile.log"
@@ -105,7 +105,7 @@ rule singlem_merged_table:
     log:
         log_dir + "/singlem/merge_table.log"
     resources:
-        mem_mb = 10000,
+        get_mem("singlem_merged_table"),
         runtime = 120
     threads: 2
     shell:
@@ -132,7 +132,7 @@ rule singlem_merge_prokaryotic_fraction:
     log:
         log_dir + "/singlem/merge_prokaryotic_fraction.log"
     resources:
-        mem_mb = 12000,
+        get_mem("singlem_merge_prokaryotic_fraction"),
         time = 60
     threads: 2
     shell:

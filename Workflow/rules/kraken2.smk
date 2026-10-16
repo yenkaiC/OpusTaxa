@@ -9,7 +9,7 @@ rule dl_kraken2_DB:
     params:
         db_dir = kraken2DB_dir
     resources:
-        mem_mb = 20000,
+        get_mem("dl_kraken2_DB"),
         runtime = 480,
         db_download = 1
     threads: 4
@@ -47,7 +47,7 @@ rule kraken2:
         db_dir = kraken2DB_dir
     threads: get_threads("kraken2")
     resources:
-        mem_mb = 64000,
+        get_mem("kraken2"),
         runtime = 480
     log:
         log_dir + "/kraken2/{sample}.log"
@@ -80,7 +80,7 @@ rule bracken:
         level = get_param("bracken", "level", "S")
     threads: 4
     resources:
-        mem_mb = 16000,
+        get_mem("bracken"),
         runtime = 60
     log:
         log_dir + "/kraken2/{sample}_bracken.log"
@@ -109,7 +109,7 @@ rule combine_bracken_reports:
         log_dir + "/kraken2/combine_reports.log"
     threads: 4
     resources:
-        mem_mb = 26000,
+        get_mem("combine_bracken_reports"),
         runtime = 60
     shell:
         """

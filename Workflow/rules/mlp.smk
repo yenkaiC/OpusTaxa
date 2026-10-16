@@ -56,7 +56,7 @@ rule mlp:
     log:
         log_dir + "/mlp/mlp.log"
     resources:
-        mem_mb = 16000,
+        get_mem("mlp"),
         runtime = 60
     threads: 2
     script:

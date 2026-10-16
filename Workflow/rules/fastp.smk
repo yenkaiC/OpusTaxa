@@ -12,7 +12,7 @@ rule fastp_trim:
         get_container("fastp")
     threads: get_threads("fastp")
     resources:
-        mem_mb = 32000, #32GB
+        get_mem("fastp_trim"), #32GB
         runtime = 480 # 8 hours
     priority: 50
     log:

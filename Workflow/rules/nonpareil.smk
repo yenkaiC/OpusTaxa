@@ -31,7 +31,7 @@ rule nonpareil_run:
         tmp    = nonpareil_dir + "/{sample}.tmp.fastq"
     threads: get_threads("nonpareil")
     resources:
-        mem_mb = 20000,
+        get_mem("nonpareil_run"),
         runtime = 240
     log:
         log_dir + "/nonpareil/{sample}.log"
@@ -68,7 +68,7 @@ rule nonpareil_report:
     params:
         script = workflow.basedir + "/Workflow/scripts/nonpareil_report.R"
     resources:
-        mem_mb = 16000,
+        get_mem("nonpareil_report"),
         runtime = 60
     threads: 4
     log:

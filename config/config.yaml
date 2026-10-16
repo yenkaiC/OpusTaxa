@@ -60,6 +60,26 @@ threads:
   genomad: 8
   sylph: 10
 
+# Memory per rule in MB (uncomment to override the built-in defaults)
+memory:
+  metaspades: 180000      # assembly — by far the hungriest step
+  humann: 64000           # translated search against UniRef90
+  kraken2: 64000          # loads the whole index into memory
+  metaphlan: 50000
+  singlem_profile: 40000
+  rgi_contigs: 40000
+  prodigal_gv: 40000
+  sylph_sketch: 33000
+  sylph_profile: 33000
+  antismash_contigs: 33000
+  genomad: 32000
+  remove_human_reads: 32000
+  fastp_trim: 32000
+
+# Minimum MB of RAM per thread; threads are capped at memory / this value
+# for rules that opt in (currently metaSPAdes). Set to 0 to disable.
+mb_per_thread: 4000
+
 # ==============================================================================
 # Tool parameters — edit these to customise tool behaviour
 # ==============================================================================

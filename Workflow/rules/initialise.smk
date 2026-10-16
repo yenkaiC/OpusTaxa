@@ -113,6 +113,98 @@ def get_threads(tool_name):
     """Get thread count from config or use default"""
     return config.get("threads", {}).get(tool_name, DEFAULT_THREADS.get(tool_name, 1))
 
+## Memory configuration
+DEFAULT_MEM_MB = {
+    # QC and preprocessing
+    "standardize_filenames": 4000,
+    "SRA_downloader": 26000,
+    "parallel_gzip": 26000,
+    "fastp_trim": 32000,
+    "raw_qc": 12000,
+    "fastp_qc": 12000,
+    "nohuman_qc": 12000,
+    "multi_qc": 8000,
+    "dl_noHuman_DB": 10000,
+    "remove_human_reads": 32000,
+    "nohuman_summary": 6000,
+    "nonpareil_run": 20000,
+    "nonpareil_report": 16000,
+    # Taxonomic profiling
+    "dl_metaphlan_DB": 24000,
+    "metaphlan": 50000,
+    "metaphlan_abundance_table": 24000,
+    "strainphlan_sample2markers": 16000,
+    "strainphlan_extract_markers": 8000,
+    "strainphlan": 32000,
+    "dl_singlem_DB": 10000,
+    "singlem_profile": 40000,
+    "singlem_extra": 38000,
+    "singlem_merged_table": 10000,
+    "singlem_merge_prokaryotic_fraction": 12000,
+    "dl_kraken2_DB": 20000,
+    "kraken2": 64000,
+    "bracken": 16000,
+    "combine_bracken_reports": 26000,
+    "dl_sylph_DB": 30000,
+    "dl_sylph_tax": 10000,
+    "dl_sylph_viral_DB": 6000,
+    "sylph_sketch": 33000,
+    "sylph_profile": 33000,
+    "sylph_profile_viral": 22000,
+    "sylph_taxprof": 12000,
+    "sylph_taxprof_viral": 12000,
+    "sylph_merge": 20000,
+    "sylph_merge_ani": 20000,
+    "sylph_merge_viral": 20000,
+    # Assembly and downstream
+    "metaspades": 180000,
+    "prodigal_gv": 40000,
+    "prodigal_gv_summary": 16000,
+    "dl_card_DB": 16000,
+    "rgi_contigs": 40000,
+    "rgi_merge_tables": 10000,
+    "antismash_download_databases": 16000,
+    "filter_contigs": 24000,
+    "antismash_contigs": 33000,
+    "antismash_summary_table": 12000,
+    "dl_genomad_db": 16000,
+    "genomad": 32000,
+    "genomad_summary_table": 20000,
+    "dl_humann_chocophlan": 20000,
+    "dl_humann_uniref": 20000,
+    "dl_humann_utility": 6000,
+    "humann": 64000,
+    "humann_merge_tables": 32000,
+    "mlp": 16000,
+}
+
+def get_mem(rule_name, default=8000):
+    """Memory in MB for a rule: config `memory:` first, then the default above."""
+    return int(config.get("memory", {}).get(rule_name,
+               DEFAULT_MEM_MB.get(rule_name, default)))
+
+# Minimum MB of RAM per thread. Tools such as metaSPAdes become unstable when
+# given many threads with too little memory, so threads are capped at
+# mem_mb / mb_per_thread wherever a rule passes its memory key to get_threads().
+# Set mb_per_thread: 0 in config.yaml to disable capping entirely.
+MB_PER_THREAD = int(config.get("mb_per_thread", 4000))
+
+def get_threads(tool_name, mem_key=None):
+    """Thread count from config, optionally capped by the rule's memory.
+
+    mem_key: the rule name whose memory budget limits the thread count.
+             Omit it and no cap is applied.
+    """
+    requested = int(config.get("threads", {}).get(
+        tool_name, DEFAULT_THREADS.get(tool_name, 1)))
+    if mem_key and MB_PER_THREAD > 0:
+        allowed = max(1, get_mem(mem_key) // MB_PER_THREAD)
+        if requested > allowed:
+            print(f"NOTE: {mem_key}: {requested} threads capped to {allowed} "
+                  f"({get_mem(mem_key)} MB at {MB_PER_THREAD} MB/thread)")
+            return allowed
+    return requested
+
 # Read SRA IDs if download_sra is enabled
 import os
 SRA_IDS = []
@@ -336,7 +428,7 @@ rule standardize_filenames:
     wildcard_constraints:
         sample = _symlink_constraint
     resources:
-        mem_mb = 4000,
+        get_mem("standardize_filenames"),
         runtime = 60
     shell:
         """

@@ -11,7 +11,7 @@ rule SRA_downloader:
         get_container("sra")
     group: "sra_download"
     resources:
-        mem_mb = 26000,
+        get_mem("SRA_downloader"),
         runtime = 500
     threads: 10
     params:
@@ -58,7 +58,7 @@ rule parallel_gzip:
         get_container("sra")
     group: "sra_download"
     resources:
-        mem_mb = 26000,
+        get_mem("parallel_gzip"),
         runtime = 240
     threads: 10
     log:
