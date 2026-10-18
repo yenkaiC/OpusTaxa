@@ -176,6 +176,7 @@ rule humann:
     shell:
         """
         # Create output directories
+        rm -rf {params.outdir}
         mkdir -p {params.outdir} {params.gf_dir} {params.pa_dir} {params.pc_dir}
         
         # Run HUMAnN
@@ -188,6 +189,14 @@ rule humann:
             --threads {threads} \
             --memory-use maximum > {log} 2>&1
         
+        for kind in genefamilies pathabundance pathcoverage; do
+            n=$(ls {params.outdir}/*_${{kind}}.tsv 2>/dev/null | wc -l)
+            if [ "$n" -ne 1 ]; then
+                echo "ERROR: expected 1 ${{kind}} file, found $n" >> {log}
+                exit 1
+            fi
+        done
+
         # Move output files to type-specific directories
         mv {params.outdir}/*_genefamilies.tsv {output.genefamilies}
         mv {params.outdir}/*_pathabundance.tsv {output.pathabundance}
