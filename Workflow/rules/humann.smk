@@ -227,7 +227,7 @@ rule humann_merge_tables:
         merge_dir = humann_dir + "/merged"
     resources:
         mem_mb = get_mem("humann_merge_tables"),
-        runtime = 360
+        runtime = 1400
     log:
         log_dir + "/humann/merge_tables.log"
     shell:
