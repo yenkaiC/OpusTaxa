@@ -174,7 +174,7 @@ DEFAULT_MEM_MB = {
     "dl_humann_uniref": 20000,
     "dl_humann_utility": 6000,
     "humann": 64000,
-    "humann_merge_tables": 32000,
+    "humann_merge_tables": 36000,
     "mlp": 16000,
 }
 

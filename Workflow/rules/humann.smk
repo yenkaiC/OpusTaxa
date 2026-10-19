@@ -235,7 +235,7 @@ rule humann_merge_tables:
         mkdir -p {params.merge_dir}
 
         # Join tables
-        humann_join_tables -i {params.gf_dir} -o {params.merge_dir}/genefamilies_joined.tsv --file_name genefamilies 2> {log} 
+        humann_join_tables -i {params.gf_dir} -o {params.merge_dir}/genefamilies_joined.tsv --file_name genefamilies > {log} 2>&1
         humann_join_tables -i {params.pa_dir} -o {params.merge_dir}/pathabundance_joined.tsv --file_name pathabundance >>  {log} 2>&1 
         humann_join_tables -i {params.pc_dir} -o {params.merge_dir}/pathcoverage_joined.tsv --file_name pathcoverage >>  {log} 2>&1 
 

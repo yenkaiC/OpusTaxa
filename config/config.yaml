@@ -64,6 +64,7 @@ threads:
 memory:
   metaspades: 180000      # assembly — by far the hungriest step
   humann: 64000           # translated search against UniRef90
+  humann_merge_tables: 36000
   kraken2: 64000          # loads the whole index into memory
   metaphlan: 50000
   singlem_profile: 40000
