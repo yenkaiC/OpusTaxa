@@ -37,7 +37,7 @@ rule install_mlp_package:
         if (length(model_files) == 0) {{
             stop('MLP installed but model files are missing!')
         }}
-        " 2> {log}
+        " > {log} 2>&1
         
         touch {output.installed}
         """

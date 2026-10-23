@@ -32,7 +32,7 @@ rule dl_card_DB:
         # Only download if card.json is missing
         if [ ! -f "card.json" ]; then
             # Clean any previous RGI data
-            rgi clean --local 2>> "$LOGFILE" || true
+            rgi clean --local >> "$LOGFILE" 2>&1 || true
 
             # Download and extract CARD data
             wget -O data.tar.bz2 https://card.mcmaster.ca/latest/data 2>> "$LOGFILE"
@@ -50,7 +50,7 @@ rule dl_card_DB:
         fi
 
         # Always (re)load to ensure RGI's local index is current
-        rgi load --card_json card.json --local 2>> "$LOGFILE"
+        rgi load --card_json card.json --local >> "$LOGFILE" 2>&1
 
         if [ -f "wildcard/index-for-model-sequences.txt" ]; then
             rgi load \
@@ -59,7 +59,7 @@ rule dl_card_DB:
                 --amr_kmers wildcard/all_amr_61mers.txt \
                 --kmer_database wildcard/61_kmer_db.json \
                 --kmer_size 61 \
-                --local 2>> "$LOGFILE"
+                --local >> "$LOGFILE" 2>&1
         fi
 
         cd "$WORKDIR"
@@ -106,7 +106,7 @@ rule rgi_contigs:
             --local \
             --clean \
             --num_threads {threads} \
-            --alignment_tool {params.aligner} 2> "$LOGFILE"
+            --alignment_tool {params.aligner} > "$LOGFILE" 2>&1
 
         cd "$WORKDIR"
         """

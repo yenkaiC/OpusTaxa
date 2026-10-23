@@ -30,13 +30,13 @@ rule dl_humann_chocophlan:
         mkdir -p {params.parent_dir}
         if [ ! -d "{params.db_dir}" ] || [ ! "$(ls -A {params.db_dir})" ]; then
             echo "Attempting humann_databases download..." > {log}
-            if humann_databases --download chocophlan full {params.parent_dir} 2>> {log}; then
+            if humann_databases --download chocophlan full {params.parent_dir} >> {log} 2>&1; then
                 echo "humann_databases download succeeded" >> {log}
             else
                 echo "humann_databases failed, trying direct Globus wget..." >> {log}
                 mkdir -p {params.db_dir}
-                if wget -q -O {params.db_dir}/chocophlan.tar.gz {params.globus_url} 2>> {log}; then
-                    tar -xzf {params.db_dir}/chocophlan.tar.gz -C {params.db_dir} 2>> {log}
+                if wget -q -O {params.db_dir}/chocophlan.tar.gz {params.globus_url} >> {log} 2>&1; then
+                    tar -xzf {params.db_dir}/chocophlan.tar.gz -C {params.db_dir} >> {log} 2>&1
                     rm {params.db_dir}/chocophlan.tar.gz
                     echo "Globus download succeeded" >> {log}
                 else
@@ -76,13 +76,13 @@ rule dl_humann_uniref:
         mkdir -p {params.parent_dir}
         if [ ! -d "{params.db_dir}" ] || [ ! "$(ls -A {params.db_dir})" ]; then
             echo "Attempting humann_databases download..." > {log}
-            if humann_databases --download uniref uniref90_diamond {params.parent_dir} 2>> {log}; then
+            if humann_databases --download uniref uniref90_diamond {params.parent_dir} >> {log} 2>&1; then
                 echo "humann_databases download succeeded" >> {log}
             else
                 echo "humann_databases failed, trying direct Globus wget..." >> {log}
                 mkdir -p {params.db_dir}
-                if wget -q -O {params.db_dir}/uniref.tar.gz {params.globus_url} 2>> {log}; then
-                    tar -xzf {params.db_dir}/uniref.tar.gz -C {params.db_dir} 2>> {log}
+                if wget -q -O {params.db_dir}/uniref.tar.gz {params.globus_url} >> {log} 2>&1; then
+                    tar -xzf {params.db_dir}/uniref.tar.gz -C {params.db_dir} >> {log} 2>&1
                     rm {params.db_dir}/uniref.tar.gz
                     echo "Globus download succeeded" >> {log}
                 else
@@ -122,13 +122,13 @@ rule dl_humann_utility:
         mkdir -p {params.parent_dir}
         if [ ! -d "{params.db_dir}" ] || [ ! "$(ls -A {params.db_dir})" ]; then
             echo "Attempting humann_databases download..." > {log}
-            if humann_databases --download utility_mapping full {params.parent_dir} 2>> {log}; then
+            if humann_databases --download utility_mapping full {params.parent_dir} >> {log} 2>&1; then
                 echo "humann_databases download succeeded" >> {log}
             else
                 echo "humann_databases failed, trying direct Globus wget..." >> {log}
                 mkdir -p {params.db_dir}
-                if wget -q -O {params.db_dir}/utility.tar.gz {params.globus_url} 2>> {log}; then
-                    tar -xzf {params.db_dir}/utility.tar.gz -C {params.db_dir} 2>> {log}
+                if wget -q -O {params.db_dir}/utility.tar.gz {params.globus_url} >> {log} 2>&1; then
+                    tar -xzf {params.db_dir}/utility.tar.gz -C {params.db_dir} >> {log} 2>&1
                     rm {params.db_dir}/utility.tar.gz
                     echo "Globus download succeeded" >> {log}
                 else

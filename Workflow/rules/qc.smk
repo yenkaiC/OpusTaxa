@@ -16,8 +16,13 @@ rule raw_qc:
         mem_mb = get_mem("raw_qc"),
         runtime = 80
     priority: 50
+    log: 
+        log_dir + "/fastqc/raw/{sample}_{read}.log"
     shell:
-        "fastqc --outdir {params} {input}"
+        """
+        mkdir -p $(dirname {log})
+        fastqc --outdir {params} {input} > {log} 2>&1
+        """
 
 ## Declare FastQC inputs, outputs and shellscript for FastP outputs
 rule fastp_qc:
@@ -37,8 +42,13 @@ rule fastp_qc:
         mem_mb = get_mem("fastp_qc"),
         runtime = 60
     priority: 50
+    log: 
+        log_dir + "/fastqc/fastp/{sample}_{read}.log"
     shell:
-        "fastqc --outdir {params} {input}"
+        """
+        mkdir -p $(dirname {log})
+        fastqc --outdir {params} {input} > {log} 2>&1
+        """
 
 ## Declare FastQC inputs, outputs and shellscript for NoHuman outputs
 rule nohuman_qc:
@@ -55,11 +65,16 @@ rule nohuman_qc:
         get_container("fastqc")
     threads: get_threads("fastqc")
     priority: 50
+    log:
+        log_dir + "/fastqc/nohuman/{sample}_{read}.log"
     resources:
         mem_mb = get_mem("nohuman_qc"),
         runtime = 80
     shell:
-        "fastqc --outdir {params} {input}"
+        """
+        mkdir -p $(dirname {log})
+        fastqc --outdir {params} {input} > {log} 2>&1
+        """
 
 ## MultiQC
 # Takes in FastQC results from the raw, fastp, and nohuman data and summarises QC results
@@ -84,14 +99,17 @@ rule multi_qc:
     container:
         get_container("multiqc")
     threads: 4
+    log:
+        log_dir + "/multiqc/multiqc.log"
     resources:
         mem_mb = get_mem("multi_qc"),
         runtime = 80
     shell:
         """
-        multiqc {raw_qc_dir} -o {params.outdir} -n raw_multiqc_report.html --force
-        multiqc {fastp_qc_dir} -o {params.outdir} -n fastp_multiqc_report.html --force
+        mkdir -p $(dirname {log})
+        multiqc {raw_qc_dir} -o {params.outdir} -n raw_multiqc_report.html --force > {log} 2>&1
+        multiqc {fastp_qc_dir} -o {params.outdir} -n fastp_multiqc_report.html --force >> {log} 2>&1
         if [ "{params.run_nohuman}" = "True" ]; then
-            multiqc {nohuman_qc_dir} -o {params.outdir} -n nohuman_multiqc_report.html --force
+            multiqc {nohuman_qc_dir} -o {params.outdir} -n nohuman_multiqc_report.html --force >> {log} 2>&1
         fi
         """

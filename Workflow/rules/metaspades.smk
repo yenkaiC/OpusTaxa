@@ -30,7 +30,7 @@ rule metaspades:
             -2 {input.r2} \
             -t {threads} \
             -m {params.mem_gb} \
-            -o {params.outdir} 2> {log}
+            -o {params.outdir} > {log} 2>&1
 
         # Preserve the SPAdes internal log before cleanup
         if [ -f "{params.outdir}/spades.log" ]; then

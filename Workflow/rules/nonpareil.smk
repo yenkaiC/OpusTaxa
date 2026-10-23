@@ -80,5 +80,5 @@ rule nonpareil_report:
         Rscript {params.script} \
             {output.table} \
             {output.plot} \
-            {input.npo} 2> {log}
+            {input.npo} > {log} 2>&1
         """

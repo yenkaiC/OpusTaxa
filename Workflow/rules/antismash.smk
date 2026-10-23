@@ -24,7 +24,7 @@ rule antismash_download_databases:
         mkdir -p {params.db_dir}
         if [ ! -f "{params.db_dir}/clusterblast/clusters.txt" ] || \
            [ -z "$(ls {params.db_dir}/knownclusterblast/*/clusters.txt 2>/dev/null)" ]; then
-            download-antismash-databases --database-dir {params.db_dir} 2> {log}
+            download-antismash-databases --database-dir {params.db_dir} > {log} 2>&1
         else
             echo "AntiSMASH databases already exist, skipping download" > {log}
         fi

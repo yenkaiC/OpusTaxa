@@ -72,7 +72,7 @@ rule genomad:
             --threads {threads} \
             {input.contigs} \
             {params.out_dir} \
-            {params.db_dir} 2> {log}
+            {params.db_dir} > {log} 2>&1
 
         # Rename outputs from contigs_* to <sample>_* for clarity
         SAMPLE="{wildcards.sample}"
