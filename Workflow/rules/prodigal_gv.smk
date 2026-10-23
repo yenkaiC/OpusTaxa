@@ -67,3 +67,21 @@ rule prodigal_gv_summary:
 
         echo "Summarised $(echo {input.gff_files} | wc -w) samples" > {log}
         """
+
+## Per-gene table across all samples (one row per predicted gene)
+rule prodigal_gv_gene_table:
+    input:
+        gff_files = expand(prodigalgv_dir + "/{sample}/{sample}_genes.gff", sample=SAMPLES)
+    output:
+        genes = prodigalgv_dir + "/table/prodigal_gv_genes.tsv.gz"
+    params:
+        prodigal_dir = prodigalgv_dir,
+        samples = SAMPLES
+    log:
+        log_dir + "/prodigal_gv/gene_table.log"
+    resources:
+        mem_mb = get_mem("prodigal_gv_gene_table"),
+        runtime = 120
+    threads: 1
+    script:
+        workflow.basedir + "/Workflow/scripts/prodigal_gv_gene_table.py"

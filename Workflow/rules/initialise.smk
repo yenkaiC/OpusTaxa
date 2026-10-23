@@ -160,6 +160,7 @@ DEFAULT_MEM_MB = {
     "metaspades": 180000,
     "prodigal_gv": 40000,
     "prodigal_gv_summary": 16000,
+    "prodigal_gv_gene_table": 16000,
     "dl_card_DB": 16000,
     "rgi_contigs": 40000,
     "rgi_merge_tables": 10000,

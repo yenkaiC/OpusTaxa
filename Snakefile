@@ -99,7 +99,8 @@ rule all:
 
         # Prodigal-GV
         expand(prodigalgv_dir + "/{sample}/{sample}_proteins.faa", sample=SAMPLES) if run_prodigalgv else [],
-        prodigalgv_dir + "/table/prodigal_gv_summary.tsv" if run_prodigalgv else [],  
+        prodigalgv_dir + "/table/prodigal_gv_summary.tsv" if run_prodigalgv else [],
+        prodigalgv_dir + "/table/prodigal_gv_genes.tsv.gz" if run_prodigalgv else [],
 
         # geNomad - Plasmid and virus identification (requires metaspades)
         expand(genomad_dir + "/{sample}/.genomad_complete", sample=SAMPLES) if run_genomad else [],
