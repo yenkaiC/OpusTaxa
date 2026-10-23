@@ -77,7 +77,7 @@ rule nohuman_summary:
             line=$(grep "sequences classified as human" "$f" 2>/dev/null || true)
 
             if [ -n "$line" ]; then
-                human=$(echo "$line" | grep -oP '\\b[0-9,]+ / ' | sed 's/ \/ //' | tr -d ',')
+                human=$(echo "$line" | grep -oP '\\b[0-9,]+ / ' | sed 's| / ||' | tr -d ',')
                 total=$(echo "$line" | grep -oP '/ [0-9,]+ ' | sed 's/[/ ]//g' | tr -d ',')
                 human_pct=$(echo "$line" | grep -oP '\\([0-9.]+%\\)' | head -1 | tr -d '()')
                 nonhuman=$(echo "$line" | grep -oP '[0-9,]+ \\(' | tail -1 | grep -oP '[0-9,]+' | tr -d ',')
