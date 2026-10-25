@@ -21,16 +21,28 @@ rule antismash_download_databases:
     threads: 2
     shell:
         """
-        mkdir -p {params.db_dir}
-        if [ ! -f "{params.db_dir}/clusterblast/clusters.txt" ] || \
-           [ -z "$(ls {params.db_dir}/knownclusterblast/*/clusters.txt 2>/dev/null)" ]; then
-            download-antismash-databases --database-dir {params.db_dir} > {log} 2>&1
-        else
-            echo "AntiSMASH databases already exist, skipping download" > {log}
+                mkdir -p {params.db_dir}
+
+        # Fetch anything missing. This is cheap when the databases are complete:
+        # each component is skipped after a checksum on one of its files.
+        download-antismash-databases --database-dir {params.db_dir} > {log} 2>&1
+
+        # The downloader only checks one file per component, so a truncated
+        # extraction is never repaired by re-running it. Ask antiSMASH what is
+        # missing, delete those components and fetch them once more.
+        if ! antismash --check-prereqs --databases {params.db_dir} >> {log} 2>&1; then
+            missing=$(grep -oE "'{params.db_dir}/[^']+'" {log} \
+                      | tr -d "'" | sed "s|{params.db_dir}/||" | cut -d/ -f1 | sort -u)
+            if [ -n "$missing" ]; then
+                echo "Incomplete components, removing and re-downloading: $missing" >> {log}
+                for component in $missing; do
+                    rm -rf "{params.db_dir}/$component"
+                done
+                download-antismash-databases --database-dir {params.db_dir} >> {log} 2>&1
+            fi
+            antismash --check-prereqs --databases {params.db_dir} >> {log} 2>&1
         fi
-        # Fail here rather than at the first sample if anything is incomplete
-        antismash --check-prereqs --cb-knownclusters --databases {params.db_dir} >> {log} 2>&1
-        
+
         touch {output.checkpoint}
         """
 
