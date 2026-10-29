@@ -74,7 +74,7 @@ rule singlem_extra:
         mem_mb = get_mem("singlem_extra"),
         runtime = 480
     log:
-        log_dir + "/singlem/{sample}_profile.log"
+        log_dir + "/singlem/{sample}_extra.log"
     shell:
         """
         singlem summarise \
