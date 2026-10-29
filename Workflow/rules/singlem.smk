@@ -88,6 +88,15 @@ rule singlem_extra:
             echo "No species-level assignments in {input.profile}; wrote unassigned-only table" >> {log}
             printf 'taxonomy\\t%s\\nunassigned\\t100.0\\n' "$sample_name" > {output.species_by_site}
         fi
+
+        singlem summarise \
+            --input-taxonomic-profile {input.profile} \
+            --output-taxonomic-profile-with-extras {output.longform} >> {log} 2>&1
+
+        singlem prokaryotic_fraction \
+            --forward {input.r1} --reverse {input.r2} \
+            --metapackage "{input.db}" \
+            -p {input.profile} > {output.microbial_fraction} 2>> {log}
         """
 
 rule singlem_merged_table:
