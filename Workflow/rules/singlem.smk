@@ -77,19 +77,17 @@ rule singlem_extra:
         log_dir + "/singlem/{sample}_extra.log"
     shell:
         """
-        singlem summarise \
-            --input-taxonomic-profile {input.profile} \
-            --output-species-by-site-relative-abundance {output.species_by_site} \
-            --output-species-by-site-level species 2>> {log}
-        
-        singlem summarise \
-            --input-taxonomic-profile {input.profile} \
-            --output-taxonomic-profile-with-extras {output.longform} 2>> {log}
-
-        singlem prokaryotic_fraction \
-            --forward {input.r1} --reverse {input.r2} \
-            --metapackage "{input.db}" \
-            -p {input.profile} > {output.microbial_fraction} 2>> {log}
+        if grep -q "s__" {input.profile}; then
+            singlem summarise \
+                --input-taxonomic-profile {input.profile} \
+                --output-species-by-site-relative-abundance {output.species_by_site} \
+                --output-species-by-site-level species >> {log} 2>&1
+        else
+            sample_name=$(awk 'NR==2 {{print $1}}' {input.profile})
+            if [ -z "$sample_name" ]; then sample_name="{wildcards.sample}"; fi
+            echo "No species-level assignments in {input.profile}; wrote unassigned-only table" >> {log}
+            printf 'taxonomy\\t%s\\nunassigned\\t100.0\\n' "$sample_name" > {output.species_by_site}
+        fi
         """
 
 rule singlem_merged_table:
