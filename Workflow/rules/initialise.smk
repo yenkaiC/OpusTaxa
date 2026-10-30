@@ -440,6 +440,37 @@ rule standardize_filenames:
         echo "Symlinked {input.r2} → {output.r2}" >> {log}
         """
 
-BRACKEN_MIN_READS = int(
-    config.get("params", {}).get("bracken", {}).get("min_reads", 100)
-)
+## ---------------------------------------------------------------------------
+## Guards for empty samples (negative controls, shallow sequencing)
+## ---------------------------------------------------------------------------
+## Shell helpers shared by every rule that has to cope with a sample holding
+## no data. Rules source it with:   source {GUARDS} {SKIP_dir}
+GUARDS = workflow.basedir + "/Workflow/scripts/guards.sh"
+
+## Where guards drop their one-line "this was skipped" markers.
+SKIP_dir = config.get("skipReportDirectory", "Reports/Skipped")
+
+
+def get_min_reads(tool, default):
+    """Minimum reads/records below which `tool` is skipped for a sample."""
+    return int(get_param(tool, "min_reads", default))
+
+
+def collate_skips():
+    """Gather the per-sample skip markers into one table at the end of a run."""
+    import glob
+
+    markers = sorted(glob.glob(os.path.join(SKIP_dir, "*.tsv")))
+    summary = os.path.join(SKIP_dir, "skipped_samples.tsv")
+    markers = [m for m in markers if os.path.abspath(m) != os.path.abspath(summary)]
+    if not markers:
+        return
+    with open(summary, "w") as out:
+        out.write("tool\tsample\treason\n")
+        for marker in markers:
+            with open(marker) as handle:
+                out.write(handle.read())
+    print(
+        f"{len(markers)} sample/tool combination(s) were skipped for lack of data; "
+        f"see {summary}"
+    )

@@ -53,6 +53,8 @@ rule kraken2:
         log_dir + "/kraken2/{sample}.log"
     shell:
         """
+        source {GUARDS} {SKIP_dir}
+
         kraken2 \
             --db {params.db_dir} \
             --threads {threads} \
@@ -64,7 +66,7 @@ rule kraken2:
         # a sample with no reads leaves kraken2 with nothing to report
         if [ ! -s {output.report} ]; then
             printf '100.00\t0\t0\tU\t0\tunclassified\n' > {output.report}
-            echo "[kraken2] no reads classified; wrote empty report" >> {log}
+            skip_note kraken2 {wildcards.sample} "no reads classified" {log}
         fi
         """
 
@@ -84,7 +86,7 @@ rule bracken:
         db_dir = kraken2DB_dir,
         read_len = get_param("bracken", "read_length", 150),
         level = get_param("bracken", "level", "S"),
-        min_reads = BRACKEN_MIN_READS,
+        min_reads = get_min_reads("bracken", 100),
     threads: 4
     resources:
         mem_mb = get_mem("bracken"),
@@ -93,13 +95,14 @@ rule bracken:
         log_dir + "/kraken2/{sample}_bracken.log"
     shell:
         """
-        # --- guard: negative controls and shallow samples -------------------
-        n=$(awk -F'\t' -v lvl="{params.level}" \
-              '$4 == lvl {{ s += $2 }} END {{ print s+0 }}' {input.report})
+        source {GUARDS} {SKIP_dir}
+        
+        n=$(kreport_reads_at {input.report} {params.level})
         if [ "$n" -lt {params.min_reads} ]; then
-            echo "[bracken] {wildcards.sample}: $n reads at level {params.level} (minimum {params.min_reads}) - skipping Bracken, writing empty table" >> {log}
-            printf 'name\ttaxonomy_id\ttaxonomy_lvl\tkraken_assigned_reads\tadded_reads\tnew_est_reads\tfraction_total_reads\n' > {output.bracken}
-            cp {input.report} {output.report}
+            skip_note bracken {wildcards.sample} \
+                "$n reads at level {params.level}, minimum {params.min_reads}" {log}
+            printf 'name\t...\tfraction_total_reads\n' > {output.bracken_out}
+            cp {input.report} {output.bracken_report}
             exit 0
         fi
         
@@ -115,7 +118,7 @@ rule bracken:
 ## Combine Bracken reports across samples
 rule combine_bracken_reports:
     input:
-        expand(kraken2_dir + "/{sample}_bracken.txt", sample=SAMPLES)
+        bracken = expand(kraken2_dir + "/{sample}_bracken.txt", sample=SAMPLES)
     output:
         combined = kraken2_dir + "/table/combined_bracken_species.txt"
     conda:
@@ -126,9 +129,7 @@ rule combine_bracken_reports:
         log_dir + "/kraken2/combine_reports.log"
     threads: 4
     params:
-        files = lambda wc, input: " ".join(
-            f for f in input.bracken if os.path.getsize(f) > 100
-        ),
+        names = ",".join(SAMPLES),
     resources:
         mem_mb = get_mem("combine_bracken_reports"),
         runtime = 60
@@ -136,6 +137,7 @@ rule combine_bracken_reports:
         """
         mkdir -p {kraken2_dir}/table
         combine_bracken_outputs.py \
-            --files {input} \
+            --files {input.bracken} \
+            --names {params.names}
             -o {output.combined} > {log} 2>&1
         """

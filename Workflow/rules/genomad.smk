@@ -62,8 +62,24 @@ rule genomad:
         log_dir + "/genomad/{sample}.log"
     shell:
         """
-        mkdir -p {params.out_dir}
+        source {GUARDS} {SKIP_dir}
+        
+        mkdir -p {params.out_dir}/contigs_summary
 
+        # geNomad aborts on a FASTA with no records
+        if ! fasta_has_records {input.contigs}; then
+            skip_note genomad {wildcards.sample} "no contigs assembled" {log}
+            printf 'seq_name\tlength\ttopology\tn_genes\tgenetic_code\tvirus_score\tfdr\tn_hallmarks\tmarker_enrichment\ttaxonomy\n' \
+                > {output.virus_summary}
+            printf 'seq_name\tlength\ttopology\tn_genes\tgenetic_code\tplasmid_score\tfdr\tn_hallmarks\tmarker_enrichment\tconjugation_genes\tamr_genes\n' \
+                > {output.plasmid_summary}
+            printf 'gene\tstart\tend\tlength\tstrand\tgc_content\tgenetic_code\trbs_motif\tmarker\tevalue\tbitscore\tuscg\tplasmid_hallmark\tvirus_hallmark\ttaxid\ttaxname\tannotation_conjscan\tannotation_amr\tannotation_accessions\tannotation_description\n' \
+                | tee {output.plasmid_genes} > {output.virus_genes}
+            : > {output.plasmid_fna}
+            : > {output.virus_fna}
+            exit 0
+        fi
+        
         genomad end-to-end \
             --cleanup \
             --splits {params.splits} \

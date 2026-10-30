@@ -21,6 +21,7 @@ strainphlanDirectory: "Data/StrainPhlAn"
 prodigalGVDirectory: "Data/ProdigalGV"
 genomadDirectory: "Data/geNomad"
 sylphDirectory: "Data/Sylph"
+skipReportDirectory: Reports/Skipped
 
 # Flags
 test_mode: false

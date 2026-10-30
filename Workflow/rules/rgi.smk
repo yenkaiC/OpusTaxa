@@ -91,7 +91,18 @@ rule rgi_contigs:
         log_dir + "/rgi/{sample}_contigs.log"
     shell:
         """
+        source {GUARDS} {SKIP_dir}
+        
         mkdir -p {rgi_dir}/{wildcards.sample}/contigs
+
+        # rgi main aborts on a FASTA with no records
+        if ! fasta_has_records {input.fasta}; then
+            skip_note rgi {wildcards.sample} "no contigs assembled" {log}
+            printf 'ORF_ID\tContig\tStart\tStop\tOrientation\tCut_Off\tPass_Bitscore\tBest_Hit_Bitscore\tBest_Hit_ARO\tBest_Identities\tARO\tModel_type\tSNPs_in_Best_Hit_ARO\tOther_SNPs\tDrug Class\tResistance Mechanism\tAMR Gene Family\tPredicted_DNA\tPredicted_Protein\tCARD_Protein_Sequence\tPercentage Length of Reference Sequence\tID\tModel_ID\tNudged\tNote\n' \
+                > {output.txt}
+            echo '{{}}' > {output.json}
+            exit 0
+        fi
 
         WORKDIR=$(pwd)
         LOGFILE="$WORKDIR/{log}"

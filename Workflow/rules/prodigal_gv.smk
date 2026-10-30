@@ -21,7 +21,18 @@ rule prodigal_gv:
         log_dir + "/prodigal_gv/{sample}.log"
     shell:
         """
+        source {GUARDS} {SKIP_dir}
+        
         mkdir -p {prodigalgv_dir}/{wildcards.sample}
+
+        # prodigal-gv aborts on a FASTA with no records
+        if ! fasta_has_records {input.scaffold}; then
+            skip_note prodigal_gv {wildcards.sample} "no contigs assembled" {log}
+            : > {output.proteins}
+            : > {output.genes}
+            echo "##gff-version 3" > {output.gff}
+            exit 0
+        fi
 
         prodigal-gv \
             -i {input.scaffold} \
@@ -55,8 +66,8 @@ rule prodigal_gv_summary:
         for gff in {input.gff_files}; do
             sample=$(basename $(dirname "$gff"))
 
-            total=$(grep -c "^[^#]" "$gff" 2>/dev/null || echo 0)
-            complete=$(grep "partial=00" "$gff" 2>/dev/null | wc -l || echo 0)
+            total=$(grep -c "^[^#]" "$gff" 2>/dev/null) || total=0
+            complete=$(grep -c "partial=00" "$gff" 2>/dev/null) || complete=0
             partial=$(( total - complete ))
 
             # Average gene length from start/end coordinates

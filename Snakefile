@@ -118,7 +118,13 @@ rule all:
         expand(sylph_dir + "/viral/{sample}_viral_taxprof.tsv", sample=SAMPLES) if run_sylph_viral else [],
         sylph_dir + "/table/sylph_viral_merged_abundance.tsv" if run_sylph_viral else [],
         
-
+## Collate the per-sample skip markers written by Workflow/scripts/guards.sh
+## into one table, so it is obvious afterwards which zero columns mean
+## "no data" rather than "nothing detected".
+onsuccess:
+    collate_skips()
+onerror:
+    collate_skips()
 
 ## Check what one should be running
 print("Config values:")
@@ -134,7 +140,7 @@ print(f"  MLP: {run_mlp}")
 print(f"  RGI: {run_rgi}")
 print(f"  AntiSMASH: {run_antismash}")
 print(f"  Prodigal-GV: {run_prodigalgv}")
-print(f"  Hecatomb: {run_hecatomb}")
-print(f"  geNomad: {run_genomad}")
+#print(f"  Hecatomb: {run_hecatomb}")
+#print(f"  geNomad: {run_genomad}")
 print(f"  Sylph: {run_sylph}")
 print(f"  Sylph viral: {run_sylph_viral}")
