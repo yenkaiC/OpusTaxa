@@ -89,6 +89,7 @@ params:
   bracken:
     read_length: 150           # -r, sequencing read length
     level: "S"                 # -l, S=species, G=genus, F=family
+    min_reads: 100             # below this at the target level, skip Bracken
 
   # AntiSMASH
   antismash:

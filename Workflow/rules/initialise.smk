@@ -439,3 +439,7 @@ rule standardize_filenames:
         echo "Symlinked {input.r1} → {output.r1}" > {log}
         echo "Symlinked {input.r2} → {output.r2}" >> {log}
         """
+
+BRACKEN_MIN_READS = int(
+    config.get("params", {}).get("bracken", {}).get("min_reads", 100)
+)

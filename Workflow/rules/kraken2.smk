@@ -60,6 +60,12 @@ rule kraken2:
             --report {output.report} \
             --output {output.output} \
             --gzip-compressed 2> {log}
+        
+        # a sample with no reads leaves kraken2 with nothing to report
+        if [ ! -s {output.report} ]; then
+            printf '100.00\t0\t0\tU\t0\tunclassified\n' > {output.report}
+            echo "[kraken2] no reads classified; wrote empty report" >> {log}
+        fi
         """
 
 ## Run Bracken for abundance estimation
@@ -77,7 +83,8 @@ rule bracken:
     params:
         db_dir = kraken2DB_dir,
         read_len = get_param("bracken", "read_length", 150),
-        level = get_param("bracken", "level", "S")
+        level = get_param("bracken", "level", "S"),
+        min_reads = BRACKEN_MIN_READS,
     threads: 4
     resources:
         mem_mb = get_mem("bracken"),
@@ -86,6 +93,16 @@ rule bracken:
         log_dir + "/kraken2/{sample}_bracken.log"
     shell:
         """
+        # --- guard: negative controls and shallow samples -------------------
+        n=$(awk -F'\t' -v lvl="{params.level}" \
+              '$4 == lvl {{ s += $2 }} END {{ print s+0 }}' {input.report})
+        if [ "$n" -lt {params.min_reads} ]; then
+            echo "[bracken] {wildcards.sample}: $n reads at level {params.level} (minimum {params.min_reads}) - skipping Bracken, writing empty table" >> {log}
+            printf 'name\ttaxonomy_id\ttaxonomy_lvl\tkraken_assigned_reads\tadded_reads\tnew_est_reads\tfraction_total_reads\n' > {output.bracken}
+            cp {input.report} {output.report}
+            exit 0
+        fi
+        
         bracken \
             -d {params.db_dir} \
             -i {input.report} \
@@ -108,6 +125,10 @@ rule combine_bracken_reports:
     log:
         log_dir + "/kraken2/combine_reports.log"
     threads: 4
+    params:
+        files = lambda wc, input: " ".join(
+            f for f in input.bracken if os.path.getsize(f) > 100
+        ),
     resources:
         mem_mb = get_mem("combine_bracken_reports"),
         runtime = 60
