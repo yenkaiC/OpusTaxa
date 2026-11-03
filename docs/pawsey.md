@@ -124,7 +124,7 @@ conda activate snakemake
 Setonix provides Singularity as a module. Load the SLURM-aware build:
 
 ```bash
-module load singularity/4.1.0-slurm
+module load pawseyenv/2025.08 singularity/4.1.0-slurm
 ```
 
 > If that exact version has changed, list what's available with:
