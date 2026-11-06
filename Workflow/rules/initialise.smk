@@ -133,6 +133,7 @@ DEFAULT_MEM_MB = {
     "dl_metaphlan_DB": 24000,
     "metaphlan": 50000,
     "metaphlan_abundance_table": 24000,
+    "metaphlan_count_table": 22000,
     "strainphlan_sample2markers": 16000,
     "strainphlan_extract_markers": 8000,
     "strainphlan": 32000,

@@ -63,6 +63,10 @@ rule all:
         # Merged table for MetaPhlAn
         metaphlan_dir + "/table/abundance_all.txt" if run_metaphlan else [],
         metaphlan_dir + "/table/abundance_species.txt" if run_metaphlan else [],
+        # Read counts (estimated reads per clade) + per-sample library sizes
+        metaphlan_dir + "/table/counts_all.txt" if run_metaphlan else [],
+        metaphlan_dir + "/table/counts_species.txt" if run_metaphlan else [],
+        metaphlan_dir + "/table/library_sizes.txt" if run_metaphlan else [],
 
         expand(strainphlan_dir + "/output/{species}/RAxML_bestTree.{species}.StrainPhlAn4.tre",
         species=STRAINPHLAN_SPECIES) if run_strainphlan and STRAINPHLAN_SPECIES else [],

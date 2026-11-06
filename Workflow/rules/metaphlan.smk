@@ -85,4 +85,20 @@ rule metaphlan_abundance_table:
         sed -n '2p' {output.abundance} > {output.species}
         grep "s__" {output.abundance} >> {output.species} 2>> {log}
         """
-    
+
+rule metaphlan_count_table:
+    input:
+        profiles = expand(metaphlan_dir + "/{sample}_profile.txt", sample=SAMPLES)
+    output:
+        counts        = metaphlan_dir + "/table/counts_all.txt",
+        species       = metaphlan_dir + "/table/counts_species.txt",
+        library_sizes = metaphlan_dir + "/table/library_sizes.txt"
+    priority: 45
+    log:
+        log_dir + "/metaphlan/merge_counts.log"
+    resources:
+        mem_mb = get_mem("metaphlan_count_table"),
+        runtime = 120
+    threads: 2
+    script:
+        workflow.basedir + "/Workflow/scripts/merge_metaphlan_counts.py"
