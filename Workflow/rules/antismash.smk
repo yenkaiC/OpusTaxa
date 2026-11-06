@@ -23,8 +23,7 @@ rule antismash_download_databases:
         """
                 mkdir -p {params.db_dir}
 
-        # Fetch anything missing. This is cheap when the databases are complete:
-        # each component is skipped after a checksum on one of its files.
+        # Fetch anything missing. Each component is skipped after a checksum on one of its files.
         download-antismash-databases --database-dir {params.db_dir} > {log} 2>&1
 
         # The downloader only checks one file per component, so a truncated
@@ -40,7 +39,10 @@ rule antismash_download_databases:
                 done
                 download-antismash-databases --database-dir {params.db_dir} >> {log} 2>&1
             fi
-            antismash --check-prereqs --databases {params.db_dir} >> {log} 2>&1
+            if ! antismash --check-prereqs --databases {params.db_dir} >> {log} 2>&1; then
+                echo "ERROR: antiSMASH databases still incomplete after repair" >> {log}
+                exit 1
+            fi
         fi
 
         touch {output.checkpoint}
