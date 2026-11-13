@@ -22,11 +22,14 @@ include: workflow.basedir + "/Workflow/rules/prodigal_gv.smk"
 include: workflow.basedir + "/Workflow/rules/genomad.smk"
 include: workflow.basedir + "/Workflow/rules/hecatomb.smk"
 include: workflow.basedir + "/Workflow/rules/sylph.smk"
-
+include: workflow.basedir + "/Workflow/rules/provenance.smk"
 
 ## Define Outputs
 rule all:
     input:
+        # Provenance: tool and database versions used by this run
+        versions_file,
+        
         # Data processing and QC
         expand(reads_dir + "/{sample}_R1_001.fastq.gz", sample=SAMPLES),
         expand(reads_dir + "/{sample}_R2_001.fastq.gz", sample=SAMPLES),

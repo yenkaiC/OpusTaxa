@@ -22,6 +22,7 @@ prodigalGVDirectory: "Data/ProdigalGV"
 genomadDirectory: "Data/geNomad"
 sylphDirectory: "Data/Sylph"
 skipReportDirectory: Reports/Skipped
+versionsFile: Data/opustaxa_versions.txt
 
 # Flags
 test_mode: false
