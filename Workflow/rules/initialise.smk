@@ -145,7 +145,7 @@ DEFAULT_MEM_MB = {
     "dl_kraken2_DB": 20000,
     "kraken2": 64000,
     "bracken": 16000,
-    "combine_bracken_reports": 26000,
+    "combine_bracken_reports": 32000,
     "dl_sylph_DB": 30000,
     "dl_sylph_tax": 10000,
     "dl_sylph_viral_DB": 6000,

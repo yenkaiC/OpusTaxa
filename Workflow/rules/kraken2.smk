@@ -138,6 +138,6 @@ rule combine_bracken_reports:
         mkdir -p {kraken2_dir}/table
         combine_bracken_outputs.py \
             --files {input.bracken} \
-            --names {params.names}
+            --names {params.names} \
             -o {output.combined} > {log} 2>&1
         """
