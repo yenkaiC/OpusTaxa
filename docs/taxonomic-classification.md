@@ -1,147 +1,134 @@
 # Taxonomic Classification in OpusTaxa
 
-## What is Taxonomic Classification?
+## What Is Taxonomic Classification?
 
-Taxonomic classification is the process of determining which organisms are present in a biological sample and in what proportions. In shotgun metagenomics, a sample (e.g. a stool, soil, or water specimen) is sequenced directly without culturing, generating millions of short DNA reads from all organisms present simultaneously. Taxonomic classification assigns each read — or a representative subset of reads — to a known taxon (species, genus, family, etc.) by comparing it to a reference database of known genomes.
+A microbiome sample, such as stool, saliva, soil or water, contains DNA from hundreds or thousands of different microorganisms. In **shotgun metagenomics**, all of that DNA is sequenced at once, without culturing anything first. The result is millions of short DNA fragments called **reads**, each typically about 150 letters (base pairs) long, from a mixture of unknown organisms.
 
-The output is a **microbial community profile**: a table describing which organisms were detected and their relative (or absolute) abundances. These profiles are the foundation for downstream analyses such as alpha/beta diversity, differential abundance testing, and community-level comparisons across samples or studies.
+**Taxonomic classification** (also called **taxonomic profiling**) answers two questions about those reads:
 
-Accurate taxonomic profiling is technically challenging because:
+1. **Who is there?** Which bacteria, archaea, viruses or fungi are present?
+2. **How much of each?** What proportion of the community does each one make up?
 
-- Reads are short (typically 150 bp) and may match many organisms
-- Closely related species share highly conserved genomic regions
-- Many microbial species lack complete reference genomes
-- Different profiling tools use different algorithms, marker gene sets, and reference databases — meaning results can vary depending on the tool used
+To answer them, a profiler compares the reads against a **reference database** of known microbial DNA. A read that closely matches a known genome is taken as evidence that the organism is present.
 
-## The Multi-Tool Approach in OpusTaxa
+The output is a **community profile**: a table of organisms and their **relative abundances**, the share of the community each one makes up. For example:
 
-A key design principle of OpusTaxa is the integration of **three independent taxonomic classifiers**. Running multiple tools on the same dataset serves as an internal validation strategy: findings that are consistent across tools with different underlying approaches and different reference databases are more likely to reflect genuine biological signal rather than tool-specific or database-specific artefacts.
+| Taxon | Sample A | Sample B |
+|-------|----------|----------|
+| *Bacteroides uniformis* | 12.4% | 3.1% |
+| *Faecalibacterium prausnitzii* | 8.7% | 15.2% |
+| *Escherichia coli* | 0.5% | 4.8% |
+| … | … | … |
 
-Running multiple complementary tools on the same dataset can provide an internal sanity check, helping to distinguish stable biological signals from tool-specific artefacts.
+These tables are the starting point for most microbiome analyses. Examples include:
 
-The three tools we have selected are:
+- **alpha diversity**: how many taxa a sample contains and how evenly they're spread
+- **beta diversity**: how different two samples' communities are
+- **differential abundance**: which taxa differ between groups, e.g. patients vs controls
 
----
+Profiles can be reported at different **taxonomic ranks**, from broad to specific: phylum → class → order → family → genus → species. Species level gives the most detail but is also the hardest to get right.
 
-## MetaPhlAn 4
+### Why It's Harder Than It Sounds
 
-**MetaPhlAn** (Metagenomic Phylogenetic Analysis) is the **primary taxonomic profiler** in OpusTaxa. Results presented in OpusTaxa outputs are drawn from MetaPhlAn, and it is enabled by default.
+- **Reads are short.** A 150 bp fragment may match several related organisms equally well.
+- **Related species share DNA.** Closely related species can be nearly identical across much of their genome.
+- **Reference databases are incomplete.** Many microbes, especially outside the human gut, have never been sequenced. Their reads may go unclassified or be assigned to the closest known relative.
+- **Taxonomies disagree.** Two main naming systems are in use: **NCBI** and **GTDB** (the Genome Taxonomy Database). They sometimes name or group the same organisms differently.
 
-### How it works
+Because each tool deals with these problems differently, **different tools can give noticeably different results on the same data.** This is why OpusTaxa runs more than one.
 
-MetaPhlAn uses a curated set of **clade-specific marker genes** — unique genomic regions that are present in one taxon but absent (or highly divergent) in all others. Reads are aligned to this marker database (using Bowtie2), and abundance is estimated from the fraction of markers detected for each taxon.
+## Why OpusTaxa Runs Multiple Tools
 
-### Database
+Profilers generally work in one of two ways:
 
-MetaPhlAn 4 uses the **CHOCOPhlAn SGB (Species-level Genome Bins)** database, which spans bacteria, archaea, viruses, and eukaryotes. The Jan 2025 release used in OpusTaxa (`mpa_vJan25_CHOCOPhlAnSGB_202503`) includes both characterised and uncharacterised (novel) SGBs, enabling detection of organisms that lack a formal species name.
+- **Marker-based** tools look only at a small set of carefully chosen genes, each characteristic of a particular group of organisms. This is fast and gives few false detections, but most of the reads are ignored.
+- **Whole-genome** tools compare reads against entire reference genomes, usually by matching short DNA "words" called **k-mers**. This uses more of the data and tends to estimate abundances well, but can produce more spurious low-level detections.
 
-**Database size:** ~34 GB uncompressed
+A large benchmark of 20 classifiers (Ye et al., 2019) found that:
 
-### Key properties
+- **The reference database matters more than the algorithm.** Differences between the tools' databases explained more of the variation in performance than differences between their methods.
+- **The two approaches have complementary strengths.** Whole-genome k-mer tools gave the most accurate abundance estimates. Marker-based tools reported very few false positives, but their abundance profiles differed noticeably from other approaches.
+- **False positives vary enormously.** On a mock community of 20 known species, tools reported anywhere from tens to thousands of species that weren't there, almost all at very low abundance.
+- **Real data are harder than benchmarks.** Performance dropped on real samples, which, unlike test data, have no known answer to check against.
 
-- Reports **relative abundances** (reads assigned to a taxon as a fraction of all classified reads)
-- High **specificity** — marker-based approach minimises false positives
-- Taxonomic framework rooted in **NCBI taxonomy**
-- Enables downstream **strain-level analysis** via StrainPhlAn
-- Tightly integrated with the **bioBakery ecosystem** (HUMAnN for functional profiling, MLP for microbial load prediction)
-- One of the most widely used and benchmarked tools for human-associated microbiome studies
+OpusTaxa therefore runs several profilers that differ in **both their method and their reference database**. A result that holds up across all of them is unlikely to be an artefact of any one tool. A result seen in only one is a cue to look more closely.
 
-### Outputs produced by OpusTaxa
+## The Tools at a Glance
 
-- Per-sample relative abundance profiles
-- Merged cross-sample abundance table (all taxonomic levels)
-- Bowtie2 alignment files (for StrainPhlAn if enabled)
+| | MetaPhlAn 4 | SingleM | Kraken2 + Bracken | Sylph |
+|-|-------------|---------|-------------------|-------|
+| **Approach** | Marker-based (clade-specific genes) | Marker-based (universal single-copy genes) | Whole-genome (exact k-mer matching) | Whole-genome (k-mer sketching) |
+| **Database** | CHOCOPhlAn SGBs (Jan 2025) | GTDB r226 (S5.4.0) | RefSeq PlusPF-16 | GTDB r220 (+ optional UHGV viral) |
+| **Taxonomy** | NCBI | GTDB | NCBI | GTDB |
+| **Organisms** | Bacteria, archaea, viruses, eukaryotes | Bacteria, archaea | Bacteria, archaea, viruses, fungi, protozoa | Bacteria, archaea (+ viruses with UHGV) |
+| **Main strength** | Specificity; links to HUMAnN, StrainPhlAn, MLP | Novel prokaryotic lineages | Broadest coverage; abundance accuracy | Speed; species-level abundance |
+| **Enabled by default** | Yes (primary output) | Yes | No | No |
+| **Config flag** | `metaphlan` | `singlem` | `kraken2` | `sylph`, `sylph_viral` |
 
----
+## MetaPhlAn 4 (primary profiler)
 
-## SingleM
+**How it works:** MetaPhlAn uses a curated set of **marker genes**, each found in one group of organisms and nowhere else. Reads are aligned to these markers with Bowtie2. Abundance is estimated from how much of each organism's marker set is covered.
 
-**SingleM** is the **second taxonomic profiler** in OpusTaxa, enabled by default. It serves as an independent validation of MetaPhlAn results.
+**Database:** The CHOCOPhlAn database is organised into **SGBs (species-level genome bins)**. These include many uncharacterised species that don't yet have a formal name.
 
-### How it works
+**Why it's the primary output:** MetaPhlAn has very few false positives and is one of the most widely used and benchmarked profilers. It also feeds directly into other OpusTaxa modules: HUMAnN (functional profiling), StrainPhlAn (strain-level analysis) and MLP (microbial load).
 
-SingleM identifies **highly conserved single-copy marker genes** (primarily ribosomal proteins and other universal prokaryotic markers) directly from metagenomic reads. Rather than aligning to whole-genome databases, it extracts reads that overlap these conserved windows and assigns them using an OTU (Operational Taxonomic Unit) approach against the **GTDB (Genome Taxonomy Database)**.
+**Keep in mind:** Abundance estimates from marker-based tools can differ from those of whole-genome tools. Where precise quantification matters, cross-check them against Bracken or Sylph.
 
-### Database
+**Outputs:** Per-sample profiles, merged tables across samples (all ranks and species-only), and alignment files for StrainPhlAn.
 
-SingleM uses the **S5.4.0 GTDB r226 metapackage** (released March 2025), built on the GTDB taxonomy — a phylogenetically consistent, genome-based reclassification of bacteria and archaea.
+## SingleM (marker-based check)
 
-**Database size:** ~7 GB
+**How it works:** SingleM looks at a small set of **universal single-copy genes**, mainly ribosomal proteins found once in nearly every bacterium and archaeon. Reads covering these genes are grouped into OTUs (operational taxonomic units) and assigned taxonomy using GTDB.
 
-### Key properties
+**Why it's included:** Because it relies on universal genes rather than a catalogue of known species, SingleM is good at detecting **novel or poorly characterised prokaryotes**. It also estimates the **prokaryotic fraction** of each sample, the share of reads from bacteria and archaea, which is a useful quality check.
 
-- Reports **OTU-level profiles** with coverage-based abundance estimates
-- Uses **GTDB taxonomy** (differs from NCBI taxonomy used by MetaPhlAn)
-- Specialised for **prokaryotes** (bacteria and archaea); estimates prokaryotic fraction of total reads
-- More sensitive to novel or poorly characterised lineages due to universal marker approach
-- Smaller database footprint relative to MetaPhlAn or Kraken2
+**Keep in mind:** It covers bacteria and archaea only, and uses GTDB names, which won't always match MetaPhlAn's NCBI names.
 
-### Outputs produced by OpusTaxa
+**Outputs:** Per-sample OTU tables and profiles, merged tables at multiple ranks, and prokaryotic fraction estimates.
 
-- OTU tables per sample
-- Species and genus-level aggregated abundance tables
-- Prokaryotic fraction estimates (useful for quality assessment)
-- Merged cross-sample tables at multiple taxonomic levels
+## Kraken2 + Bracken (broad whole-genome classifier)
 
----
+**How it works:** Kraken2 breaks each read into k-mers and looks them up in a database built from whole genomes. The read is assigned to the most specific taxon consistent with all its matches. Many reads can only be placed at genus level or above, so **Bracken** re-estimates abundances at species level.
 
-## Kraken2 + Bracken
+**Why it's included:** It is the only profiler here whose database covers **fungi and protozoa** as well as bacteria, archaea and viruses. Whole-genome k-mer tools also gave some of the most accurate abundance estimates in benchmarking.
 
-**Kraken2** with **Bracken** abundance re-estimation is the **third taxonomic classifier** in OpusTaxa. It is **disabled by default** but can be enabled in the configuration file for studies requiring orthogonal validation or k-mer-based classification.
+**Keep in mind:** Raw Kraken2 output can contain many low-abundance false positives. With Bracken and an abundance threshold, the benchmark found false-positive counts comparable to marker-based tools. Kraken2 only detects organisms with a genome in its database.
 
-### How it works
+**Outputs:** Per-sample Kraken2 reports, Bracken species abundances, and a merged Bracken table.
 
-Kraken2 uses **exact k-mer matching** against a reference database of genomic sequences. Every k-mer (short substring) in each read is looked up in a hash table; the read is assigned to the lowest common ancestor of all matched taxa. Bracken then uses the Kraken2 report to re-estimate species-level abundances probabilistically, correcting for reads that were assigned above species level.
+## Sylph (fast whole-genome profiler)
 
-### Database
+**How it works:** Sylph first compresses each sample's reads into a compact **sketch**, a small sample of its k-mers. It then compares the sketch against sketches of reference genomes. From this it estimates which genomes are present, how similar the sample's strains are to them (**ANI**, average nucleotide identity) and at what abundance.
 
-OpusTaxa uses the **PlusPF-16 database** (`k2_pluspf_16_GB_20251015`), which includes bacteria, archaea, viruses, fungi, plasmids, human, and protozoa sequences from RefSeq.
+**Why it's included:** Like Kraken2, Sylph compares reads against whole genomes rather than marker genes. Unlike Kraken2, it uses GTDB, which gives a second whole-genome view whose names match SingleM's directly. It is very fast, and sketches are saved, so a sample can be re-profiled against another database without reprocessing its reads. The optional UHGV database (`sylph_viral`) adds **gut virus** profiling.
 
-**Database size:** 16 GB
+**Keep in mind:** The default database covers bacteria and archaea only. Sylph was published after the Ye et al. benchmark and was not evaluated there.
 
-### Key properties
+**Outputs:** Per-sample taxonomic profiles and a merged abundance table, plus equivalent viral tables if enabled.
 
-- **Extremely fast** — k-mer hashing enables classification of millions of reads per second
-- **Broad taxonomic coverage** including fungi, viruses, and protozoa (beyond prokaryotes)
-- Uses **NCBI RefSeq** as the reference — sensitive to database completeness
-- Known to have **higher false positive rates** than marker-based tools in some benchmarks, particularly for organisms with large amounts of genomic sequence in the database
-- Bracken dramatically improves species-level abundance estimates over raw Kraken2 output
+## Interpreting Results Across Tools
 
-### Outputs produced by OpusTaxa
+**When tools agree** on an organism or pattern, that is strong evidence it is real.
 
-- Per-sample Kraken2 classification reports
-- Bracken-adjusted species-level abundance tables
-- Merged cross-sample Bracken output
+**When they disagree**, the cause is usually one of these:
 
----
+- **Database coverage**: the organism is in one tool's reference database but missing from another's.
+- **Naming**: GTDB (SingleM, Sylph) and NCBI (MetaPhlAn, Kraken2) sometimes name or group taxa differently. A mismatch may be a difference in names rather than in biology.
+- **Organism type**: only Kraken2 detects fungi and protozoa. SingleM and Sylph (by default) only cover bacteria and archaea.
+- **Low abundance**: a taxon reported by only one tool at very low abundance is the most likely false positive.
 
-## Comparison of the Three Tools
+### Recommendations
 
-| Feature | MetaPhlAn 4 | SingleM | Kraken2 + Bracken |
-|---------|------------|---------|-------------------|
-| **Algorithm** | Marker gene alignment (Bowtie2) | Single-copy gene OTUs | k-mer exact matching |
-| **Reference database** | CHOCOPhlAn SGBs (NCBI taxonomy) | GTDB r226 | RefSeq PlusPF (NCBI taxonomy) |
-| **Taxonomic framework** | NCBI | GTDB | NCBI |
-| **Prokaryote focus** | Bacteria, archaea, viruses, eukaryotes | Primarily bacteria & archaea | Bacteria, archaea, viruses, fungi, protozoa |
-| **Novel organism sensitivity** | High (SGBs for uncharacterised taxa) | High (universal markers) | Lower (requires genome in DB) |
-| **Speed** | Moderate | Moderate | Very fast |
-| **Database size** | ~34 GB | ~7 GB | ~16 GB |
-| **Specificity** | High | High | Moderate |
-| **Default in OpusTaxa** | Yes (primary output) | Yes | No (optional) |
-| **Memory requirement** | ~50 GB | ~40 GB | ~64 GB |
+- **Apply an abundance threshold** before comparing tools or running statistics. Most false positives sit at very low relative abundance.
+- **Compare at genus level** as well as species level. Tools agree more at genus level, and naming differences between taxonomies matter less.
+- **When tools disagree, trust marker-based tools on presence and whole-genome tools on abundance.**
+- **Include negative controls**, such as extraction blanks, where possible, and run them through the same pipeline.
 
----
+Human DNA is removed with **NoHuman** before any profiling. Otherwise human reads are misclassified as microbial at measurable rates, as the benchmark found.
 
-## Why Run Multiple Tools?
+**A note on the evidence:** The benchmark tested earlier versions of these tools and databases (e.g. MetaPhlAn 2), so its exact figures may not apply to the versions used in OpusTaxa. Its general conclusions are the basis for OpusTaxa's design.
 
-Each tool makes different assumptions, uses different reference data, and follows a different algorithmic approach. A species that is misclassified or absent from one tool's database may be correctly identified by another. Conversely, false positives arising from database contamination or k-mer coincidence in one tool are unlikely to propagate to tools with completely different matching strategies.
+## Reference
 
-**Concordant findings** across MetaPhlAn, SingleM, and Kraken2 provide strong evidence that a detected organism or community pattern is biologically real. **Discordant findings** highlight areas that warrant closer inspection — they may reflect genuine differences in database coverage, taxonomic frameworks (NCBI vs GTDB), or algorithmic sensitivity.
-
-This multi-tool strategy is particularly valuable for:
-
-- **Cross-study reproducibility**: Reporting MetaPhlAn results while providing SingleM and Kraken2 as validation layers allows other researchers to assess whether findings hold under alternative profiling strategies
-- **Novel organisms**: SingleM's OTU approach and MetaPhlAn's SGB database both handle uncharacterised taxa that would be missed by a database restricted to named reference genomes
-- **Fungal and protozoal content**: Kraken2's broader taxonomic coverage complements the prokaryotic focus of MetaPhlAn and SingleM
-
-The primary outputs reported by OpusTaxa are from **MetaPhlAn**, which has the most extensive literature, benchmarking, and integration with downstream tools (HUMAnN, StrainPhlAn, MLP). SingleM and optionally Kraken2 are provided as independent validation layers.
+Ye SH, Siddle KJ, Park DJ, Sabeti PC. (2019). Benchmarking metagenomics tools for taxonomic classification. *Cell* 178(4):779–794. https://doi.org/10.1016/j.cell.2019.07.010
