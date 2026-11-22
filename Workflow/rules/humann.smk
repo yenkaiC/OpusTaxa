@@ -190,9 +190,10 @@ rule humann:
             --memory-use maximum > {log} 2>&1
         
         for kind in genefamilies pathabundance pathcoverage; do
-            n=$(ls {params.outdir}/*_${{kind}}.tsv 2>/dev/null | wc -l)
-            if [ "$n" -ne 1 ]; then
-                echo "ERROR: expected 1 ${{kind}} file, found $n" >> {log}
+            set -- {params.outdir}/*_${{kind}}.tsv
+            if [ "$#" -ne 1 ] || [ ! -f "$1" ]; then
+                echo "ERROR: expected exactly 1 ${{kind}} file in {params.outdir}, found: $*" >> {log}
+                ls -la {params.outdir} >> {log} 2>&1 || true
                 exit 1
             fi
         done
