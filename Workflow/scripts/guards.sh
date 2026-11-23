@@ -93,3 +93,19 @@ skip_note() {
         echo "[$1] $2 skipped: $3" >&2
     fi
 }
+
+# sylphmpa_real FILE...
+#   Print only those .sylphmpa files that `sylph-tax merge` can actually read.
+#   Every genuine sylph-tax output starts '#SampleID<tab>...', and merge_data
+#   takes field 2 of that line as the sample name - so a placeholder written for
+#   a sample with no taxa raises IndexError and kills the whole merge.
+#   `case` rather than `grep` keeps this out of a pipeline, so pipefail cannot
+#   mistake a SIGPIPE for "not a real file".
+sylphmpa_real() {
+    for _f in "$@"; do
+        [ -s "$_f" ] || continue
+        case "$(head -1 "$_f" 2>/dev/null)" in
+            '#SampleID'*) printf '%s\n' "$_f" ;;
+        esac
+    done
+}

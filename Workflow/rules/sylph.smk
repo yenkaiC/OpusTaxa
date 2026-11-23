@@ -171,8 +171,13 @@ rule sylph_taxprof:
 
         # sylph-tax appends a suffix; normalise to the expected output name
         if [ ! -f "{output.taxprof}" ]; then
-            produced=$(ls {params.prefix}*.sylphmpa 2>/dev/null | head -1)
-            if [ -n "$produced" ]; then mv "$produced" {output.taxprof}; fi
+            produced=$(ls {params.prefix}*.sylphmpa 2>/dev/null | head -1 || true)
+            if [ -n "$produced" ]; then
+                mv "$produced" {output.taxprof}
+            else
+                echo "# No taxa annotated for this sample" > {output.taxprof}
+                echo "sylph-tax produced no .sylphmpa output; wrote placeholder" >> {log}
+            fi
         fi
         """
 
@@ -195,9 +200,18 @@ rule sylph_merge:
         log_dir + "/sylph/merge.log"
     shell:
         """
+        source {GUARDS} {SKIP_dir}
+        
         mkdir -p $(dirname {output.merged})
         mkdir -p $(dirname {log})
-        sylph-tax merge {input.taxprofs} --column relative_abundance -o {output.merged} > {log} 2>&1
+
+        real_files=$(sylphmpa_real {input.taxprofs})
+        if [ -n "$real_files" ]; then
+            sylph-tax merge $real_files --column relative_abundance -o {output.merged} > {log} 2>&1
+        else
+            echo "# No taxa in any sample - nothing to merge" > {output.merged}
+            echo "No usable .sylphmpa files; wrote an empty table" > {log}
+        fi
         """
 
 ## Merge all taxonomic profiles into an ANI table
@@ -220,9 +234,18 @@ rule sylph_merge_ani:
         log_dir + "/sylph/merge_ani.log"
     shell:
         """
+        source {GUARDS} {SKIP_dir}
+
         mkdir -p $(dirname {output.merged})
         mkdir -p $(dirname {log})
-        sylph-tax merge {input.taxprofs} --column ANI -o {output.merged} > {log} 2>&1
+
+        real_files=$(sylphmpa_real {input.taxprofs})
+        if [ -n "$real_files" ]; then
+            sylph-tax merge $real_files --column ANI -o {output.merged} > {log} 2>&1
+        else
+            echo "# No taxa in any sample - nothing to merge" > {output.merged}
+            echo "No usable .sylphmpa files; wrote an empty table" > {log}
+        fi
         """
 
 ## Viral Sylph
@@ -263,12 +286,43 @@ rule dl_sylph_viral_DB:
         fi
         """
 
+## Viral sketches must be at the database's -c (100), not the default 200.
+rule sylph_sketch_viral:
+    input:
+        r1 = reads_dir + "/{sample}_R1_001.fastq.gz",
+        r2 = reads_dir + "/{sample}_R2_001.fastq.gz"
+    output:
+        sketch = sylph_dir + "/sketches_viral/{sample}.paired.sylsp"
+    conda:
+        workflow.basedir + "/Workflow/envs/sylph.yaml"
+    container:
+        get_container("sylph")
+    params:
+        outdir = sylph_dir + "/sketches_viral",
+        c = SYLPH_VIRAL_C
+    threads: get_threads("sylph")
+    resources:
+        mem_mb = get_mem("sylph_sketch"),
+        runtime = 300
+    log:
+        log_dir + "/sylph/{sample}_viral_sketch.log"
+    shell:
+        """
+        mkdir -p {params.outdir}
+        mkdir -p $(dirname {log})
+        sylph sketch \
+            -1 {input.r1} -2 {input.r2} \
+            -c {params.c} \
+            -t {threads} \
+            -d {params.outdir} \
+            -S {wildcards.sample} 2> {log}
+        """
 
 ## Profile against the viral database (note the -c flag must match the db)
 rule sylph_profile_viral:
     input:
-        sketch = sylph_dir + "/sketches/{sample}.paired.sylsp",
-        db = ancient(sylphDB_dir + "/" + SYLPH_VIRAL_DB_NAME)
+        sketch = sylph_dir + "/sketches_viral/{sample}.paired.sylsp",
+        db = ancient(sylphDB_dir + "/" + SYLPH_VIRAL_DB_NAME),
     output:
         profile = sylph_dir + "/viral/{sample}_viral_profile.tsv"
     conda:
@@ -290,7 +344,6 @@ rule sylph_profile_viral:
         sylph profile \
             {input.db} \
             {input.sketch} \
-            -c {params.c} \
             -t {threads} \
             -o {output.profile} 2> {log}
         """
@@ -360,21 +413,16 @@ rule sylph_merge_viral:
         log_dir + "/sylph/viral_merge.log"
     shell:
         """
+        source {GUARDS} {SKIP_dir}
+
         mkdir -p $(dirname {output.merged})
         mkdir -p $(dirname {log})
 
-        # Keep only real taxprof files (skip empty placeholders that start with '#')
-        real_files=""
-        for f in {input.taxprofs}; do
-            if [ -s "$f" ] && ! head -1 "$f" | grep -q '^#'; then
-                real_files="$real_files $f"
-            fi
-        done
-
+        real_files=$(sylphmpa_real {input.taxprofs})
         if [ -n "$real_files" ]; then
             sylph-tax merge $real_files --column relative_abundance -o {output.merged} > {log} 2>&1
         else
-            echo "# No viral taxa across any sample — nothing to merge" > {output.merged}
-            echo "All viral taxprof files were empty placeholders" > {log}
+            echo "# No viral taxa in any sample - nothing to merge" > {output.merged}
+            echo "No usable .sylphmpa files; wrote an empty table" > {log}
         fi
         """

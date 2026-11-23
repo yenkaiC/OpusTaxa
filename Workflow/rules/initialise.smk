@@ -150,6 +150,7 @@ DEFAULT_MEM_MB = {
     "dl_sylph_tax": 10000,
     "dl_sylph_viral_DB": 6000,
     "sylph_sketch": 33000,
+    "sylph_sketch_viral": 48000,
     "sylph_profile": 33000,
     "sylph_profile_viral": 22000,
     "sylph_taxprof": 12000,
