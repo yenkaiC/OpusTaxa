@@ -166,11 +166,12 @@ rule humann:
         protdb  = humannDB_dir + "/uniref",
         gf_dir  = humann_dir + "/genefamilies",
         pa_dir  = humann_dir + "/pathabundance",
-        pc_dir  = humann_dir + "/pathcoverage"
+        pc_dir  = humann_dir + "/pathcoverage",
+        memory_use = get_param("humann", "memory_use", "minimum")
     threads: get_threads("humann")
     resources:
         mem_mb = get_mem("humann"), #64G
-        runtime = 1400
+        runtime = 1439
     log:
         log_dir + "/humann/{sample}.log"
     shell:
@@ -187,7 +188,7 @@ rule humann:
             --bypass-nucleotide-search \
             --protein-database {params.protdb} \
             --threads {threads} \
-            --memory-use maximum > {log} 2>&1
+            --memory-use {params.memory_use} > {log} 2>&1
         
         for kind in genefamilies pathabundance pathcoverage; do
             set -- {params.outdir}/*_${{kind}}.tsv
@@ -204,7 +205,7 @@ rule humann:
         mv {params.outdir}/*_pathcoverage.tsv {output.pathcoverage}
         
         # Clean up temp directory
-        rm -rf {params.outdir}
+        rm -rf {params.outdir} || true
         """
 
 ## Merge, normalise, and split stratified tables

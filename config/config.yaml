@@ -93,6 +93,12 @@ params:
     level: "S"                 # -l, S=species, G=genus, F=family
     min_reads: 100             # below this at the target level, skip Bracken
 
+  humann:
+    memory_use: "minimum"      # HUMAnN --memory-use. "maximum" keeps every
+                               # alignment hit and every unaligned read's
+                               # sequence in RAM, which scales with library
+                               # depth and OOMs the deepest samples.
+
   # AntiSMASH
   antismash:
     taxon: "bacteria"          # bacteria or fungi
